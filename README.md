@@ -1,3 +1,7 @@
+# Notes
+
+A collection of notes on various subjects ranging from supervised learning and computer security.
+
 # Editing
 
 These notes were written in [Typora](https://typora.io/), a markdown editor and reader which can handle and render LaTeX. It is strongly suggested to use Typora for editing these files as it renders LaTeX, images and markdown while you type.
