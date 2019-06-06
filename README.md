@@ -11,7 +11,7 @@ When you are done editing:
 - Make sure any images you added are also placed in the correct directory.
 
 - Check that all images display correctly (try to keep the image sizes reasonable), and do a print preview before committing.
-- Export the markdown file to PDF (this is a feature within Typora), using the **Dropbox** theme.
+- Export the markdown file to PDF (this is a feature within Typora), using the [**Lavender**](https://theme.typora.io/theme/Lavender/) theme.
 - Make your pull request.
 
 # Contributors
@@ -36,12 +36,6 @@ When you are done editing:
 ---
 
 <p align="center">
-  <b>Notes</b> &copy; 2019-2020, Edwin Onuonga - Released under the <a href="http://mit-license.org/">MIT</a> License.<br/>
+  <b>Notes</b> &copy; 2019-2020, Edwin Onuonga - Released under the <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> License.<br/>
   <em>Authored and maintained by Edwin Onuonga.</em>
-
-  <p align="center">
-    <a href="https://eonu.net">eonu.net</a>&nbsp;&middot;&nbsp;
-    GitHub: <a href="https://github.com/eonu">@eonu</a>&nbsp;&middot;&nbsp;
-    Email: <a href="mailto:ed@eonu.net">ed@eonu.net</a>
-  </p>
 </p>

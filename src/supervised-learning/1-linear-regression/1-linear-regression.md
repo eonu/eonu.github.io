@@ -136,3 +136,18 @@ $$
 $$
 
 # Linear regression
+
+**==Linear regression==** addresses the supervised learning problem of approximating the relationship between the **input variables** and **output variables** of some data.
+
+## Training data
+
+$$
+\set{\l(\b{x}^{(i)},y^{(i)}\r)}_{i=1}^n
+$$
+
+> **Where**:
+>
+> - $\b{x}^{(i)}\in\R^d$, a $d$-dimensional vector of real numbers, $\b{x}^{(i)}=\rowv{x^{(i)}}{1}{d}$.
+> - $y_i\in\R$
+
+
