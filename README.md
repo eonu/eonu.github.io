@@ -1,6 +1,6 @@
 # Notes
 
-A collection of notes on various subjects ranging from supervised learning and computer security.
+Markdown/LaTeX formatted notes for computer science topics.
 
 # Editing
 
