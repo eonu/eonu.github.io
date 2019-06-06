@@ -127,13 +127,6 @@ footer {
     }
 }
 
-#best-viewed-with {
-    width: 75px;
-    position: fixed;
-    top: 0px;
-    left: 0px;
-}
-
 @include bp-1 {
     :root {
         font-size: 13px;
@@ -179,9 +172,5 @@ footer {
                 padding-left: 0px;
             }
         }
-    }
-
-    #best-viewed-with {
-        display: none;
     }
 }

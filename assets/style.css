@@ -84,12 +84,6 @@ footer {
   footer hr {
     margin-bottom: 15px; }
 
-#best-viewed-with {
-  width: 75px;
-  position: fixed;
-  top: 0px;
-  left: 0px; }
-
 @media only screen and (max-width: 520px) {
   :root {
     font-size: 13px; }
@@ -120,9 +114,6 @@ footer {
       padding-right: 0px; }
     section .item:nth-child(even) {
       /* Right */
-      padding-left: 0px; }
-
-  #best-viewed-with {
-    display: none; } }
+      padding-left: 0px; } }
 
 /*# sourceMappingURL=style.css.map */
