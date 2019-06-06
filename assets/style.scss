@@ -4,10 +4,8 @@
     }
 }
 
-@mixin bp-2 {
-    @media only screen and (max-width: 480px) {
-        @content;
-    }
+* {
+    transition: font-size 0.1s;
 }
 
 :root {
@@ -128,7 +126,7 @@ footer {
 
 @include bp-1 {
     :root {
-        font-size: 12px;
+        font-size: 13px;
     }
 
     main {
@@ -138,7 +136,7 @@ footer {
     }
 
     main {
-        padding: 15px;
+        padding: 0px 30px 0px 30px;
         box-sizing: border-box;
     }
 
@@ -147,9 +145,7 @@ footer {
         min-width: 90vw;
         max-width: 90vw;
     }
-}
 
-@include bp-2 {
     section {
         &:first-child {
             flex-direction: column-reverse;
