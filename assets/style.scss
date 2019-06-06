@@ -103,13 +103,26 @@ section {
             padding-left: 0;
 
             li {
-                ul {
+                margin-bottom: 2px;
+
+                ol {
                     margin-left: 0;
-                    padding-left: 12.5px;
+                    padding-left: 0;
+                    list-style: none;
+                    counter-reset: --counter;
 
                     li {
+                        margin-bottom: 0;
                         span {
                             float: right;
+                        }
+
+                        counter-increment: --counter;
+
+                        &::before {
+                            content: counter(--counter) ". ";
+                            color: rgb(130, 130, 130);
+                            font-style: italic;
                         }
                     }
                 }

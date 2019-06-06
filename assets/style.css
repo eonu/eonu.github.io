@@ -72,11 +72,22 @@ section {
       margin-left: 10px;
       margin-bottom: 5px;
       padding-left: 0; }
-      section .item ul li ul {
-        margin-left: 0;
-        padding-left: 12.5px; }
-        section .item ul li ul li span {
-          float: right; }
+      section .item ul li {
+        margin-bottom: 2px; }
+        section .item ul li ol {
+          margin-left: 0;
+          padding-left: 0;
+          list-style: none;
+          counter-reset: --counter; }
+          section .item ul li ol li {
+            margin-bottom: 0;
+            counter-increment: --counter; }
+            section .item ul li ol li span {
+              float: right; }
+            section .item ul li ol li::before {
+              content: counter(--counter) ". ";
+              color: #828282;
+              font-style: italic; }
 
 footer {
   padding-bottom: 5px;
