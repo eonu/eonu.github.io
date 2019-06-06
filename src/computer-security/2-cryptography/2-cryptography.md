@@ -1169,7 +1169,7 @@ A **==cryptographic protocol==** is a protocol that performs a security-related 
 
 ### Example of a logical attack
 
-Assume a commutative symmetric encryption scheme `{{m}_K1}_K2={{m}_K2}_K1` where `{m}_K` denotes the encryption of message `m` under the key `K`.
+Assume a commutative symmetric encryption scheme `((m)_K1)_K2=((m)_K2)_K1` where `(m)_K` denotes the encryption of message `m` under the key `K`.
 
 ```sequence
 participant Alice
@@ -1178,13 +1178,13 @@ participant Bob
 Note over Alice,Bob: Example of a logical attack\non a cryptographic protocol
 
 Note over Alice: new K1
-Alice->Bob:{pin:3443}_K1
+Alice->Bob:(pin:3443)_K1
 
 Note over Bob: new K2
-Bob-->Alice:{{pin:3443}_K1}_K2
+Bob-->Alice:((pin:3443)_K1)_K2
 
 Note over Alice: Decrypts\nwith K_1
-Alice->Bob: {pin:3443}_K2
+Alice->Bob: (pin:3443)_K2
 ```
 
 In this example, an attacker sitting on the network can derive `K_2`. An attacker can also perform a man-in-the-middle attack. 
