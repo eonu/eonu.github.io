@@ -289,7 +289,7 @@ $$
 
 Despite there being infinitely many possible values for $\bs{\theta}$, the hyperplane is restricted to passing through the origin $\b{0}$—as there is no intercept term in $\hat{\b{y}}=\b{X}\bs{\theta}$.
 
-This can often be a very limiting restriction, as it essentially means that the hyperplane cannot be translated on the $\hat{\b{y}}$ plane. This may make it difficult to create a *good* regression line from the training data.
+This can often be a very limiting restriction, as it essentially means that the hyperplane cannot be translated on the $\b{y}$ plane. This may make it difficult to create a *good* regression line from the training data.
 
 > **Example**: Due to the origin restriction, it is not possible to create an optimal regression line for the following collection of one-dimensional feature vectors.
 >
