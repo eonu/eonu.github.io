@@ -166,7 +166,7 @@ $$
 	\blue{\b{x}^{(n)^\T}} & x_1^{(n)} & x_2^{(n)} & \cdots & x_d^{(n)} & y^{(n)}\\
 \end{array}
 $$
-The accompanying output variable $\b{y}$ contains the output for each feature vector where the output $y^{(i)}$ is assumed to be a **linear function** of its feature values $\b{x}^{(i)}$—that is:
+The accompanying output variable $\b{y}$ contains the output for each feature vector where the output $y^{(i)}$ is assumed to be a **linear combination** of its feature values $\b{x}^{(i)}$—that is:
 $$
 \begin{align}
 	y^{(i)}
@@ -295,15 +295,15 @@ This can often be a very limiting restriction, as it essentially means that the 
 >
 > <div>
 >   <div style="display:flex;flex-direction:row;justify-content:center;">
->     <figure style="text-align:center;margin-bottom:0;margin-top:0px;">
+>     <figure style="text-align:center;margin:0 5px;">
 >   		<img src="./assets/y=1.1x.png" width="200px"></img>
 >     	<figcaption>y=1.1x</figcaption>
 >   	</figure>
-> 		<figure style="text-align:center;margin-bottom:0;margin-top:0px;">
+> 		<figure style="text-align:center;margin:0 5px;">
 >       <img src="./assets/y=1.5x.png" width="200px"></img>
 > 		 <figcaption>y=1.5x</figcaption>
 > 		</figure>
-> 		<figure style="text-align:center;margin-bottom:0;margin-top:0px;">
+> 		<figure style="text-align:center;margin:0 5px;">
 >       <img src="./assets/y=2x.png" width="200px"></img>
 > 	    <figcaption>y=2x</figcaption>
 > 		</figure>
@@ -349,11 +349,11 @@ $$
 $$
 Prior to the introduction of the bias term, we could express this as a dot product. However, the $\theta_0$ term in the expression above is **no longer** attached to the value of any explanatory variable $x_{j}^{(i)}$.
 
-We can address this issue by extending the feature vector $\b{x}^{(i)}$ to have $1$ as it's first element, $x_0^{(i)}$. Let this new vector be $\phi\l(\b{x}^{(i)}\r)$:
+We can address this issue by extending the feature vector $\b{x}^{(i)}$ to have $1$ as it's first element, $x_0^{(i)}$. Let this new vector be $\phi \! \l(\b{x}^{(i)}\r)$:
 $$
-\phi\l(\b{x}^{(i)}\r)=\underbrace{\l(1,x_1^{(i)},\ldots,x_d^{(i)}\r)^\T}_{d+1}
+\bs{\phi} \! \l(\b{x}^{(i)}\r)=\underbrace{\l(1,x_1^{(i)},\ldots,x_d^{(i)}\r)^\T}_{d+1}
 $$
-If we express $y^{(i)}$ as a linear combination of the explanatory variables as defined in $\phi\l(\b{x}^{(i)}\r)$, we can now say:
+If we express $y^{(i)}$ as a linear combination of the explanatory variables as defined in $\bs{\phi} \! \l(\b{x}^{(i)}\r)$, we can now say:
 $$
 \begin{align}
 	y^{(i)}
@@ -381,19 +381,18 @@ $$
 		\vdots\\
 		x_d^{(i)}
 	\end{pmatrix}\\
-	&=\bs{\theta}\cdot\phi\l(\b{x}^{(i)}\r)\\
-	&=\bs{\theta}^\T\phi\l(\b{x}^{(i)}\r)
+	&=\bs{\theta}^\T\bs{\phi} \! \l(\b{x}^{(i)}\r)
 \end{align}
 $$
-The modified feature vectors $\phi\l(\b{x}^{(i)}\r)$ can be represented by a new matrix—known as the **==design matrix==**, $\bs{\Phi}$:
+The modified feature vectors $\bs{\phi} \! \l(\b{x}^{(i)}\r)$ can be represented by a new matrix—known as the **==design matrix==**, $\bs{\Phi}$:
 $$
 \begin{array}{c:ccccc|c}
 	\bs{\Phi} & \b{x}_0 & \b{x}_1 & \b{x}_2 & \cdots & \b{x}_d & \b{y}\\
 	\hdashline
-	\blue{\phi\l(\b{x}^{(1)}\r)^\T} & 1 & x_1^{(1)} & x_2^{(1)} & \cdots & x_d^{(1)} & y^{(1)}\\
-	\blue{\phi\l(\b{x}^{(2)}\r)^\T} &  1& x_1^{(2)} & x_2^{(2)} & \cdots & x_d^{(2)} & y^{(2)}\\
+	\blue{\bs{\phi}\l(\b{x}^{(1)}\r)^\T} & 1 & x_1^{(1)} & x_2^{(1)} & \cdots & x_d^{(1)} & y^{(1)}\\
+	\blue{\bs{\phi}\l(\b{x}^{(2)}\r)^\T} &  1& x_1^{(2)} & x_2^{(2)} & \cdots & x_d^{(2)} & y^{(2)}\\
 	\vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-	\blue{\phi\l(\b{x}^{(n)}\r)^\T} & 1 & x_1^{(n)} & x_2^{(n)} & \cdots & x_d^{(n)} & y^{(n)}\\
+	\blue{\bs{\phi}\l(\b{x}^{(n)}\r)^\T} & 1 & x_1^{(n)} & x_2^{(n)} & \cdots & x_d^{(n)} & y^{(n)}\\
 \end{array}
 $$
 Using the previous result along with matrix algebra, we can represent the output vector $\b{y}$ as:
@@ -440,9 +439,10 @@ Regularization discourages or decreases the complexity of a linear model.
 	<img src="./assets/regularization.png" width="25%"></img>
 	<br>
 	<p style="text-align:center;">
-    <b>Figure 6</b>: Simplification of a polynomial regression model as a result of regularization.<br/><em>Blue represents the unregularized and overfitted model, and green represents a regularized model which generalizes better.</em> (<a href="https://en.wikipedia.org/wiki/Regularization_(mathematics)">source</a>)
+    <b>Figure 6</b>: Simplification of a polynomial regression model's <em>complexity</em> as a result of regularization.<br/><em>Blue represents the unregularized and overfitted model, and green represents a regularized model which generalizes better.</em> (<a href="https://en.wikipedia.org/wiki/Regularization_(mathematics)">source</a>)
 	</p>
 </p>
+
 
 For least squares problems, the regularized cost function looks like:
 $$
@@ -469,9 +469,10 @@ Regularization essentially forces the minimization of a cost function within the
 	</div>
 	<br>
 	<p style="text-align:center;">
-    <b>Figure 7</b>: Graphical depiction of the constraint placed on the minimization of the RSS cost function as a result of L2 regularization in a two-dimensional feature space.</br><em>This constraint is in place due to the fact that we now have to minimize a combined sum of the RSS and regularization term. To solve this minimization problem we must get as close to the minimum of the RSS contour, whilst still remaining in the constrained region imposed by the regularization term (the circle in this case).</em> (<a href="https://sebastianraschka.com/faq/docs/regularized-logistic-regression-performance.html">source</a>)
+    <b>Figure 7</b>: Graphical depiction of the constraint placed on the minimization of the RSS cost function as a result of L2 regularization in a two-dimensional feature space.</br><em>This constraint is in place due to the fact that we now have to minimize a combined sum of the RSS and regularization term. To solve this minimization problem we must get as close to the minimum of the RSS contour, whilst still remaining in the constrained region imposed by the regularization term (the circle in this case, but n-sphere in general).</em> (<a href="https://sebastianraschka.com/faq/docs/regularized-logistic-regression-performance.html">source</a>)
 	</p>
 </div>
+
 
 ### $L_1$ and $L_2$ regularized least squares problems
 
@@ -491,13 +492,132 @@ The table below provides information about both of these regularization methods 
 
 ### Elastic net regularization
 
-**==Elastic net==** is a compromise regularization method that involves the usage of a regularization term which linearly combines the $L_1$ and $L_2$ norms of the weights.
+**==Elastic net==** is a compromise regularization method that involves the usage of a regularization term which linearly combines the $L_1$ and $L_2$ norms of the weights, using two tuning parameters, $\lambda_1$ and $\lambda_2$. 
 
-$\redt{TODO}$
+The elastic net regularized cost function for least squares problems is given as:
+$$
+C(\bs{\theta})=\underbrace{\sum_{i=1}^n\l(y^{(i)}-\bs{\theta}^\T x^{(i)}\r)^2}_\text{RSS}+\underbrace{\lambda_1\sum_{i=1}^n |\theta_i|}_{L_1}+\underbrace{\lambda_2\sum_{i=1}^n \theta_i^2}_{L_2}
+$$
 
-## Polynomial regression and kernels
+#### Comparison with standalone $L_1$ and $L_2$ regularization
 
-$\redt{TODO}$
+This form of regularization is often used to counteract the limitations of the $L_1$ and $L_2$ penalties.
+
+- With highly-correlated features:
+
+  - $L_1$ regularization generally picks one over the others. However, often it is the case that one does not know which feature gets picked.
+  - $L_2$ regularization shrinks multiple weights into one another, and sets the others to zero—effectively ignoring that feature.
+
+  Elastic net is a compromise between the two that attempts to shrink and do a **sparse selection** simultaneously.
+
+- In regards to penalty:
+
+  - $L_1$ regularization penalizes weights more uniformly.
+  - $L_2$ regularization penalizes higher-valued weights more than the smaller ones.
+
+  Once again, elastic net acts as a compromise between this property of the two regularization methods.
+
+## Basis functions
+
+The main requirement for a linear regression model is that the weights must be linear. However, it is not necessary that the explanatory variables are  linear—they can be defined by any non-linear function of the explanatory variables too.
+
+This allows us to more generally define a linear model as:
+$$
+\begin{align}
+	y^{(i)}
+	&=\theta_0 \phi_0 \! \l(x_0^{(i)}\r)
+	+\theta_1 \phi_1 \! \l(x_1^{(i)}\r)
+	+\theta_2 \phi_2 \! \l(x_2^{(i)}\r)
+	+\cdots
+	+\theta_d \phi_d \! \l(x_d^{(i)}\r)\\
+	&=\sum_{j=0}^d \theta_j \phi_j \! \l(x_j^{(i)}\r)\\
+	&=\bs{\theta}^\T \bs{\phi} \! \l(\b{x}^{(i)}\r)
+\end{align}
+$$
+
+> **Where**:
+>
+> - Each $\phi_j$ is called a **==basis function==**, which is a function of the current input $\b{x}^{(i)}$.
+> - $\bs{\phi}$ is a vector-valued function such that $\bs{\phi} \! \l(\b{x}^{(i)}\r)=\Big(\phi_0 \! \l(\b{x}^{(i)}\r),\ldots,\phi_d \! \l(\b{x}^{(i)}\r) \Big)^\T$.
+> - $\phi_0 \! \l(\b{x}^{(i)}\r)=1$ by convention—so that the bias term is not affected by the basis function.
+
+### The identity basis function
+
+The most simple case of a linear regression model that we have seen before is where the output variable may be modeled as:
+$$
+y^{(i)}=\theta_0+\theta_1x_1^{(i)}+\theta_2x_2^{(i)}+\cdots+\theta_dx_d^{(i)}
+$$
+This regression model can be defined by the identity basis function:
+$$
+\begin{align}
+	\bs{\phi} \! \l(\b{x}^{(i)}\r)
+	&=\b{x}^{(i)}\\
+	&=\l(1,x_1^{(i)},\ldots,x_d^{(i)}\r)^\T
+\end{align}
+$$
+
+> **Where**: The individual basis functions would be $\phi_j \! \l(\b{x}^{(i)}\r)=x_j^{(i)}$—a function only of the feature with the same index as the basis function.
+
+This is more clearly seen by looking at the design matrix $\bs{\Phi}$ of this basis function when applied to the training set $\mathcal{D}_\text{train}$:
+$$
+\begin{array}{c:ccccc|c}
+	\bs{\Phi} & \b{x}_0 & \b{x}_1 & \b{x}_2 & \cdots & \b{x}_d & \b{y}\\
+	\hdashline
+	\blue{\bs{\phi}\l(\b{x}^{(1)}\r)^\T} & \phi_0 \! \l(\b{x}^{(1)}\r) & \phi_1 \! \l(\b{x}^{(1)}\r) & \phi_2 \! \l(\b{x}^{(1)}\r) & \cdots & \phi_d \! \l(\b{x}^{(1)}\r) & y^{(1)}\\
+	\blue{\bs{\phi}\l(\b{x}^{(2)}\r)^\T} & \phi_0 \! \l(\b{x}^{(2)}\r) & \phi_1 \! \l(\b{x}^{(2)}\r) & \phi_2 \! \l(\b{x}^{(2)}\r) & \cdots & \phi_d \! \l(\b{x}^{(2)}\r) & y^{(2)}\\
+	\vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
+	\blue{\bs{\phi}\l(\b{x}^{(n)}\r)^\T} & \phi_0 \! \l(\b{x}^{(n)}\r) & \phi_1 \! \l(\b{x}^{(n)}\r) & \phi_2 \! \l(\b{x}^{(n)}\r) & \cdots & \phi_d \! \l(\b{x}^{(n)}\r) & y^{(n)}\\
+\end{array}
+
+\quad
+=
+\quad
+
+\begin{array}{c:ccccc|c}
+	\bs{\Phi} & \b{x}_0 & \b{x}_1 & \b{x}_2 & \cdots & \b{x}_d & \b{y}\\
+	\hdashline
+	\blue{\bs{\phi}\l(\b{x}^{(1)}\r)^\T} & 1 & x_1^{(1)} & x_2^{(1)} & \cdots & x_d^{(1)} & y^{(1)}\\
+	\blue{\bs{\phi}\l(\b{x}^{(2)}\r)^\T} &  1& x_1^{(2)} & x_2^{(2)} & \cdots & x_d^{(2)} & y^{(2)}\\
+	\vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
+	\blue{\bs{\phi}\l(\b{x}^{(n)}\r)^\T} & 1 & x_1^{(n)} & x_2^{(n)} & \cdots & x_d^{(n)} & y^{(n)}\\
+\end{array}
+$$
+
+### Polynomial regression
+
+Standard linear regression with the identity basis function is powerful for modelling an output variable $y^{(i)}$ which is assumed to be linearly dependent upon the explanatory variables $x_j^{(i)}$.
+
+However, it is not always the case that the explanatory variables have a linear relationship with the output variable. 
+
+<p style="text-align:center;">
+	<img src="./assets/poly-reg.gif" width="40%"></img>
+	<br>
+	<p style="text-align:center;">
+    <b>Figure 8</b>: Example of a relationship that cannot accurately be modeled with a hyperplane.<br/><em>This data would be more accurately represented with a polynomial regression model.</em> (<a href="https://towardsdatascience.com/introduction-to-linear-regression-and-polynomial-regression-f8adc96f31cb">source</a>)
+	</p>
+</p>
+
+In this case, it may be more appropriate to assume a different relationship, such as a polynomial one. The output variable can be modeled as a $d$-degree polynomial—a linear combination of the **monomials** of each feature:
+$$
+y^{(i)}=\theta_0+\theta_1x_1^{(i)}+\theta_2\l(x_2^{(i)}\r)^2+\cdots+\theta_d\l(x_d^{(i)}\r)^d
+$$
+Which can be defined with the following basis function:
+$$
+\bs{\phi} \l(\b{x}^{(i)}\r)=\l(1,x_1^{(i)}, \l(x_2^{(i)}\r)^2, \ldots, \l(x_d^{(i)}\r)^d\r)^\T
+$$
+
+### Multivariate basis functions
+
+Despite the identity and polynomial basis functions $\phi_j \! \l(\b{x}^{(i)}\r)$ only operating on the $j^\text{th}$ feature, $x_j^{(i)}$, this isn't a strict requirement of basis functions—remember that each basis function $\phi_j$ is a function of the entire feature vector $\b{x}^{(i)}$, and can therefore be dependent upon the values of other features. This brings rise to what are known as **==multivariate basis functions==**.
+
+> **Example**: A basis function with multivariate inputs.
+> $$
+> \begin{array}{c:cccccccc}
+> 	& \phi_0\!\l(\b{x}^{(i)}\r) & \phi_1\!\l(\b{x}^{(i)}\r) & \phi_2\!\l(\b{x}^{(i)}\r) & \phi_3\!\l(\b{x}^{(i)}\r) & \phi_4\!\l(\b{x}^{(i)}\r) & \phi_5\!\l(\b{x}^{(i)}\r) & \phi_6\!\l(\b{x}^{(i)}\r) & \phi_7\!\l(\b{x}^{(i)}\r) & \cdots\\
+> 	\hdashline
+> 	\bs{\phi}\l(\b{x}^{(i)}\r)^\T & 1 & x_1^{(i)} & x_2^{(i)} & x_3^{(i)} & x_1^{(i)}x_2^{(i)} & x_1^{(i)}x_3^{(i)} & x_2^{(i)}x_3^{(i)} & \l(x_1^{(i)}\r)^2 & \cdots\\
+> \end{array}
+> $$
 
 # Resources
 
@@ -513,3 +633,5 @@ $\redt{TODO}$
 - *Sebastian Raschka*<br/>[Does regularization in logistic regression always results in better fit and better generalization?](https://sebastianraschka.com/faq/docs/regularized-logistic-regression-performance.html)
 - *Sebastian Raschka (Mlxtend)*<br/>[Regularization of Generalized Linear Models](http://rasbt.github.io/mlxtend/user_guide/general_concepts/regularization-linear/)
 - *balaks (StackOverflow)*<br/>[Ridge, lasso and elastic net](https://stats.stackexchange.com/questions/93181/ridge-lasso-and-elastic-net)
+- *Martin Krasser*<br/>[Bayesian regression with linear basis function models](http://krasserm.github.io/2019/02/23/bayesian-linear-regression/)
+- *Ayush Pant (Towards Data Science)*<br/>[Introduction to Linear Regression and Polynomial Regression](https://towardsdatascience.com/introduction-to-linear-regression-and-polynomial-regression-f8adc96f31cb)
