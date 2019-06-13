@@ -612,11 +612,7 @@ Despite the identity and polynomial basis functions $\phi_j \! \l(\b{x}^{(i)}\r)
 
 > **Example**: A basis function with multivariate inputs.
 > $$
-> \begin{array}{c:cccccccc}
-> 	& \phi_0\!\l(\b{x}^{(i)}\r) & \phi_1\!\l(\b{x}^{(i)}\r) & \phi_2\!\l(\b{x}^{(i)}\r) & \phi_3\!\l(\b{x}^{(i)}\r) & \phi_4\!\l(\b{x}^{(i)}\r) & \phi_5\!\l(\b{x}^{(i)}\r) & \phi_6\!\l(\b{x}^{(i)}\r) & \phi_7\!\l(\b{x}^{(i)}\r) & \cdots\\
-> 	\hdashline
-> 	\bs{\phi}\l(\b{x}^{(i)}\r)^\T & 1 & x_1^{(i)} & x_2^{(i)} & x_3^{(i)} & x_1^{(i)}x_2^{(i)} & x_1^{(i)}x_3^{(i)} & x_2^{(i)}x_3^{(i)} & \l(x_1^{(i)}\r)^2 & \cdots\\
-> \end{array}
+> \bs{\phi}\l(\b{x}^{(i)}\r)^\T=1+x_1^{(i)}+x_2^{(i)}+x_3^{(i)}+x_1^{(i)}x_2^{(i)}+x_1^{(i)}x_3^{(i)}+x_2^{(i)}x_3^{(i)}+\l(x_1^{(i)}\r)^2+\cdots
 > $$
 
 # Resources
