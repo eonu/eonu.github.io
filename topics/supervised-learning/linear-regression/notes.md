@@ -487,7 +487,7 @@ The table below provides information about both of these regularization methods 
 | **Regularized least squares** — $C(\bs{\theta})$             | $\sum_{i=1}^n\l(y^{(i)}-\bs{\theta}^\T x^{(i)}\r)^2+\lambda\sum_{i=1}^n |\theta_i|$ | $\sum_{i=1}^n\l(y^{(i)}-\bs{\theta}^\T x^{(i)}\r)^2+\lambda\sum_{i=1}^n \theta_i^2$ |
 | **Analytic solution**                                        |           None—use iterative optimization methods.           | $\hat{\bs{\theta}}=\l(\bs{\Phi}^\T\bs{\Phi}+\lambda \b{I}\r)^{-1}\bs{\Phi}^\T\b{y}$ |
 | **Affected weights**                                         |                    All weights—uniformly.                    | All weights—but low valued weights will be penalized less since we are squaring. Conversely, large weights will face more penalty. |
-| **When to use**                                              | When there are many features which are irrelevant to the output variable—since it **can** shrink them to zero, completely disregarding them. | When all (or most) features are relevant to the output variable—since it can **not** shrink them to zero, meaning that all features will have **some** impact. |
+| **When to use**                                              | When there are many features which are irrelevant to the output variable—since it **can** shrink them to zero, completely disregarding them. Also works well when $n\gg d$ (number of instances is far greater than the number of features). | When all (or most) features are relevant to the output variable—since it can **not** shrink them to zero, meaning that all features will have **some** impact. Also works better when there is high collinearity between features. |
 | **Constraint region visualization**<br/>**Note**: Regularization constraint region is depicted in red, RSS contour is depicted in blue. |    <img src="./assets/l1-regularization.png" width="70%">    |    <img src="./assets/l2-regularization.png" width="70%">    |
 
 ### Elastic net regularization
@@ -505,8 +505,8 @@ This form of regularization is often used to counteract the limitations of the $
 
 - With highly-correlated features:
 
-  - $L_1$ regularization generally picks one over the others. However, often it is the case that one does not know which feature gets picked.
-  - $L_2$ regularization shrinks multiple weights into one another, and sets the others to zero—effectively ignoring that feature.
+  - $L_1$ regularization generally picks one and effectively discards the others by setting their weights to zero. However, it is often difficult to determine which feature was chosen.
+  - $L_2$ regularization shrinks the weights of highly-correlated features towards one another.
 
   Elastic net is a compromise between the two that attempts to shrink and do a **sparse selection** simultaneously.
 
@@ -635,3 +635,4 @@ Despite the identity and polynomial basis functions $\phi_j \! \l(\b{x}^{(i)}\r)
 - *balaks (StackOverflow)*<br/>[Ridge, lasso and elastic net](https://stats.stackexchange.com/questions/93181/ridge-lasso-and-elastic-net)
 - *Martin Krasser*<br/>[Bayesian regression with linear basis function models](http://krasserm.github.io/2019/02/23/bayesian-linear-regression/)
 - *Ayush Pant (Towards Data Science)*<br/>[Introduction to Linear Regression and Polynomial Regression](https://towardsdatascience.com/introduction-to-linear-regression-and-polynomial-regression-f8adc96f31cb)
+- *Ignacio P. Pozuelo*<br/>[Lasso or Ridge for correlated variables](https://stackoverflow.com/questions/42904211/lasso-or-ridge-for-correlated-variables)
