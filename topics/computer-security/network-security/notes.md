@@ -145,7 +145,7 @@ Communication in modern networks is characterised by the following fundamental p
 - **Stack of layers**
 - **Encapsulation**
 
-### Packet switching
+## Packet switching
 
 **==Packet switching==** is a mode of data transmission in which a message is:
 
@@ -161,20 +161,20 @@ Communication in modern networks is characterised by the following fundamental p
 	</p>
 </p>
 
-#### Packets
+### Packets
 
 **==Packets==** typically consist of a **header** and a **payload**.
 
 - **Header**: Contains data about the packet, which is used by the networking hardware to direct the packet to its destination.
 - **Payload**: The actual data that is to be delivered to the packet's destination.<br>
 
-#### Reasons to use packet-switching
+### Reasons to use packet-switching
 
 If a message is sent all at once (as one packet), an attacker would have access to the whole message if it was intercepted. 
 
 Dividing it into packets prevents this, by only allowing a single packet or division of the message (which is often useless alone) to be intercepted by the attacker.
 
-### Networking stacks
+## Networking stacks
 
 Network communication models typically use a **stack of layers** to divide network communications.
 
@@ -188,7 +188,7 @@ A network **==layer==** takes care of a specific job, and passes the data onto t
 	</p>
 </p>
 
-#### OSI model
+### OSI model
 
 The **==OSI model==** is a specific standard for network communication layering - it defines a networking framework to implement protocols in **seven** layers.
 
@@ -204,11 +204,11 @@ Most communications systems implement the OSI model in one way or another, often
 	</p>
 </p>
 
-#### Packet encapsulation and decapsulation
+### Packet encapsulation and decapsulation
 
 As packets travel through a networking stack, the protocols at each layer either add or remove fields from the basic header. 
 
-##### Encapsulation
+#### Encapsulation
 
 When a protocol on the sending host adds data to the packet header, the process is called data ==**encapsulation**==. This occurs when going **down** the stack, towards the physical layer.
 
@@ -219,11 +219,11 @@ Data that the host typically adds to the packet header includes:
 - The type of data
 - Source and destination addresses
 
-##### Decapsulation
+#### Decapsulation
 
 When a protocol on the sending host removes data from the packet header, the process is called data **==decapsulation==**. This occurs when going **up** the stack, towards the application layer.
 
-#### Protocol data units
+### Protocol data units
 
 A **==protocol data unit==** (PDU) is a single unit of information transmitted between layers in a network stack.
 
@@ -245,7 +245,7 @@ These are all different types of PDUs, just with specific names on specific laye
 	</p>
 </p>
 
-### Network interfaces
+## Network interfaces
 
 **==Network interfaces==** are devices that connect a computer to a network. Packets are transmitted between network interfaces, and computers may have multiple network interfaces. Some examples are:
 
@@ -255,7 +255,7 @@ These are all different types of PDUs, just with specific names on specific laye
 
 As discussed in the [*Protocol Data Units*](#protocol-data-units) section, most local area networks (such as Ethernet and WiFi) broadcast frames.
 
-#### MAC addresses
+### MAC addresses
 
 Most network interfaces come with a predefined MAC address. A **==Media Access Control (MAC) address==** is a 48-bit number usually represented in hexadecimal. These addresses are used in the **data link layer** of the OSI model.
 
@@ -271,14 +271,14 @@ The first three **octets** of any MAC address are [IEEE](https://www.ieee.org/)-
 
 The remaining three octets of the MAC address can be assigned by organisations as they wish, with uniqueness being the only constraint.
 
-### Switch
+## Switch
 
 A **==network switch==** is a computer networking device that connects devices on a network by using packet switching to receive, process and forward data to the destination device.
 
 - Operates at the link layer
 - Has multiple interfaces, each connected to a device/segment
 
-#### Operation of a switch
+### Operation of a switch
 
 1. Learn the MAC addresses of each device connected to it.
 2. Forward frames only to the destination device.
@@ -291,7 +291,7 @@ A **==network switch==** is a computer networking device that connects devices o
 	</p>
 </p>
 
-#### Combining switches
+### Combining switches
 
 Switches can be combined and arranged into a **tree**. Each switch forwards frames for the MAC addresses of the machines in the segments (subtrees) connected to it.
 
@@ -306,13 +306,13 @@ Switches can be combined and arranged into a **tree**. Each switch forwards fram
 	</p>
 </p>
 
-### Internet Protocol (IP)
+## Internet Protocol (IP)
 
 The **==Internet Protocol (IP)==** is the principal set of digital message formats and rules for exchanging messages between devices across a single network or a series of interconnected networks, using the *Internet Protocol* Suite (often referred to as TCP/IP).
 
 The IP is used as the primary protocol in the TCP/IP stack's **internet layer** (a subset of the OSI stack's **network layer**).
 
-#### IP functions
+### IP functions
 
 <p style="text-align:center;">
     <img src="./assets/datalink-frame.jpg" width="70%"></img>
@@ -322,15 +322,15 @@ The IP is used as the primary protocol in the TCP/IP stack's **internet layer** 
 	</p>
 </p>
 
-##### Addressing
+#### Addressing
 
 In order to deliver data, IP needs to be aware of the destination of the data, and hence includes addressing systems.
 
-##### Routing
+#### Routing
 
 IP might be required to communicate across networks, and communicate with networks not directly connected to the current network.
 
-#### Addresses
+### Addresses
 
 An **==IP address==** is a numerical label assigned to each device connected to a computer network that uses the Internet Protocol for communication. These addresses are used in the **network layer** of the OSI model.
 
@@ -346,14 +346,14 @@ IP addresses come in two forms:
 
 IPv6 was introduced to solve the issue of [IPv4 address exhaustion](https://en.wikipedia.org/wiki/IPv4_address_exhaustion) (a limitation on the ~4.3 billion IPv4 addresses available).
 
-##### Address subdivisions
+#### Address subdivisions
 
 IP addresses are divided into separate segments: **network**, **subnet** and **host**.
 $$
 \underbrace{\color{red}{128.148}}_\text{Network}.\underbrace{\color{blue}{32}}_\text{Subnet}.\underbrace{\color{green}{110}}_\text{Host}
 $$
 
-##### Broadcast addresses
+#### Broadcast addresses
 
 A **==broadcast address==** is a network address at which all devices connected to a network are enabled to receive packets.
 
@@ -363,7 +363,7 @@ $$
 \underbrace{128.148.32.110}_\text{IP address}\quad\to\quad \underbrace{128.148.32.\color{red}{255}}_\text{Broadcast address}
 $$
 
-##### Private networks
+#### Private networks
 
 **==Private networks==** are networks which are not routed outside of a LAN.
 
@@ -373,7 +373,7 @@ $$
 > - `172.16.0.0/12`
 > - `192.168.0.0/16`
 
-#### Packets
+### Packets
 
 The headers of IP packets typically include the following fields:
 
@@ -385,7 +385,7 @@ The headers of IP packets typically include the following fields:
 - Fragmentation information
 - Transport layer protocol information (e.g. TCP)
 
-#### Routing
+### Routing
 
 A **==router==** bridges two or more networks.
 
@@ -404,18 +404,18 @@ Routers operate at the **network layer**, and have two main tasks:
 
 A **==routing table==** maps ranges of addresses to LANs or other gateway routers.
 
-### Internet Control Message Protocol (ICMP)
+## Internet Control Message Protocol (ICMP)
 
 **==Internet Control Message Protocol (ICMP)==** is a protocol that is used for network testing and debugging. Messages for this protocol are simple, and encapsulated in single IP packets.
 
 ICMP is considered a **network layer** protocol.
 
-#### Tools using ICMP
+### Tools using ICMP
 
 - `ping` - Command for sending series of echo request messages and provides statistics on roundtrip times and packet loss.
 - `traceroute` - Command for sending series of ICMP packets with increasing TTL value to discover and display routes that the packets took.
 
-#### Smurfing
+### Smurfing
 
 **==Smurfing==** is a form of **Denial of Service (DoS)** attack that exploits the ICMP, whereby remote hosts respond to echo packets to say they are alive (ping).
 
@@ -434,20 +434,20 @@ The idea behind smurfing is:
 	</p>
 </p>
 
-##### Prevention
+#### Prevention
 
 - Individual hosts and routers can be configured to be non-responsive to external ping requests or broadcasts.
 - Routers can also be configured to ensure that packets directed to broadcast addresses are not forwarded to all devices on the network.
 - ==**Ingress filtering**== - a technique used to ensure that incoming packets are actually from the networks which they claim to originate.
 
-### Address Resolution Protocol (ARP)
+## Address Resolution Protocol (ARP)
 
 The **==Address Resolution Protocol (ARP)==** is a protocol responsible for connecting the **network layer** and **data link layer** together by mapping IP addresses to physical machine addresses (MAC addresses) that are recognised in the local network.
 
 - Based on broadcast messages and local caching
 - Doesn't support confidentiality, integrity or authentication
 
-#### Caching (look-up table)
+### Caching (look-up table)
 
 Systems keep an ==**ARP look-up table**== where they store information about what IP addresses are associated with what MAC addresses.
 
@@ -459,7 +459,7 @@ Systems keep an ==**ARP look-up table**== where they store information about wha
 > | 128.148.31.15  | 00-0c-76-b2-d7-1d    | dynamic  |
 > | 128.148.31.71  | 00-0c-76-b2-d0-d2    | dynamic  |
 
-#### Functionality
+### Functionality
 
 If a source device wants to send a packet to another device:
 
@@ -488,7 +488,7 @@ If a source device wants to send a packet to another device:
 
 8. The source device will then send the requested packet to the now known **target hardware address**.
 
-#### Poisoning attacks
+### Poisoning attacks
 
 An **==ARP poisoning attack==** (also known as ARP spoofing or ARP cache poisoning) is a type of attack in which a malicious **man-in-the-middle** sends false ARP reply messages over a local area network.
 
@@ -496,23 +496,23 @@ Essentially in step 5 of the [*ARP functionality*](#arp-functionality) descripti
 
 This results in the linking of an attacker's MAC address with the IP address of a legitimate device on the network.
 
-### User Datagram Protocol (UDP)
+## User Datagram Protocol (UDP)
 
 The **==User Datagram Protocol (UDP)==** is a stateless, unreliable datagram protocol built on top of IP - that is, it lies at the **transport layer** of the OSI model.
 
 > **Example**: VoIP and streaming (audio/video) all use UDP.
 
-#### Advantages
+### Advantages
 
 - UDP aims to be an efficient protocol, and does this by not providing delivery guarantees or acknowledgements.
 - Can distinguish data for multiple concurrent applications on a single host.
 
-#### Disadvantages
+### Disadvantages
 
 - Lack of reliability implies applications using UDP **must** be ready to accept a fair amount of corrupted and lost data.
 - Most applications built on UDP will suffer if they require reliability.
 
-### Transmission Control Protocol (TCP)
+## Transmission Control Protocol (TCP)
 
 **==Transmission Control Protocol (TCP)==** is a **transport layer** (OSI model) protocol that enables/offers: 
 
@@ -522,14 +522,14 @@ The **==User Datagram Protocol (UDP)==** is a stateless, unreliable datagram pro
 
 > **Example**: HTTP and SSH are built on top of TCP.
 
-#### Functionality
+### Functionality
 
 - Packages a data stream into segments transported by IP.
   - The order of these segments is maintained by marking each packet with a **sequence number**.
   - Every time TCP receives a packet, it sends out an ==**ACK** (control character indicating the successful receipt of a packet)==. 
 - Checks transmitted data by comparing a **checksum** of the data with a checksum encoded in the packet.
 
-#### Packet structure
+### Packet structure
 
 <p style="text-align:center;">
     <img src="./assets/tcp-packet.png" width="80%"></img>
@@ -539,7 +539,7 @@ The **==User Datagram Protocol (UDP)==** is a stateless, unreliable datagram pro
 	</p>
 </p>
 
-#### Ports
+### Ports
 
 Both TCP and UDP support concurrent applications running on the same server. In order to do this, **==ports==** are used to identify where data is directed. 
 
@@ -551,11 +551,11 @@ A **port** is simply represented as a 16 bit number (`0`-`65535`).
 
 - Ports `1024`-`49151` are known as user ports, and are used for listening to connections.
 
-#### `SYN` flag
+### `SYN` flag
 
 **==SYN==** is a binary flag field in the TCP packet header, which indicates whether a particular packet is part of a SYN exchange during the handshake.
 
-#### Establishing connections
+### Establishing connections
 
 A **TCP connection** involves a client and server, where the server is generally a passive listener, waiting for a connection request. However, the server is just another client.
 
@@ -584,7 +584,7 @@ Client->Server: ACK\nSeq=x+1, Ack=y+1
 Note over Client,Server: TCP connection\nestablished
 ```
 
-#### Terminating connections
+### Terminating connections
 
 - During connection establishment using the three-way handshake, initial **sequence numbers** are exchanged.
 - The TCP header includes a 16-bit checksum of the data and parts of the header, including the source and destination.
@@ -611,11 +611,11 @@ Client->Server: ACK\nSeq=y+1
 Note over Client,Server: TCP connection terminated
 ```
 
-#### Data transfer
+### Data transfer
 
 Data transfer with TCP works the same way as [*terminating connections*](#terminating-connections), but replacing the `FIN`'s with `DATA`'s.
 
-#### `SYN` flooding
+### `SYN` flooding
 
 ==**`SYN` flooding**== is a form of TCP attack in which lots of requests (`SYN` packets)  are sent to the victim in order to overload them.
 
@@ -625,36 +625,36 @@ Data transfer with TCP works the same way as [*terminating connections*](#termin
 
    As a result, the victim accumulates more `SYN` packets than they can handle.
 
-##### Advantages of `SYN` flooding (as an attack)
+#### Advantages of `SYN` flooding (as an attack)
 
 - Effective against small targets - e.g. someone running a game server in their home.
 
-##### Disadvantages of `SYN` flooding (as an attack)
+#### Disadvantages of `SYN` flooding (as an attack)
 
 - **Attribution**: The attacker uses their own IP address, which could be easily traced.
 - **Bandwidth**: The attacker uses their own bandwidth, which is likely to be smaller than the server's.
 - Not effective against large targets, e.g. company websites.
 
-#### Forging packets (spoofing)
+### Forging packets (spoofing)
 
 **==TCP packet forging==** is another form of TCP attack, which is exactly the same as `SYN` flooding - except the source of the TCP packet is forged.
 
-##### Advantages of packet forging (as an attack)
+#### Advantages of packet forging (as an attack)
 
 - Harder to trace the attacker.
 - `ACK`'s are sent to a second computer. This means that less bandwidth is used on the attacker's side.
 
-##### Disadvantages of packet forging (as an attack)
+#### Disadvantages of packet forging (as an attack)
 
 - **Ingress filtering** is commonly used to drop packets with source addresses outside their origin network fragment.
 
-### Application layer and DNS
+## Application layer and DNS
 
 The **==application layer==** is a layer in the OSI network model that is used for managing human-computer interactions. 
 
 This layer is typically where applications (such as web browsers) can access the network services.
 
-#### Protocols
+### Protocols
 
 Examples of protocols that lie in the application layer are:
 
@@ -666,7 +666,7 @@ Examples of protocols that lie in the application layer are:
 - **Telnet**. Early remote access protocol.
 - **SSH**. More recent secure remote access protocol.
 
-#### URLs
+### URLs
 
 **==Uniform Resource Locators (URLs)==** are a standardised format for describing the location and access method of resources via the internet.
 
@@ -679,7 +679,7 @@ $$
 >
 > Example: $\texttt{https://}\red{\texttt{profile}}.\green{\texttt{facebook}}.\blue{\texttt{com}}$
 
-#### Domain Name System (DNS)
+### Domain Name System (DNS)
 
 The **==Domain Name System (DNS)==** is an application-layer protocol. The basic function of DNS is to **map domain names to IP addresses**—this mapping is many-to-many.
 
@@ -696,15 +696,15 @@ More generally, a DNS is a distributed database that stores **==resource records
 | Mail exchange     | `MX`             | Mail server of a domain.                |
 | Name server       | `NS`             | Authoritative server for a domain.      |
 
-##### Domains
+#### Domains
 
-###### Domain name
+##### Domain name
 
 A **==domain name==** consists of two or more labels, separated by dots.
 
 > **Example**: `google.com`, `inf.ed.ac.uk`
 
-###### Top-level domain (TLD)
+##### Top-level domain (TLD)
 
 **==Top-level domains==** can be any of:
 
@@ -712,7 +712,7 @@ A **==domain name==** consists of two or more labels, separated by dots.
 - Country-code (ccTLD), e.g. `.ca`, `.it` - managed by government organisations
 - New top level domains, e.g. `.scot`, `.tirol`
 
-###### ICANN
+##### ICANN
 
 The **==Internet Corporation for Assigned Names and Numbers (ICANN)==** is a non-profit corporation that:
 
@@ -720,7 +720,7 @@ The **==Internet Corporation for Assigned Names and Numbers (ICANN)==** is a non
 
 - Accredits registrars for gTLDs
 
-##### DNS tree
+#### DNS tree
 
 `TLD` (e.g. `ac.uk`) -> `Domain` (e.g. `ed.ac.uk`) -> `Resource records`
 
@@ -728,7 +728,7 @@ Alternatively, if a domain has subdomains:
 
 `TLD` (e.g. `ac.uk`) -> `Domain` (e.g. `ed.ac.uk`) -> `Subdomain` (e.g. `inf.ed.ac.uk`) -> `Resource records` (e.g. `A`, `MX`)
 
-##### Name servers
+#### Name servers
 
 A **==name server==** is a server on the internet responsible for handling queries regarding a domain name.
 
@@ -745,7 +745,7 @@ An **==authoritative name server==** stores a reference version of DNS records f
 > - `dns0.ed.ac.uk` is authoritative for `ed.ac.uk`
 > - `dns0.inf.ed.ac.uk` is authoritative for `inf.ed.ac.uk`
 
-##### Name resolution
+#### Name resolution
 
 A **==name resolver==** is a program that retrieves DNS records.
 
@@ -763,7 +763,7 @@ A name resolver:
 	</p>
 </p>
 
-###### Iterative name resolution
+##### Iterative name resolution
 
 In **==iterative name resolution==**, when a DNS server is queried, it returns an answer without querying other DNS servers—even if it cannot provide a definite answer. This answer can be:
 
@@ -771,25 +771,25 @@ In **==iterative name resolution==**, when a DNS server is queried, it returns a
 - A referral to an authoritative server (e.g. a TLD server) via a NS record.
 - An error if the domain/host does not exist, or for other reasons such as network errors.
 
-###### Recursive name resolution
+##### Recursive name resolution
 
 In **==recursive name resolution==**, when a DNS server is queried, it will query subsequent DNS servers (on behalf of the client/requester) until a definitive answer is returned to the requester.
 
 **Note**: The queries made to subsequent DNS servers from the first DNS server are **iterative** queries.
 
-##### Glue records
+#### Glue records
 
 A **==glue record==** is a DNS record of type `A` (IP address) for a name server referred to by a `NS` record.
 
 This is used to break **circular references**.
 
-###### Circular references
+##### Circular references
 
 Sometimes the authoritative name server for a domain may be within the same domain (a subdomain).
 
 > **Example**: `dns0.inf.ed.ac.uk` is authoritative for `inf.ed.ac.uk`
 
-###### Example
+##### Example
 
 In the below table, the second record represents a **glue record**.
 
@@ -798,7 +798,7 @@ In the below table, the second record represents a **glue record**.
 | `inf.ed.ac.uk`      | `NS`     | `dns0.inf.ed.ac.uk` |
 | `dns0.inf.ed.ac.uk` | `A`      | `129.215.160.240`   |
 
-##### Caching
+#### Caching
 
 If a path in the DNS tree was simply traversed for each requested query, there would be too much network traffic, meaning that root servers and TLD servers would quickly become overloaded.
 
@@ -807,7 +807,7 @@ DNS servers **==cache==** records that are results of queries, for a specified a
 1. Resolver looks in the cache for an `A` record of the query domain.
 2. Resolver looks in the cache for a `NS` record of the longest suffix of the query domain.
 
-##### Local DNS cache
+#### Local DNS cache
 
 The local DNS cache is maintained by the operating system. This is shared among all running applications and can be displayed to all users.
 
@@ -816,18 +816,18 @@ This may cause privacy issues—namely:
 - Browsing by other users can be monitored
 - Private or incognito browsing does not clear the DNS cache.
 
-##### DNS cache poisoning
+#### DNS cache poisoning
 
 **==DNS cache poisoning==** is a cyber attack that exploits DNS vulnerabilities by diverting internet traffic away from legitimate servers and towards fake ones.
 
 The basic idea behind the attack is to give a DNS server a false address `A` record and get it cached.
 
-###### DNS query mechanism
+##### DNS query mechanism
 
 - DNS queries are issued over UDP on port 53. This is convenient for an attack because there are no sequence numbers (`SYN-ACK`) as there were in TCP/IP. In UDP, a sent packet will get processed since there are no authentication measures.
 - There is a 16-bit **==request identifier==** in the payload to match answers with queries.
 
-###### Vulnerability to cache poisoning
+##### Vulnerability to cache poisoning
 
 A DNS server is vulnerable to cache poisoning if its resolver:
 
@@ -835,7 +835,7 @@ A DNS server is vulnerable to cache poisoning if its resolver:
 - Has predictable request identifiers and return ports.
 - Accepts unsolicited DNS records.
 
-###### Defences against cache poisoning
+##### Defences against cache poisoning
 
 - **Query randomisation**
   - Random request identifier (16 bits)
@@ -843,7 +843,7 @@ A DNS server is vulnerable to cache poisoning if its resolver:
 - **Check request identifiers**
 - **Use signed records** (DNSSEC)
 
-### SSL/TLS
+## SSL/TLS
 
 **==SSL==** and **==TLS==** are both cryptographic protocols that establish an encrypted, bidirectional network tunnel for arbitrary data to travel between two hosts through the use of public-key cryptography. These protocols are often used in conjunction with other internet protocols such as HTTPS, SSH, FTPS and secure email.
 
@@ -854,7 +854,7 @@ These protocols provide:
 
 In addition to providing an encrypted channel, these protocols are also used to authenticate communicating parties. This is crucial for such applications as online transactions because a client must be sure that money is being transferred to the person or company who they claim to be.
 
-#### Position in the stack
+### Position in the stack
 
 SSL and TLS lie on top of TCP/IP, and below application layer protocols (in the OSI model). In the TCP/IP stack, these protocols lie in the application layer (as seen in Figure 12).
 
@@ -866,18 +866,18 @@ SSL and TLS lie on top of TCP/IP, and below application layer protocols (in the 
 	</p>
 </p>
 
-#### Differences between SSL and TLS
+### Differences between SSL and TLS
 
 SSL is the predecessor to TLS. TLS was introduced in 1999 as a new version of SSL, and was based on SSLv3.
 
-#### TLS building blocks
+### TLS building blocks
 
 |                       | **Confidentiality**                         | **Integrity**                            | **Authentication**                      |
 | --------------------- | ------------------------------------------- | ---------------------------------------- | --------------------------------------- |
 | **Setup**             | Public-key based key-exchanged (RSA and DH) | Public-key digital signature (e.g. RSA)  | Public-key digital signature (e.g. RSA) |
 | **Data transmission** | Symmetric encryption (e.g. AES in CBC mode) | Hash-based MACS (e.g. HMAC using SHA256) |                                         |
 
-#### Functionality
+### Functionality
 
 When a connection is established between a client $C$ (typically a web browser) and a server $S$:
 
@@ -899,7 +899,7 @@ Before a message is encrypted, a MAC is appended to each HTTP message. The resul
 
 This symmetric cryptosystem provides **confidentiality**, and the use of MAC provides integrity of the HTTP requests and responses.
 
-##### Basic key exchange
+#### Basic key exchange
 
 The basic key exchange performed in step 5 described above **used to be** done with RSA:
 
@@ -908,7 +908,7 @@ The basic key exchange performed in step 5 described above **used to be** done w
 3. $C$ encrypts $r$ with public key $K_\hat{p}^S$ and sends this message $m=E(K_\hat{p}^S,r)$ to $S$.
 4. $S$ decrypts $m$ with their private key $K_\hat{s}^S$, giving $r$, which is later used to encrypt messages.
 
-#### Forward secrecy
+### Forward secrecy
 
 **==Forward secrecy==** is provided by a crypto-system if a compromise of private keys in a key exchange does not break the confidentiality of past messages.
 
@@ -916,7 +916,7 @@ TLS with the basic key exchange described above **does not** provide forward sec
 
 As a result, the basic RSA key exchange is not used since an attacker can uncover the value of $r$ and use it to derive encryption keys.
 
-#### Diffie-Hellman key exchange
+### Diffie-Hellman key exchange
 
 An alternate key exchange method used that provides forward secrecy is the **==Diffie-Hellman key exchange==**.
 
@@ -928,7 +928,7 @@ An alternate key exchange method used that provides forward secrecy is the **==D
 6. $S$ calculates $K_S=X^y\pmod p=(g^x)^y\pmod p$.
 7. Observe that $K_C=K_S$.
 
-##### Problems
+#### Problems
 
 Although Diffie-Hellman provides forward secrecy, it is open to an man-in-the-middle attack.
 
@@ -936,17 +936,17 @@ This attack can be prevented by signing $X$ and $Y$ before sending them.
 
 **Note**: This approach requires both $C$ and $S$ to know each other's public key.
 
-### Firewalls and intrusion detection
+## Firewalls and intrusion detection
 
 A **==firewall==** is a security measure designed to prevent **unauthorised electronic access** to a networked computer system. 
 
-#### Firewall policies
+### Firewall policies
 
 Firewalls prevent unauthorised access by monitoring and controlling incoming an outgoing traffic based on predetermined security rules.
 
 These rules are called **==firewall policies==**. Based on these rules, it allows or denies traffic.
 
-##### Example
+#### Example
 
 | **Rule** | **Protocol** | **Source address** | **Destination address** | **Destination port** | **Action** |
 | -------- | ------------ | ------------------ | ----------------------- | -------------------- | ---------- |
@@ -956,7 +956,7 @@ These rules are called **==firewall policies==**. Based on these rules, it allow
 | 4        | TCP          | 8                  | 192.168.1.18            | 80                   | Permit     |
 | 5        | UDP          | *                  | 192.168.1.*             | *                    | Deny       |
 
-#### Stateless firewalls
+### Stateless firewalls
 
 A **==stateless firewall==** does not maintain any remembered context (state) with respect to the packets it is processing.
 
@@ -964,7 +964,7 @@ Instead, it treats each packet attempting to travel through it in isolation with
 
 **Note**: Stateless firewalls may have to be fairly restrictive in order to prevent most attacks.
 
-#### Stateful firewalls
+### Stateful firewalls
 
 **==Stateful firewalls==** can tell when packets are part of legitimate sessions originating within a trusted network. They maintain a record of all connections passing through it and can determine if a packet is either:
 
@@ -976,13 +976,13 @@ Stateful firewalls maintain tables containing information on each active connect
 
 Using these tables, stateful firewalls can allow only inbound TCP packets that are in response to a connection initiated from the internal network.
 
-##### Port scanning
+#### Port scanning
 
 A **==port scanner==** is a tool that provides information regarding open ports in a target system. An example of a port-scanning tool is `nmap`.
 
 Port scanning can be a useful tool in the arsenal of an attacker, as it can identify ports which are open to attacks.
 
-#### Application layer firewalls
+### Application layer firewalls
 
 An **==application layer firewall==** works like a proxy—it can *understand* certain applications and protocols, and as a result effectively simulates the effects of an application at OSI level 7.
 
@@ -992,27 +992,27 @@ This type of firewall acts as a **protective man-in-the-middle** that screens in
 - Remove all macros from Microsoft Word files in email
 - Prevent anything that looks like a credit card number from leaving a database
 
-#### Personal firewalls
+### Personal firewalls
 
 A **==personal firewall==** runs on the workstation that it protects, as software. It provides basic protection—especially for home or mobile devices.
 
 Any **rootkit** type software can disable the firewall.
 
-#### Network Address Translation (NAT)
+### Network Address Translation (NAT)
 
 **==Network Address Translation (NAT)==** is a method of remapping one IP address space into another.
 
-##### IPv4
+#### IPv4
 
 **==IPv4==** is the fourth version of the Internet Protocol. The addressing system used in this protocol is 32-bit, which limits the address space to $2^{32}=4,294,967,296$ addresses.
 
-###### Address space exhaustion
+##### Address space exhaustion
 
 There are less than 4.3 billion IPv4 addresses available. This is an issue as we do not have enough addresses for every device on the planet.
 
 The solution to this problem is NAT, where the internal IP address of a device is different from its external IP address.
 
-#### Intrusion Detection Systems (IDS)
+### Intrusion Detection Systems (IDS)
 
 Firewalls are used as a preventative measure. An **==Intrusion Detection System (IDS)==** can be used to detect a potential incident in progress.
 
@@ -1020,13 +1020,13 @@ At some point, some traffic must be allowed to move into and out of a network. H
 
 The next step is to identify that something bad is happening quickly so it can be addressed. This is when IDS comes in.
 
-#### Alarms
+### Alarms
 
 An IDS can either sound an alarm or not, depending on whether it thinks it has detected an intrusion attack. 
 
 This leads to TP, FP, FN and TN.
 
-##### Rule-based intrusion detection
+#### Rule-based intrusion detection
 
 In **==rule-based intrusion detection==**, a set of rules identify the types of actions that match certain known intrusion attacks. These rules encode a **signature** for such attacks.
 
@@ -1036,7 +1036,7 @@ In **==rule-based intrusion detection==**, a set of rules identify the types of 
 |                                     | An attacker may test an attack on common signatures |
 |                                     | Impossible to detect a new type of attack           |
 
-##### Statistical intrusion detection
+#### Statistical intrusion detection
 
 In **==statistical intrusion detection==**, a statistical model of acceptable or *normal* behavior is dynamically built, and any other non-matching behaviour is flagged.
 
@@ -1045,7 +1045,7 @@ In **==statistical intrusion detection==**, a statistical model of acceptable or
 | Admin does not need to anticipate potential attacks | System needs time to warm up to new behaviour |
 | Can detect new types of attacks                     | Lower accuracy (higher false positives)       |
 
-##### Number of alarms
+#### Number of alarms
 
 In the 2013 Target breach, the IDS did correctly identify that there was an attack on the Target network. However, there were too many alarms going off to investigate all of them in great depth.
 
