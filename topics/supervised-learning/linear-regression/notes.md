@@ -442,8 +442,6 @@ Regularization discourages or decreases the complexity of a linear model.
     <b>Figure 6</b>: Simplification of a polynomial regression model's <em>complexity</em> as a result of regularization.<br/><em>Blue represents the unregularized and overfitted model, and green represents a regularized model which generalizes better.</em> (<a href="https://en.wikipedia.org/wiki/Regularization_(mathematics)">source</a>)
 	</p>
 </p>
-
-
 For least squares problems, the regularized cost function looks like:
 $$
 C(\bs{\theta})=\sum_{i=1}^n\l(y^{(i)}-\bs{\theta}^\T x^{(i)}\r)^2+\lambda\underbrace{\blue{R(\bs{\theta})}}_\text{reg. term}
@@ -472,8 +470,6 @@ Regularization essentially forces the minimization of a cost function within the
     <b>Figure 7</b>: Graphical depiction of the constraint placed on the minimization of the RSS cost function as a result of L2 regularization in a two-dimensional feature space.</br><em>This constraint is in place due to the fact that we now have to minimize a combined sum of the RSS and regularization term. To solve this minimization problem we must get as close to the minimum of the RSS contour, whilst still remaining in the constrained region imposed by the regularization term (the circle in this case, but n-sphere in general).</em> (<a href="https://sebastianraschka.com/faq/docs/regularized-logistic-regression-performance.html">source</a>)
 	</p>
 </div>
-
-
 ### $L_1$ and $L_2$ regularized least squares problems
 
 Regularization terms in the form of the $L_1$ (Manhattan) and $L_2$ (Euclidean) **norms** are commonly used for linear regression—these norms form the basis for **==$L_1$ and $L_2$ regularization==**. 
