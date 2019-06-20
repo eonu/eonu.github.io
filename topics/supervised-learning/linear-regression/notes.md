@@ -264,7 +264,7 @@ $$
 \begin{align}
 	C(\bs{\theta})
 	&=\sum_{i=1}^n\l(y^{(i)}-\hat{y}^{(i)}\r)^2\\
-	&=\sum_{i=1}^n\l(y^{(i)}-\bs{\theta}^\T x^{(i)}\r)^2
+	&=\sum_{i=1}^n\l(y^{(i)}-\bs{\theta}^\T \b{x}^{(i)}\r)^2
 \end{align}
 $$
 
@@ -444,7 +444,7 @@ Regularization discourages or decreases the complexity of a linear model.
 </p>
 For least squares problems, the regularized cost function looks like:
 $$
-C(\bs{\theta})=\sum_{i=1}^n\l(y^{(i)}-\bs{\theta}^\T x^{(i)}\r)^2+\lambda\underbrace{\blue{R(\bs{\theta})}}_\text{reg. term}
+C(\bs{\theta})=\sum_{i=1}^n\l(y^{(i)}-\bs{\theta}^\T \b{x}^{(i)}\r)^2+\lambda\underbrace{\blue{R(\bs{\theta})}}_\text{reg. term}
 $$
 
 > **Where**: 
@@ -480,7 +480,7 @@ The table below provides information about both of these regularization methods 
 | ------------------------------------------------------------ | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | **Name**                                                     |                            Lasso                             |                            Ridge                             |
 | **Regularization term** — $R(\bs{\theta})$<br/>_**Note**: Observe that we don't penalize the bias term, $\theta_0$._ | $\sum_{i=1}^n \blue{|\theta_i|}$ (or $||\bs{\theta}||_1$ — the $L_1$ norm) | $\sum_{i=1}^n \blue{\theta_i^2}$ (or $||\bs{\theta}||_2^2$ — the squared $L_2$ norm) |
-| **Regularized least squares** — $C(\bs{\theta})$             | $\sum_{i=1}^n\l(y^{(i)}-\bs{\theta}^\T x^{(i)}\r)^2+\lambda\sum_{i=1}^n |\theta_i|$ | $\sum_{i=1}^n\l(y^{(i)}-\bs{\theta}^\T x^{(i)}\r)^2+\lambda\sum_{i=1}^n \theta_i^2$ |
+| **Regularized least squares** — $C(\bs{\theta})$             | $\sum_{i=1}^n\l(y^{(i)}-\bs{\theta}^\T \b{x}^{(i)}\r)^2+\lambda\sum_{i=1}^n |\theta_i|$ | $\sum_{i=1}^n\l(y^{(i)}-\bs{\theta}^\T \b{x}^{(i)}\r)^2+\lambda\sum_{i=1}^n \theta_i^2$ |
 | **Analytic solution**                                        |           None—use iterative optimization methods.           | $\hat{\bs{\theta}}=\l(\bs{\Phi}^\T\bs{\Phi}+\lambda \b{I}\r)^{-1}\bs{\Phi}^\T\b{y}$ |
 | **Affected weights**                                         |                    All weights—uniformly.                    | All weights—but low valued weights will be penalized less since we are squaring. Conversely, large weights will face more penalty. |
 | **When to use**                                              | When there are many features which are irrelevant to the output variable—since it **can** shrink them to zero, completely disregarding them. Also works well when $n\gg d$ (number of instances is far greater than the number of features). | When all (or most) features are relevant to the output variable—since it can **not** shrink them to zero, meaning that all features will have **some** impact. Also works better when there is high collinearity between features. |
@@ -492,7 +492,7 @@ The table below provides information about both of these regularization methods 
 
 The elastic net regularized cost function for least squares problems is given as:
 $$
-C(\bs{\theta})=\underbrace{\sum_{i=1}^n\l(y^{(i)}-\bs{\theta}^\T x^{(i)}\r)^2}_\text{RSS}+\underbrace{\lambda_1\sum_{i=1}^n |\theta_i|}_{L_1}+\underbrace{\lambda_2\sum_{i=1}^n \theta_i^2}_{L_2}
+C(\bs{\theta})=\underbrace{\sum_{i=1}^n\l(y^{(i)}-\bs{\theta}^\T \b{x}^{(i)}\r)^2}_\text{RSS}+\underbrace{\lambda_1\sum_{i=1}^n |\theta_i|}_{L_1}+\underbrace{\lambda_2\sum_{i=1}^n \theta_i^2}_{L_2}
 $$
 
 #### Comparison with standalone $L_1$ and $L_2$ regularization
