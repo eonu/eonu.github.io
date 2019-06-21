@@ -521,12 +521,12 @@ This allows us to more generally define a linear model as:
 $$
 \begin{align}
 	y^{(i)}
-	&=\theta_0 \phi_0 \! \l(x_0^{(i)}\r)
-	+\theta_1 \phi_1 \! \l(x_1^{(i)}\r)
-	+\theta_2 \phi_2 \! \l(x_2^{(i)}\r)
+	&=\theta_0 \phi_0 \! \l(\b{x}^{(i)}\r)
+	+\theta_1 \phi_1 \! \l(\b{x}^{(i)}\r)
+	+\theta_2 \phi_2 \! \l(\b{x}^{(i)}\r)
 	+\cdots
-	+\theta_d \phi_d \! \l(x_d^{(i)}\r)\\
-	&=\sum_{j=0}^d \theta_j \phi_j \! \l(x_j^{(i)}\r)\\
+	+\theta_d \phi_d \! \l(\b{x}^{(i)}\r)\\
+	&=\sum_{j=0}^d \theta_j \phi_j \! \l(\b{x}^{(i)}\r)\\
 	&=\bs{\theta}^\T \bs{\phi} \! \l(\b{x}^{(i)}\r)
 \end{align}
 $$
@@ -608,7 +608,17 @@ Despite the identity and polynomial basis functions $\phi_j \! \l(\b{x}^{(i)}\r)
 
 > **Example**: A basis function with multivariate inputs.
 > $$
-> \bs{\phi}\l(\b{x}^{(i)}\r)^\T=1+x_1^{(i)}+x_2^{(i)}+x_3^{(i)}+x_1^{(i)}x_2^{(i)}+x_1^{(i)}x_3^{(i)}+x_2^{(i)}x_3^{(i)}+\l(x_1^{(i)}\r)^2+\cdots
+> \bs{\phi}\l(\b{x}^{(i)}\r)^\T=\l(
+> 1,\ 
+> x_1^{(i)},\ 
+> x_2^{(i)},\ 
+> x_3^{(i)},\ 
+> x_1^{(i)}x_2^{(i)},\ 
+> x_1^{(i)}x_3^{(i)},\ 
+> x_2^{(i)}x_3^{(i)},\ 
+> \l(x_1^{(i)}\r)^2,\
+> \cdots
+> \r)
 > $$
 
 # Resources
