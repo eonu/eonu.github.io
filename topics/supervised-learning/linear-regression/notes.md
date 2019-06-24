@@ -151,9 +151,9 @@ $$
 > **Where**:
 >
 > - $\b{x}^{(i)}\in\R^d$, a $d$-dimensional vector of real numbers, $\b{x}^{(i)}=\colv{x^{(i)}}{1}{d}$.
-> - $y_i\in\R$
+> - $y^{(i)}\in\R$
 
-This is typically represented as an $N\times D$ matrix of **==feature vectors==** $\b{X}=\l(\b{x}^{(1)^\T},\ldots,\b{x}^{(n)^\T}\r)^\T$ and a corresponding **output vector** $\b{y}=\l(y^{(1)},\ldots,y^{(n)}\r)^\T$. 
+This is typically represented as an $n\times d$ matrix of **==feature vectors==** $\b{X}=\l(\b{x}^{(1)^\T},\ldots,\b{x}^{(n)^\T}\r)^\T$ and a corresponding **output vector** $\b{y}=\l(y^{(1)},\ldots,y^{(n)}\r)^\T$. 
 
 Each of the columns $\b{x}_j=\l(x_j^{(1)},\ldots,x_j^{(n)}\r)^\T$ of $\b{X}$ represents a **==feature==**, which is simply a **random variable** (sometimes called an **explanatory variable**). In practicality, these features are often specific attributes of the system or object being modeled, e.g. *height*, *rent*, *temperature*. 
 $$
@@ -254,7 +254,6 @@ The most commonly used residuals are **vertical-offset**, only considering the d
     <b>Figure 3</b>: Vertical-offset residuals in a two-dimensional feature space. (<a href="https://stackoverflow.com/questions/47344850/scatterplot3d-regression-plane-with-residuals">source</a>)
 	</p>
 </p>
-
 #### Ordinary least squares (OLS)
 
 **==Ordinary least squares (OLS)==** is a form of regression analysis that uses the **==sum-squared error==** (or **residual sum of squares (RSS)**) function as a cost function.
@@ -425,7 +424,7 @@ $$
 
 > **Where**: $\l(\bs{\Phi}^\T\bs{\Phi}\r)^{-1}\bs{\Phi}^\T$ is referred to as the **==pseudo-inverse==** of $\bs{\Phi}$. 
 >
-> This is not the actual inverse matrix since $\bs{\Phi}$ is **not invertible** as it is not square, since it has shape $N\times (D+1)$.
+> This is not the actual inverse matrix since $\bs{\Phi}$ is **not invertible** as it is not square, since it has shape $n\times (d+1)$.
 
 **Note**: Although OLS has an analytical solution, it is also possible to use other iterative optimization methods such as **gradient descent**, **stochastic gradient descent**, **BFGS**, etc. to minimize the cost function. However, these methods are **not** guaranteed to converge or find a global minimum.
 
@@ -628,7 +627,7 @@ Despite the identity and polynomial basis functions $\phi_j \! \l(\b{x}^{(i)}\r)
 - *Hiroshi Shimodaira, Iain Murray, Steve Renals (School of Informatics, University of Edinburgh)*<br/>[Algorithms, Data Structures and Learning: Introduction to statistical pattern recognition and optimization](https://www.inf.ed.ac.uk/teaching/courses/inf2b/learnSlides/inf2b-learnlec05-full.pdf)
 - *Gordon Ross (School of Mathematics, University of Edinburgh)*<br/>[Statistical Learning: Nonlinearity and Dimensionality Reduction](http://www.drps.ed.ac.uk/19-20/dpt/cxmath10094.htm)
 - *Nguyen (StackOverflow)*<br/>[Role of the bias term in linear regression](https://stats.stackexchange.com/a/286849)
-- Wikipedia<br/>[Residual sum of squares](https://en.wikipedia.org/wiki/Residual_sum_of_squares)<br/>[Regularization (mathematics)](https://en.wikipedia.org/wiki/Regularization_(mathematics))<br/>[Norm (mathematics)](https://en.wikipedia.org/wiki/Norm_(mathematics))<br/>[Taxicab geometry](https://en.wikipedia.org/wiki/Taxicab_geometry)<br/>[Elastic net regularization](https://en.wikipedia.org/wiki/Elastic_net_regularization)
+- _Wikipedia_<br/>[Residual sum of squares](https://en.wikipedia.org/wiki/Residual_sum_of_squares)<br/>[Regularization (mathematics)](https://en.wikipedia.org/wiki/Regularization_(mathematics))<br/>[Norm (mathematics)](https://en.wikipedia.org/wiki/Norm_(mathematics))<br/>[Taxicab geometry](https://en.wikipedia.org/wiki/Taxicab_geometry)<br/>[Elastic net regularization](https://en.wikipedia.org/wiki/Elastic_net_regularization)
 - *Renu Khandelwal (Medium)*<br/>[$L_1$ and $L_2$ Regularization](https://medium.com/datadriveninvestor/l1-l2-regularization-7f1b4fe948f2)
 - *Jae Duk Seo (Towards Data Science)*<br/>[Only Numpy: Implementing different combinations of $L_1$/$L_2$ norm/regularization](https://towardsdatascience.com/only-numpy-implementing-different-combination-of-l1-norm-l2-norm-l1-regularization-and-14b01a9773b)
 - *Stephanie (Statistics How To)*<br/>[Tuning Parameter / Penalty Parameter](https://www.statisticshowto.datasciencecentral.com/tuning-parameter/)
@@ -637,4 +636,4 @@ Despite the identity and polynomial basis functions $\phi_j \! \l(\b{x}^{(i)}\r)
 - *balaks (StackOverflow)*<br/>[Ridge, lasso and elastic net](https://stats.stackexchange.com/questions/93181/ridge-lasso-and-elastic-net)
 - *Martin Krasser*<br/>[Bayesian regression with linear basis function models](http://krasserm.github.io/2019/02/23/bayesian-linear-regression/)
 - *Ayush Pant (Towards Data Science)*<br/>[Introduction to Linear Regression and Polynomial Regression](https://towardsdatascience.com/introduction-to-linear-regression-and-polynomial-regression-f8adc96f31cb)
-- *Ignacio P. Pozuelo (StackOverflow)*<br/>[Lasso or Ridge for correlated variables](https://stackoverflow.com/questions/42904211/lasso-or-ridge-for-correlated-variables)
+- *Ignacio P. Pozuelo (Stack Overflow)*<br/>[Lasso or Ridge for correlated variables](https://stackoverflow.com/questions/42904211/lasso-or-ridge-for-correlated-variables)
