@@ -36,6 +36,6 @@ When you are done editing:
 ---
 
 <p align="center">
-  <b>Notes</b> &copy; 2019-2020, Edwin Onuonga - Released under the <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> License.<br/>
+  &copy; 2019-2020, Edwin Onuonga - Released under the <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> License.<br/>
   <em>Authored and maintained by Edwin Onuonga.</em>
 </p>
