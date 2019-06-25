@@ -487,7 +487,7 @@ $$
 > - $\bs{\Theta}=\l(\bs{\theta}^{(1)},\bs{\theta}^{(2)},\ldots,\bs{\theta}^{(K)}\r)$, a matrix where each column represents a vector of weights $\bs{\theta}^{(c)}$ for class $c$.
 > - $\frac{1}{\sum_{k=1}^K \exp\l({\bs{\theta}^{(k)\T}\b{x}^{(i)}}\r)}$ is a normalization term, used to ensure that the distribution sums up to one.
 
-To decide on a class for $\b{x}^{(i)}$, we must calculate $\cp{y^{(i)}=c}{\b{x}^{(i)}}$ for every class $c$. The chosen class for $\b{x}^{(i)}$ is then the one that results in the maximum conditional probability—that is:
+To decide on a class for $\b{x}^{(i)}$, we must calculate $\cp{y^{(i)}=c}{\b{x}^{(i)};\bs{\Theta}}$ for every class $c$. The chosen class for $\b{x}^{(i)}$ is then the one that results in the maximum conditional probability—that is:
 $$
 \hat{c}=\underset{c\in\set{1,\ldots,K}}{\arg\max}\ \cp{y^{(i)}=c}{\b{x}^{(i)};\bs{\Theta}}
 $$
