@@ -566,7 +566,7 @@ $$
 > - $\lambda$ is a **==tuning parameter==** that controls the importance of the regularization term—higher $\lambda$ leads to more penalization. This parameter is selected through cross-validation.
 > - $R(\bs{\theta})$ is a regularization term chosen to penalize coefficients by a specific quantity—shrinking them towards zero.
 
-For more general information regularization and how the $L_1$ and $L_2$ norms (along with ElasticNet) can be used as the regularization term, please read the _Linear Regression_ notes—these regularization methods apply in the same way to logistic regression.
+For more general information about regularization and how the $L_1$ and $L_2$ norms (along with ElasticNet) can be used as the regularization term, please read the _Linear Regression_ notes—these regularization methods apply in the same way to logistic regression.
 
 # Resources
 
