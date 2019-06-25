@@ -145,55 +145,55 @@ $$
 
 Training data for linear regression problems comes in the form:
 $$
-\mathcal{D}_\text{train}=\set{\l(\b{x}^{(i)},y^{(i)}\r)}_{i=1}^n
+\mathcal{D}_\text{train}=\set{\l(\b{x}^{(i)},y^{(i)}\r)}_{i=1}^N
 $$
 
 > **Where**:
 >
-> - $\b{x}^{(i)}\in\R^d$, a $d$-dimensional vector of real numbers, $\b{x}^{(i)}=\colv{x^{(i)}}{1}{d}$.
+> - $\b{x}^{(i)}\in\R^D$, a $D$-dimensional vector of real numbers, $\b{x}^{(i)}=\colv{x^{(i)}}{1}{D}$.
 > - $y^{(i)}\in\R$
 
-This is typically represented as an $n\times d$ matrix of **==feature vectors==** $\b{X}=\l(\b{x}^{(1)^\T},\ldots,\b{x}^{(n)^\T}\r)^\T$ and a corresponding **output vector** $\b{y}=\l(y^{(1)},\ldots,y^{(n)}\r)^\T$. 
+This is typically represented as an $N\times D$ matrix of **==feature vectors==** $\b{X}=\l(\b{x}^{(1)^\T},\ldots,\b{x}^{(N)^\T}\r)^\T$ and a corresponding **output vector** $\b{y}=\l(y^{(1)},\ldots,y^{(N)}\r)^\T$. 
 
-Each of the columns $\b{x}_j=\l(x_j^{(1)},\ldots,x_j^{(n)}\r)^\T$ of $\b{X}$ represents a **==feature==**, which is simply a **random variable** (sometimes called an **explanatory variable**). In practicality, these features are often specific attributes of the system or object being modeled, e.g. *height*, *rent*, *temperature*. 
+Each of the columns $\b{x}_j=\l(x_j^{(1)},\ldots,x_j^{(N)}\r)^\T$ of $\b{X}$ represents a **==feature==**, which is simply a **random variable** (sometimes called an **explanatory variable**). In practicality, these features are often specific attributes of the system or object being modeled, e.g. *height*, *rent*, *temperature*. 
 $$
 \begin{array}{c:cccc|c}
-	\b{X} & \b{x}_1 & \b{x}_2 & \cdots & \b{x}_d & \b{y}\\
+	\b{X} & \b{x}_1 & \b{x}_2 & \cdots & \b{x}_D & \b{y}\\
 	\hdashline
-	\blue{\b{x}^{(1)^\T}} & x_1^{(1)} & x_2^{(1)} & \cdots & x_d^{(1)} & y^{(1)}\\
-	\blue{\b{x}^{(2)^\T}} & x_1^{(2)} & x_2^{(2)} & \cdots & x_d^{(2)} & y^{(2)}\\
+	\blue{\b{x}^{(1)^\T}} & x_1^{(1)} & x_2^{(1)} & \cdots & x_D^{(1)} & y^{(1)}\\
+	\blue{\b{x}^{(2)^\T}} & x_1^{(2)} & x_2^{(2)} & \cdots & x_D^{(2)} & y^{(2)}\\
 	\vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-	\blue{\b{x}^{(n)^\T}} & x_1^{(n)} & x_2^{(n)} & \cdots & x_d^{(n)} & y^{(n)}\\
+	\blue{\b{x}^{(N)^\T}} & x_1^{(N)} & x_2^{(N)} & \cdots & x_D^{(N)} & y^{(N)}\\
 \end{array}
 $$
 The accompanying output variable $\b{y}$ contains the output for each feature vector where the output $y^{(i)}$ is assumed to be a **linear combination** of its feature values $\b{x}^{(i)}$—that is:
 $$
 \begin{align}
 	y^{(i)}
-	&=\theta_1x_1^{(i)}+\theta_2x_2^{(i)}+\cdots+\theta_dx_d^{(i)}\\
-	&=\sum_{j=1}^d \theta_j x_j^{(i)}
+	&=\theta_1x_1^{(i)}+\theta_2x_2^{(i)}+\cdots+\theta_Dx_D^{(i)}\\
+	&=\sum_{j=1}^D \theta_j x_j^{(i)}
 \end{align}
 $$
 
 > **Where**: $\theta_j\in\R$ is an arbitrary coefficient, referred to as a **==weight==**.
 
-If we let $\bs{\theta}=\colv{\theta}{1}{d}$ then we can see that the expression for $y^{(i)}$ as a sum of products, can be represented as a dot product:
+If we let $\bs{\theta}=\colv{\theta}{1}{D}$ then we can see that the expression for $y^{(i)}$ as a sum of products, can be represented as a dot product:
 $$
 \begin{align}
 	y^{(i)}
-	&=\sum_{j=1}^d \theta_j x_j^{(i)}\\
+	&=\sum_{j=1}^D \theta_j x_j^{(i)}\\
 	&=\begin{pmatrix}
 		\theta_1\\
 		\theta_2\\
 		\vdots\\
-		\theta_d
+		\theta_D
 	\end{pmatrix}
 	\cdot
 	\begin{pmatrix}
 		x_1^{(i)}\\
 		x_2^{(i)}\\
 		\vdots\\
-		x_d^{(i)}
+		x_D^{(i)}
 	\end{pmatrix}\\
 	&=\bs{\theta}\cdot\b{x}^{(i)}\\
 	&=\bs{\theta}^\T\b{x}^{(i)}
@@ -210,11 +210,11 @@ $$
 
 ## Learning task
 
-Suppose we have training data $\mathcal{D}_\text{train}=\set{\l(\b{x}^{(i)},y^{(i)}\r)}_{i=1}^n$. 
+Suppose we have training data $\mathcal{D}_\text{train}=\set{\l(\b{x}^{(i)},y^{(i)}\r)}_{i=1}^N$. 
 
 Linear regression aims to learn from this data in order to create a **regression line**, $\hat{\b{y}}$. This line can then be used to estimate the value of the output variable $y^{(k)}$ for some new unlabeled feature vector $\b{x}^{(k)}$.
 
-**Note**: The regression line is simply a $d$-dimensional hyperplane in $d$-dimensional feature space. This is often called a **line-of-best-fit**.
+**Note**: The regression line is simply a $D$-dimensional hyperplane in $D$-dimensional feature space. This is often called a **line-of-best-fit**.
 
 <p style="text-align:center;">
 	<img src="./assets/predictor.gif" width="40%"></img>
@@ -262,8 +262,8 @@ Sum-squared error is simply the sum of the squared (vertical-offset) residual le
 $$
 \begin{align}
 	C(\bs{\theta})
-	&=\sum_{i=1}^n\l(y^{(i)}-\hat{y}^{(i)}\r)^2\\
-	&=\sum_{i=1}^n\l(y^{(i)}-\bs{\theta}^\T \b{x}^{(i)}\r)^2
+	&=\sum_{i=1}^N\l(y^{(i)}-\hat{y}^{(i)}\r)^2\\
+	&=\sum_{i=1}^N\l(y^{(i)}-\bs{\theta}^\T \b{x}^{(i)}\r)^2
 \end{align}
 $$
 
@@ -277,12 +277,10 @@ Then the optimum weight vector $\hat{\bs{\theta}}$ is given by minimising this c
 $$
 \begin{align}
 	\hat{\bs{\theta}}
-	&=\arg\min_{\bs{\theta}\in\bs{\Theta}}C(\bs{\theta})\\
-	&=\arg\min_{\bs{\theta}\in\bs{\Theta}}\l(\b{y}-\b{X}\bs{\theta}\r)^\T\l(\b{y}-\b{X}\bs{\theta}\r)
+	&=\arg\min_{\bs{\theta}}C(\bs{\theta})\\
+	&=\arg\min_{\bs{\theta}}\l(\b{y}-\b{X}\bs{\theta}\r)^\T\l(\b{y}-\b{X}\bs{\theta}\r)
 \end{align}
 $$
-
-> **Where**: $\bs{\Theta}$ is the set of all possible weights—$\R^d$ in this case.
 
 ### Bias term
 
@@ -317,7 +315,7 @@ If an intercept term $\theta_0$ (called a **==bias==**) is incorporated into the
 
 In practicality, we will usually want a bias for our linear model anyway.
 
-> **Example**: If we are modelling the prediction the price of a house, $y^{(i)}$, with explanatory variables valued at $x_1^{(i)},\ldots,x_d^{(i)}$, we don't want the house price to be $0$ when all of the explanatory variables are valued at $0$. 
+> **Example**: If we are modelling the prediction the price of a house, $y^{(i)}$, with explanatory variables valued at $x_1^{(i)},\ldots,x_D^{(i)}$, we don't want the house price to be $0$ when all of the explanatory variables are valued at $0$. 
 >
 > For example, when the explanatory variables are all zero, we want the default house price will be $\$1000$. The bias term allows us to capture this information by defining the value of the regression line when the explanatory variables are all zero—in other words, the point of intercept with the $\b{y}$ axis.
 
@@ -342,43 +340,43 @@ With the introduction of the bias term $\theta_0$, an individual training exampl
 $$
 \begin{align}
 	y^{(i)}
-	&=\blue{\theta_0}+\theta_1x_1^{(i)}+\theta_2x_2^{(i)}+\cdots+\theta_dx_d^{(i)}\\
-	&=\blue{\theta_0}+\sum_{j=1}^d \theta_j x_j^{(i)}
+	&=\blue{\theta_0}+\theta_1x_1^{(i)}+\theta_2x_2^{(i)}+\cdots+\theta_Dx_D^{(i)}\\
+	&=\blue{\theta_0}+\sum_{j=1}^D \theta_j x_j^{(i)}
 \end{align}
 $$
 Prior to the introduction of the bias term, we could express this as a dot product. However, the $\theta_0$ term in the expression above is **no longer** attached to the value of any explanatory variable $x_{j}^{(i)}$.
 
 We can address this issue by extending the feature vector $\b{x}^{(i)}$ to have $1$ as it's first element, $x_0^{(i)}$. Let this new vector be $\phi \! \l(\b{x}^{(i)}\r)$:
 $$
-\bs{\phi} \! \l(\b{x}^{(i)}\r)=\underbrace{\l(1,x_1^{(i)},\ldots,x_d^{(i)}\r)^\T}_{d+1}
+\bs{\phi} \! \l(\b{x}^{(i)}\r)=\underbrace{\l(1,x_1^{(i)},\ldots,x_D^{(i)}\r)^\T}_{D+1}
 $$
 If we express $y^{(i)}$ as a linear combination of the explanatory variables as defined in $\bs{\phi} \! \l(\b{x}^{(i)}\r)$, we can now say:
 $$
 \begin{align}
 	y^{(i)}
-	&=\blue{\theta_0}+\theta_1x_1^{(i)}+\theta_2x_2^{(i)}+\cdots+\theta_dx_d^{(i)}\\
-	&=\blue{\theta_0\cdot 1}+\theta_1x_1^{(i)}+\theta_2x_2^{(i)}+\cdots+\theta_dx_d^{(i)}\\
-	&=\blue{\theta_0x_0^{(i)}}+\theta_1x_1^{(i)}+\theta_2x_2^{(i)}+\cdots+\theta_dx_d^{(i)}\\
-	&=\sum_{j=0}^d \theta_j x_j^{(i)}
+	&=\blue{\theta_0}+\theta_1x_1^{(i)}+\theta_2x_2^{(i)}+\cdots+\theta_Dx_D^{(i)}\\
+	&=\blue{\theta_0\cdot 1}+\theta_1x_1^{(i)}+\theta_2x_2^{(i)}+\cdots+\theta_Dx_D^{(i)}\\
+	&=\blue{\theta_0x_0^{(i)}}+\theta_1x_1^{(i)}+\theta_2x_2^{(i)}+\cdots+\theta_Dx_D^{(i)}\\
+	&=\sum_{j=0}^D \theta_j x_j^{(i)}
 \end{align}
 $$
-Further if we treat the bias term $\theta_0$ as an extension of the weight vector $\bs{\theta}$, so that $\bs{\theta}=\underbrace{\colv{\theta}{0}{d}}_{d+1}$ we can express this as a dot product:
+Further if we treat the bias term $\theta_0$ as an extension of the weight vector $\bs{\theta}$, so that $\bs{\theta}=\underbrace{\colv{\theta}{0}{D}}_{D+1}$ we can express this as a dot product:
 $$
 \begin{align}
 	y^{(i)}
-	&=\sum_{j=0}^d \theta_j x_j^{(i)}\\
+	&=\sum_{j=0}^D \theta_j x_j^{(i)}\\
 	&=\begin{pmatrix}
 		\theta_0\\
 		\theta_1\\
 		\vdots\\
-		\theta_d
+		\theta_D
 	\end{pmatrix}
 	\cdot
 	\begin{pmatrix}
 		x_0^{(i)}\\
 		x_1^{(i)}\\
 		\vdots\\
-		x_d^{(i)}
+		x_D^{(i)}
 	\end{pmatrix}\\
 	&=\bs{\theta}^\T\bs{\phi} \! \l(\b{x}^{(i)}\r)
 \end{align}
@@ -386,12 +384,12 @@ $$
 The modified feature vectors $\bs{\phi} \! \l(\b{x}^{(i)}\r)$ can be represented by a new matrix—known as the **==design matrix==**, $\bs{\Phi}$:
 $$
 \begin{array}{c:ccccc|c}
-	\bs{\Phi} & \b{x}_0 & \b{x}_1 & \b{x}_2 & \cdots & \b{x}_d & \b{y}\\
+	\bs{\Phi} & \b{x}_0 & \b{x}_1 & \b{x}_2 & \cdots & \b{x}_D & \b{y}\\
 	\hdashline
-	\blue{\bs{\phi}\l(\b{x}^{(1)}\r)^\T} & 1 & x_1^{(1)} & x_2^{(1)} & \cdots & x_d^{(1)} & y^{(1)}\\
-	\blue{\bs{\phi}\l(\b{x}^{(2)}\r)^\T} &  1& x_1^{(2)} & x_2^{(2)} & \cdots & x_d^{(2)} & y^{(2)}\\
+	\blue{\bs{\phi}\l(\b{x}^{(1)}\r)^\T} & 1 & x_1^{(1)} & x_2^{(1)} & \cdots & x_D^{(1)} & y^{(1)}\\
+	\blue{\bs{\phi}\l(\b{x}^{(2)}\r)^\T} &  1& x_1^{(2)} & x_2^{(2)} & \cdots & x_D^{(2)} & y^{(2)}\\
 	\vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-	\blue{\bs{\phi}\l(\b{x}^{(n)}\r)^\T} & 1 & x_1^{(n)} & x_2^{(n)} & \cdots & x_d^{(n)} & y^{(n)}\\
+	\blue{\bs{\phi}\l(\b{x}^{(N)}\r)^\T} & 1 & x_1^{(N)} & x_2^{(N)} & \cdots & x_D^{(N)} & y^{(N)}\\
 \end{array}
 $$
 Using the previous result along with matrix algebra, we can represent the output vector $\b{y}$ as:
@@ -405,16 +403,16 @@ We previously saw that the optimal $\hat{\bs{\theta}}$ with no bias term is give
 $$
 \begin{align}
 	\hat{\bs{\theta}}
-	&=\arg\min_{\bs{\theta}\in\bs{\Theta}}C(\bs{\theta})\\
-	&=\arg\min_{\bs{\theta}\in\bs{\Theta}}\l(\b{y}-\b{X}\bs{\theta}\r)^\T\l(\b{y}-\b{X}\bs{\theta}\r)
+	&=\arg\min_{\bs{\theta}}C(\bs{\theta})\\
+	&=\arg\min_{\bs{\theta}}\l(\b{y}-\b{X}\bs{\theta}\r)^\T\l(\b{y}-\b{X}\bs{\theta}\r)
 \end{align}
 $$
 By extending $\bs{\theta}$ with the bias term $\theta_0$ and using the design matrix $\bs{\Phi}$ instead of $\b{X}$, this becomes:
 $$
 \begin{align}
 	\hat{\bs{\theta}}
-	&=\arg\min_{\bs{\theta}\in\bs{\Theta}}C(\bs{\theta})\\
-	&=\arg\min_{\bs{\theta}\in\bs{\Theta}}\l(\b{y}-\bs{\Phi}\bs{\theta}\r)^\T\l(\b{y}-\bs{\Phi}\bs{\theta}\r)
+	&=\arg\min_{\bs{\theta}}C(\bs{\theta})\\
+	&=\arg\min_{\bs{\theta}}\l(\b{y}-\bs{\Phi}\bs{\theta}\r)^\T\l(\b{y}-\bs{\Phi}\bs{\theta}\r)
 \end{align}
 $$
 Minimization for OLS has a **closed-form (analytical) solution** which can be derived by taking partial derivatives with respect to $\bs{\theta}$ and setting them to $0$. This leads to the following analytical solution for the optimal weight vector $\hat{\bs{\theta}}$:
@@ -424,7 +422,7 @@ $$
 
 > **Where**: $\l(\bs{\Phi}^\T\bs{\Phi}\r)^{-1}\bs{\Phi}^\T$ is referred to as the **==pseudo-inverse==** of $\bs{\Phi}$. 
 >
-> This is not the actual inverse matrix since $\bs{\Phi}$ is **not invertible** as it is not square, since it has shape $n\times (d+1)$.
+> This is not the actual inverse matrix since $\bs{\Phi}$ is **not invertible** as it is not square, since it has shape $N\times (D+1)$.
 
 **Note**: Although OLS has an analytical solution, it is also possible to use other iterative optimization methods such as **gradient descent**, **stochastic gradient descent**, **BFGS**, etc. to minimize the cost function. However, these methods are **not** guaranteed to converge or find a global minimum.
 
@@ -443,7 +441,7 @@ Regularization discourages or decreases the complexity of a linear model.
 </p>
 For least squares problems, the regularized cost function looks like:
 $$
-C(\bs{\theta})=\sum_{i=1}^n\l(y^{(i)}-\bs{\theta}^\T \b{x}^{(i)}\r)^2+\lambda\underbrace{\blue{R(\bs{\theta})}}_\text{reg. term}
+C(\bs{\theta})=\sum_{i=1}^N\l(y^{(i)}-\bs{\theta}^\T \b{x}^{(i)}\r)^2+\lambda\underbrace{\blue{R(\bs{\theta})}}_\text{reg. term}
 $$
 
 > **Where**: 
@@ -478,8 +476,8 @@ The table below provides information about both of these regularization methods 
 |                                                              |                            $L_1$                             |                            $L_2$                             |
 | ------------------------------------------------------------ | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | **Name**                                                     |                            Lasso                             |                            Ridge                             |
-| **Regularization term** — $R(\bs{\theta})$<br/>_**Note**: Observe that we don't penalize the bias term, $\theta_0$._ | $\sum_{i=1}^n \blue{|\theta_i|}$ (or $||\bs{\theta}||_1$ — the $L_1$ norm) | $\sum_{i=1}^n \blue{\theta_i^2}$ (or $||\bs{\theta}||_2^2$ — the squared $L_2$ norm) |
-| **Regularized least squares** — $C(\bs{\theta})$             | $\sum_{i=1}^n\l(y^{(i)}-\bs{\theta}^\T \b{x}^{(i)}\r)^2+\lambda\sum_{i=1}^n |\theta_i|$ | $\sum_{i=1}^n\l(y^{(i)}-\bs{\theta}^\T \b{x}^{(i)}\r)^2+\lambda\sum_{i=1}^n \theta_i^2$ |
+| **Regularization term** — $R(\bs{\theta})$<br/>_**Note**: Observe that we don't penalize the bias term, $\theta_0$._ | $\sum_{i=1}^N \blue{|\theta_i|}$ (or $||\bs{\theta}||_1$ — the $L_1$ norm) | $\sum_{i=1}^N \blue{\theta_i^2}$ (or $||\bs{\theta}||_2^2$ — the squared $L_2$ norm) |
+| **Regularized least squares** — $C(\bs{\theta})$             | $\sum_{i=1}^N\l(y^{(i)}-\bs{\theta}^\T \b{x}^{(i)}\r)^2+\lambda\sum_{i=1}^N |\theta_i|$ | $\sum_{i=1}^N\l(y^{(i)}-\bs{\theta}^\T \b{x}^{(i)}\r)^2+\lambda\sum_{i=1}^N \theta_i^2$ |
 | **Analytic solution**                                        |           None—use iterative optimization methods.           | $\hat{\bs{\theta}}=\l(\bs{\Phi}^\T\bs{\Phi}+\lambda \b{I}\r)^{-1}\bs{\Phi}^\T\b{y}$ |
 | **Affected weights**                                         |                    All weights—uniformly.                    | All weights—but low valued weights will be penalized less since we are squaring. Conversely, large weights will face more penalty. |
 | **When to use**                                              | When there are many features which are irrelevant to the output variable—since it **can** shrink them to zero, completely disregarding them. Also works well when $n\gg d$ (number of instances is far greater than the number of features). | When all (or most) features are relevant to the output variable—since it can **not** shrink them to zero, meaning that all features will have **some** impact. Also works better when there is high collinearity between features. |
@@ -491,7 +489,7 @@ The table below provides information about both of these regularization methods 
 
 The elastic net regularized cost function for least squares problems is given as:
 $$
-C(\bs{\theta})=\underbrace{\sum_{i=1}^n\l(y^{(i)}-\bs{\theta}^\T \b{x}^{(i)}\r)^2}_\text{RSS}+\underbrace{\lambda_1\sum_{i=1}^n |\theta_i|}_{L_1}+\underbrace{\lambda_2\sum_{i=1}^n \theta_i^2}_{L_2}
+C(\bs{\theta})=\underbrace{\sum_{i=1}^N\l(y^{(i)}-\bs{\theta}^\T \b{x}^{(i)}\r)^2}_\text{RSS}+\underbrace{\lambda_1\sum_{i=1}^N |\theta_i|}_{L_1}+\underbrace{\lambda_2\sum_{i=1}^N \theta_i^2}_{L_2}
 $$
 
 #### Comparison with standalone $L_1$ and $L_2$ regularization
@@ -524,8 +522,8 @@ $$
 	+\theta_1 \phi_1 \! \l(\b{x}^{(i)}\r)
 	+\theta_2 \phi_2 \! \l(\b{x}^{(i)}\r)
 	+\cdots
-	+\theta_d \phi_d \! \l(\b{x}^{(i)}\r)\\
-	&=\sum_{j=0}^d \theta_j \phi_j \! \l(\b{x}^{(i)}\r)\\
+	+\theta_D \phi_D \! \l(\b{x}^{(i)}\r)\\
+	&=\sum_{j=0}^D \theta_j \phi_j \! \l(\b{x}^{(i)}\r)\\
 	&=\bs{\theta}^\T \bs{\phi} \! \l(\b{x}^{(i)}\r)
 \end{align}
 $$
@@ -533,21 +531,21 @@ $$
 > **Where**:
 >
 > - Each $\phi_j$ is called a **==basis function==**, which is a function of the current input $\b{x}^{(i)}$.
-> - $\bs{\phi}$ is a vector-valued function such that $\bs{\phi} \! \l(\b{x}^{(i)}\r)=\Big(\phi_0 \! \l(\b{x}^{(i)}\r),\ldots,\phi_d \! \l(\b{x}^{(i)}\r) \Big)^\T$.
+> - $\bs{\phi}$ is a vector-valued function such that $\bs{\phi} \! \l(\b{x}^{(i)}\r)=\Big(\phi_0 \! \l(\b{x}^{(i)}\r),\ldots,\phi_D \! \l(\b{x}^{(i)}\r) \Big)^\T$.
 > - $\phi_0 \! \l(\b{x}^{(i)}\r)=1$ by convention—so that the bias term is not affected by the basis function.
 
 ### The identity basis function
 
 The most simple case of a linear regression model that we have seen before is where the output variable may be modeled as:
 $$
-y^{(i)}=\theta_0+\theta_1x_1^{(i)}+\theta_2x_2^{(i)}+\cdots+\theta_dx_d^{(i)}
+y^{(i)}=\theta_0+\theta_1x_1^{(i)}+\theta_2x_2^{(i)}+\cdots+\theta_Dx_D^{(i)}
 $$
 This regression model can be defined by the identity basis function:
 $$
 \begin{align}
 	\bs{\phi} \! \l(\b{x}^{(i)}\r)
 	&=\b{x}^{(i)}\\
-	&=\l(1,x_1^{(i)},\ldots,x_d^{(i)}\r)^\T
+	&=\l(1,x_1^{(i)},\ldots,x_D^{(i)}\r)^\T
 \end{align}
 $$
 
@@ -556,12 +554,12 @@ $$
 This is more clearly seen by looking at the design matrix $\bs{\Phi}$ of this basis function when applied to the training set $\mathcal{D}_\text{train}$:
 $$
 \begin{array}{c:ccccc|c}
-	\bs{\Phi} & \b{x}_0 & \b{x}_1 & \b{x}_2 & \cdots & \b{x}_d & \b{y}\\
+	\bs{\Phi} & \b{x}_0 & \b{x}_1 & \b{x}_2 & \cdots & \b{x}_D & \b{y}\\
 	\hdashline
-	\blue{\bs{\phi}\l(\b{x}^{(1)}\r)^\T} & \phi_0 \! \l(\b{x}^{(1)}\r) & \phi_1 \! \l(\b{x}^{(1)}\r) & \phi_2 \! \l(\b{x}^{(1)}\r) & \cdots & \phi_d \! \l(\b{x}^{(1)}\r) & y^{(1)}\\
-	\blue{\bs{\phi}\l(\b{x}^{(2)}\r)^\T} & \phi_0 \! \l(\b{x}^{(2)}\r) & \phi_1 \! \l(\b{x}^{(2)}\r) & \phi_2 \! \l(\b{x}^{(2)}\r) & \cdots & \phi_d \! \l(\b{x}^{(2)}\r) & y^{(2)}\\
+	\blue{\bs{\phi}\l(\b{x}^{(1)}\r)^\T} & \phi_0 \! \l(\b{x}^{(1)}\r) & \phi_1 \! \l(\b{x}^{(1)}\r) & \phi_2 \! \l(\b{x}^{(1)}\r) & \cdots & \phi_D \! \l(\b{x}^{(1)}\r) & y^{(1)}\\
+	\blue{\bs{\phi}\l(\b{x}^{(2)}\r)^\T} & \phi_0 \! \l(\b{x}^{(2)}\r) & \phi_1 \! \l(\b{x}^{(2)}\r) & \phi_2 \! \l(\b{x}^{(2)}\r) & \cdots & \phi_D \! \l(\b{x}^{(2)}\r) & y^{(2)}\\
 	\vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-	\blue{\bs{\phi}\l(\b{x}^{(n)}\r)^\T} & \phi_0 \! \l(\b{x}^{(n)}\r) & \phi_1 \! \l(\b{x}^{(n)}\r) & \phi_2 \! \l(\b{x}^{(n)}\r) & \cdots & \phi_d \! \l(\b{x}^{(n)}\r) & y^{(n)}\\
+	\blue{\bs{\phi}\l(\b{x}^{(N)}\r)^\T} & \phi_0 \! \l(\b{x}^{(N)}\r) & \phi_1 \! \l(\b{x}^{(N)}\r) & \phi_2 \! \l(\b{x}^{(N)}\r) & \cdots & \phi_D \! \l(\b{x}^{(N)}\r) & y^{(N)}\\
 \end{array}
 
 \quad
@@ -569,12 +567,12 @@ $$
 \quad
 
 \begin{array}{c:ccccc|c}
-	\bs{\Phi} & \b{x}_0 & \b{x}_1 & \b{x}_2 & \cdots & \b{x}_d & \b{y}\\
+	\bs{\Phi} & \b{x}_0 & \b{x}_1 & \b{x}_2 & \cdots & \b{x}_D & \b{y}\\
 	\hdashline
-	\blue{\bs{\phi}\l(\b{x}^{(1)}\r)^\T} & 1 & x_1^{(1)} & x_2^{(1)} & \cdots & x_d^{(1)} & y^{(1)}\\
-	\blue{\bs{\phi}\l(\b{x}^{(2)}\r)^\T} &  1& x_1^{(2)} & x_2^{(2)} & \cdots & x_d^{(2)} & y^{(2)}\\
+	\blue{\bs{\phi}\l(\b{x}^{(1)}\r)^\T} & 1 & x_1^{(1)} & x_2^{(1)} & \cdots & x_D^{(1)} & y^{(1)}\\
+	\blue{\bs{\phi}\l(\b{x}^{(2)}\r)^\T} &  1& x_1^{(2)} & x_2^{(2)} & \cdots & x_D^{(2)} & y^{(2)}\\
 	\vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-	\blue{\bs{\phi}\l(\b{x}^{(n)}\r)^\T} & 1 & x_1^{(n)} & x_2^{(n)} & \cdots & x_d^{(n)} & y^{(n)}\\
+	\blue{\bs{\phi}\l(\b{x}^{(N)}\r)^\T} & 1 & x_1^{(N)} & x_2^{(N)} & \cdots & x_D^{(N)} & y^{(N)}\\
 \end{array}
 $$
 
@@ -592,13 +590,13 @@ However, it is not always the case that the explanatory variables have a linear 
 	</p>
 </p>
 
-In this case, it may be more appropriate to assume a different relationship, such as a polynomial one. The output variable can be modeled as a $d$-degree polynomial—a linear combination of the **monomials** of each feature:
+In this case, it may be more appropriate to assume a different relationship, such as a polynomial one. The output variable can be modeled as a $D$-degree polynomial—a linear combination of the **monomials** of each feature:
 $$
-y^{(i)}=\theta_0+\theta_1x_1^{(i)}+\theta_2\l(x_2^{(i)}\r)^2+\cdots+\theta_d\l(x_d^{(i)}\r)^d
+y^{(i)}=\theta_0+\theta_1x_1^{(i)}+\theta_2\l(x_2^{(i)}\r)^2+\cdots+\theta_D\l(x_D^{(i)}\r)^D
 $$
 Which can be defined with the following basis function:
 $$
-\bs{\phi} \l(\b{x}^{(i)}\r)=\l(1,x_1^{(i)}, \l(x_2^{(i)}\r)^2, \ldots, \l(x_d^{(i)}\r)^d\r)^\T
+\bs{\phi} \l(\b{x}^{(i)}\r)=\l(1,x_1^{(i)}, \l(x_2^{(i)}\r)^2, \ldots, \l(x_D^{(i)}\r)^D\r)^\T
 $$
 
 ### Multivariate basis functions
