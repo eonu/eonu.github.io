@@ -470,7 +470,6 @@ For these kinds of tasks, the binomial logistic regression that was previously i
     <b>Figure 3</b>: Division of the feature-space of a dataset into three decision regions by a classifier such as multinomial logistic regression that can generate multiple decision boundaries (each being linear in this case). (<a href="https://mathematica.stackexchange.com/questions/22218/multinomial-logistic-regression">source</a>)
 	</p>
 </p>
-
 ---
 
 Given training data $\mathcal{D}_\text{train}=\set{\l(\b{x}^{(i)},y^{(i)}\r)}_{i=1}^N$ where $y^{(i)}\in\set{1,\ldots,K}$, we can create a separate weight vector $\bs{\theta}^{(k)}=\colv{\theta^{(k)}}{0}{D}$ for each class $k\in K$. We can then classify a feature vector $\b{x}^{(i)}$ as $k$ or not-$k$, through the use of the **==softmax==** function, which is simply a normalized exponential function:
