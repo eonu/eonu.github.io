@@ -44,9 +44,19 @@ header {
         width: 200px;
     }
 
-    b {
+    em {
+        margin-top: 10px;
+    }
+
+    nav a {
         font-size: 1.1rem;
         padding: 0px 10px;
+
+        &.active {
+            color: black;
+            font-weight: bold;
+            text-decoration: none;
+        }
     }
 }
 
