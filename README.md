@@ -1,6 +1,6 @@
 # Notes
 
-Markdown/LaTeX formatted notes for computer science topics.
+Collection of personal notes, R-notebooks and other resources for research into computer science topics.
 
 # Editing
 
