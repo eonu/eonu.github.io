@@ -476,7 +476,7 @@ Given training data $\mathcal{D}_\text{train}=\set{\l(\b{x}^{(i)},y^{(i)}\r)}_{i
 $$
 \begin{align}
 	\cp{y^{(i)}=c}{\b{x}^{(i)};\bs{\Theta}}
-	&=\sigma_c\l(\b{x}^{(i)}\r)\\
+	&=\sigma_c\l(\b{x}^{(i)};\bs{\Theta}\r)\\
 	&=\frac{\exp\l({\bs{\theta}^{(c)\T}\b{x}^{(i)}}\r)}{\sum_{k=1}^K \exp\l({\bs{\theta}^{(k)\T}\b{x}^{(i)}}\r)}
 \end{align}
 $$
@@ -577,9 +577,9 @@ For more general information about regularization and how the $L_1$ and $L_2$ no
 - _Wei Xu (Department of Computer Science and Engineering, Ohio State University)_<br/>[Multi-Class Logistic Regression and Perceptron](https://cocoxu.github.io/courses/5525_slides_spring17/06_perceptron.pdf)
 - _Wikipedia_<br/>[Decision boundary](https://en.wikipedia.org/wiki/Decision_boundary)<br/>[Logistic regression](https://en.wikipedia.org/wiki/Logistic_regression)<br/>[Monotonic function](https://en.wikipedia.org/wiki/Monotonic_function)<br/>[Sigmoid function](https://en.wikipedia.org/wiki/Sigmoid_function)<br/>[Bernoulli distribution](https://en.wikipedia.org/wiki/Bernoulli_distribution)<br/>[Multinomial logistic regression](https://en.wikipedia.org/wiki/Multinomial_logistic_regression)<br/>[Maximum likelihood estimation](https://en.wikipedia.org/wiki/Maximum_likelihood_estimation)
 - _Trevor Hastie (Department of Statistics, Stanford University)_<br/>[Fast Regularization Paths via Coordinate Descent](https://web.stanford.edu/~hastie/TALKS/glmnet.pdf)
-- _Chandler Watson (Stack Overflow)_<br/>[Proof that conditional probabilities sum up to one](https://math.stackexchange.com/questions/2084313/proof-that-conditional-probabilities-sum-up-to-one)
+- _Chandler Watson (Stack Exchange)_<br/>[Proof that conditional probabilities sum up to one](https://math.stackexchange.com/questions/2084313/proof-that-conditional-probabilities-sum-up-to-one)
 - _Dan Nettleton (Iowa State University)_<br/>[A Generalized Linear Model for Bernoulli Response Data](https://dnett.github.io/S510/26GeneralizedLinearModelBernoulliAnnotated.pdf)
-- _Mark (Stack Overflow)_<br/>[Logistic Regression: Bernoulli vs. Binomial Response Variables](https://stats.stackexchange.com/a/144174)
+- _Mark (Stack Exchange)_<br/>[Logistic Regression: Bernoulli vs. Binomial Response Variables](https://stats.stackexchange.com/a/144174)
 - _Neos Guide (University of Wisconsin-Madison)_<br/>[Maximum Likelihood Estimation with Logit Model](https://neos-guide.org/content/logit)
 - _Dan Nuttle (RPubs)_<br/>[Partial Derivative of Cost Function for Logistic Regression](https://rpubs.com/dnuttle/ml-logistic-cost-func_derivative)
 - _Ayush Pant (Towards Data Science)_<br/>[Introduction to Logistic Regression](https://towardsdatascience.com/introduction-to-logistic-regression-66248243c148)

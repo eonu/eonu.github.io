@@ -49,17 +49,6 @@ header {
         padding: 0 10px;
         font-family: 'Courier New', Courier, monospace;
     }
-
-    nav a {
-        font-size: 1.1rem;
-        padding: 0px 10px;
-
-        &.active {
-            color: black;
-            font-weight: bold;
-            text-decoration: none;
-        }
-    }
 }
 
 hr, main {

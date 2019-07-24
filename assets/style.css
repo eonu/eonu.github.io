@@ -34,13 +34,6 @@ header {
     margin-top: 10px;
     padding: 0 10px;
     font-family: 'Courier New', Courier, monospace; }
-  header nav a {
-    font-size: 1.1rem;
-    padding: 0px 10px; }
-    header nav a.active {
-      color: black;
-      font-weight: bold;
-      text-decoration: none; }
 
 hr, main {
   width: 40vw;
