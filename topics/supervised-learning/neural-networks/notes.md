@@ -458,24 +458,50 @@ The purpose of back-propagation is to calculate all of the error derivatives of 
 
 ### Error derivatives
 
-The back-propagation algorithm decides how much to update each weight of the network after comparing the predicted output with the desired output for a **particular** example. For this, we need to compute how the error changes with respect to each weight—that is $\pderiv{}{\theta_{j,k}^{(i)}}C(\bs{\Theta})$.
+The back-propagation algorithm decides how much to update each weight of the network after comparing the predicted output with the desired output for a **particular** example. For this, we need to compute how the error changes with respect to each weight—that is $\pderiv{}{\theta_{j,k}^{(l)}}C(\bs{\Theta})$.
 
-Once we have these error derivatives, the weights can be updated using a simple update rule:
+Once we have these error derivatives, the weights can be updated using a simple update rule for $l\in\set{1,\ldots,L}$:
 $$
-\theta_{j,k}^{(i)} \leftarrow \theta_{j,k}^{(i)} - \eta \pderiv{C}{\theta_{j,k}^{(i)}}
+\theta_{j,k}^{(l)} \leftarrow \theta_{j,k}^{(l)} - \eta \pderiv{C}{\theta_{j,k}^{(l)}}
 $$
+Or as a per-layer weight matrix update:
+$$
+\bs{\Theta}^{(l)} \leftarrow \bs{\Theta}^{(l)} - \eta \bs{\nabla}_{\bs{\Theta}^{(l)}}C(\bs{\Theta})
+$$
+
+> **Where**:
+> $$
+> \bs{\nabla}_{\bs{\Theta}^{(l)}} C(\bs{\Theta})
+> =\begin{pmatrix}
+> 	\nabla_{\bs{\theta}_{0,\cdot}^{(l)}} C(\bs{\Theta})\\
+> 	\nabla_{\bs{\theta}_{1,\cdot}^{(l)}} C(\bs{\Theta})\\
+> 	\vdots\\
+> 	\nabla_{\bs{\theta}_{N_l,\cdot}^{(l)}} C(\bs{\Theta})\\
+> \end{pmatrix}^\T
+> =\begin{pmatrix}
+> 	\overset{\small{\nabla_{\bs{\theta}_{0,\cdot}^{(l)}} C(\bs{\Theta})}\\}{\pderiv{C}{\theta_{0,1}^{(l)}}} &
+> 	\overset{\small{\nabla_{\bs{\theta}_{1,\cdot}^{(l)}} C(\bs{\Theta})}\\}{\pderiv{C}{\theta_{1,1}^{(l)}}} &
+> 	\cdots & 
+> 	\overset{\small{\nabla_{\bs{\theta}_{N_l,\cdot}^{(l)}} C(\bs{\Theta})}\\}{\pderiv{C}{\theta_{N_l,1}^{(l)}}}
+> 	\\
+> 	
+> 	\pderiv{C}{\theta_{0,2}^{(l)}} & \pderiv{C}{\theta_{1,2}^{(l)}} & \cdots & \pderiv{C}{\theta_{N_l,2}^{(l)}}\\
+> 	\vdots & \vdots & \ddots & \vdots\\
+> 	\pderiv{C}{\theta_{0,N_{l+1}}^{(l)}} & \pderiv{C}{\theta_{1,N_{l+1}}^{(l)}} & \cdots & \pderiv{C}{\theta_{N_l,N_{l+1}}^{(l)}}\\
+> \end{pmatrix}
+> $$
 
 ### Additional derivatives
 
-To help compute $\pderiv{C}{\theta_{j,k}^{(i)}}$, we store two additional derivatives for each neuron:
+To help compute $\pderiv{C}{\theta_{j,k}^{(l)}}$, we store two additional derivatives for each neuron:
 
-- How the error changes with the **total (weighted) input of the neuron**: $\pderiv{C}{z_{j}^{(i)}}$.
+- How the error changes with the **total (weighted) input of the neuron**: $\pderiv{C}{z_{j}^{(l)}}$.
 
-  > **Where**: $z_j^{(i)}=\bs{\theta}_{\cdot,j}^{(i-1)\T}\b{a}^{(i-1)}$, the input for neuron $n_j^{(i)}$.
+  > **Where**: $z_j^{(l)}=\bs{\theta}_{\cdot,j}^{(l-1)\T}\b{a}^{(l-1)}$, the input for neuron $n_j^{(l)}$.
 
-- How the error changes with the **total output of the neuron**: $\pderiv{C}{a_{j}^{(i)}}$.
+- How the error changes with the **total output of the neuron**: $\pderiv{C}{a_{j}^{(l)}}$.
 
-  > **Where**: $a_j^{(i)}=\sigma^{(i)} \! \l(\bs{\theta}_{\cdot,j}^{(i-1)\T}\b{a}^{(i-1)}\r)=\sigma^{(i)} \! \l(z_j^{(i)}\r)$
+  > **Where**: $a_j^{(l)}=\sigma^{(l)} \! \l(\bs{\theta}_{\cdot,j}^{(l-1)\T}\b{a}^{(l-1)}\r)=\sigma^{(l)} \! \l(z_j^{(l)}\r)$
 
 ### Example
 
@@ -501,7 +527,6 @@ The neural network has the following properties:
   $$
   C(\bs{\Theta})=\frac{1}{2}\l(y^{(i)}-\hat{y}^{(i)}\r)^2
   $$
-  
 
 The neural network can be defined by the following matrices and vectors (as seen before):
 $$
@@ -583,26 +608,22 @@ To begin back-propagating to find the cost derivatives, we start at the end of t
    \underbrace{\bigg(y^{(i)}-\sigma\l(z_1^{(4)}\r)\bigg)}_{\pderiv{C}{a_{1}^{(4)}}}
    $$
 
-3. Once we have the cost derivative with respect to the total (weighted) input of a neuron, $\pderiv{C}{z_j^{(i)}}$, we can get the cost derivative with respect to the weights coming into that neuron:
+3. Once we have the cost derivative with respect to the total (weighted) input of a neuron, $\pderiv{C}{z_j^{(l)}}$, we can get the cost derivative with respect to the weights coming into that neuron:
    $$
-   \pderiv{C}{\theta_{j,k}^{(i-1)}}=
-   \pderiv{C}{z_k^{(i)}}
-   \pderiv{z_k^{(i)}}{\theta_{j,k}^{(i-1)}}
+   \pderiv{C}{\theta_{j,k}^{(l-1)}}=
+   \pderiv{C}{z_k^{(l)}}
+   \pderiv{z_k^{(l)}}{\theta_{j,k}^{(l-1)}}
    $$
-   Recall that $z_k^{(i)}$ is defined as:
+   Recall that $z_k^{(l)}$ is defined as:
    $$
-   \begin{align}
-   	z_k^{(i)}
-   	&=\sigma\l(\bs{\theta}_{\cdot,k}^{(i-1)\T}\b{a}^{(i-1)}\r)\\
-   	&=\sigma\l(\sum_{l=0}^{N_{i-1}}\theta_{l,k}^{(i-1)}a_l^{(i-1)}\r)
-   \end{align}
+   z_k^{(l)}=\sigma\l(\bs{\theta}_{\cdot,k}^{(l-1)\T}\b{a}^{(l-1)}\r)
    $$
-   Then the derivative of the input $z_k^{(i)}$ with respect to the incoming weight $\theta_{j,k}^{(i-1)}$ is given by the following (using the chain rule):
+   Then the derivative of the input $z_k^{(l)}$ with respect to the incoming weight $\theta_{j,k}^{(l-1)}$ is given by the following (using the chain rule):
    $$
    \begin{align}
-   	\pderiv{z_k^{(i)}}{\theta_{j,k}^{(i-1)}}
-   	&=\sigma'\l(\bs{\theta}_{\cdot,k}^{(i-1)\T}\b{a}^{(i-1)}\r)a_j^{(i-1)}\\
-   	&=\sigma'\l(z_k^{(i)}\r)a_j^{(i-1)}
+   	\pderiv{z_k^{(l)}}{\theta_{j,k}^{(l-1)}}
+   	&=\sigma'\l(\bs{\theta}_{\cdot,k}^{(l-1)\T}\b{a}^{(l-1)}\r)a_j^{(l-1)}\\
+   	&=\sigma'\l(z_k^{(l)}\r)a_j^{(l-1)}
    \end{align}
    $$
 
@@ -651,7 +672,7 @@ The example above describes the process of finding all of the error derivatives 
 
 To train a neural network using all of the training examples:
 
-1. **Input a set of training examples**<br/>$\mathcal{D}_\text{train}=\set{(\b{x}^{(i)},y^{(i)})}_{i=1}^N$.
+1. **Input a set of training examples**<br/>$\mathcal{D}=\set{(\b{x}^{(i)},y^{(i)})}_{i=1}^N$.
 2. **Randomize the weights of the networks**<br/>Biases should be set to $1$.
 3. **For each training example**:
    1. **Feedforward**<br/>For each layer $l$ and each neuron $n_j^{(l)}$ on layer $l$, compute:
@@ -662,14 +683,78 @@ To train a neural network using all of the training examples:
       - $\ds\pderiv{C}{\theta_{j,k}^{(L)}}$ (the error derivative w.r.t the weight $\theta_{j,k}^{(L)}$ connecting $n_j^{(L)}$ with $n_k^{(L+1)}$)
    3. **Backpropagate the error**<br/>For each $l\in\set{L,L-1\ldots,2}$, compute the following values for each neuron $n_k^{(l)}$:
       - $\ds\pderiv{C}{z_k^{(l)}}$ (the error)
-      - $\ds\pderiv{C}{\theta_{j,k}^{(l-1)}}$ (the error derivative w.r.t the weight $\theta_{j,k}^{(L)}$)
-4. **Gradient descent**<br/>For each weight $\theta_{j,k}^{(i)}$, update it using the simple update rule $\theta_{j,k}^{(i)} \leftarrow \theta_{j,k}^{(i)} - \eta \pderiv{C}{\theta_{j,k}^{(i)}}$.
+      - $\ds\pderiv{C}{\theta_{j,k}^{(l-1)}}$ (the error derivative w.r.t the weight $\theta_{j,k}^{(l-1)}$)
+4. **Gradient descent**<br/>For each weight $\theta_{j,k}^{(l)}$ in the network (where $l\in\set{1,\ldots,L}$), update it using the simple update rule $\theta_{j,k}^{(l)} \leftarrow \theta_{j,k}^{(l)} - \eta \pderiv{C}{\theta_{j,k}^{(l)}}$.
 
-This forms a training loop for one **epoch**, treating the entire training set as one **batch**.
+#### Epochs and batches
 
-To implement **stochastic gradient descent** in practice, you will require an outer loop generating mini-batches of training examples.
+The algorithm above forms a training loop for one **epoch**, treating the entire training set as one **batch**.
 
-To train over multiple epochs, you will need another outer loop.
+An **==epoch==** represents a single forward pass and backward pass of **all** of the training examples through the neural network. Since feeding the entire training data set into the neural network would be time consuming, we divide it into several **batches**, each of equal **batch size**.
+
+A **==batch==** is therefore just a division of the training set. An epoch requires all of the batches to be passed forward and backward through the neural network. Therefore, the number of **iterations** in an epoch is simply equal to the number of batches.
+
+> **Example**: If we have a training set consisting of $1000$ examples and divide it into batches of size $200$, we will have $5$ batches and will therefore require $5$ iterations to complete $1$ full epoch.
+
+#### Types of gradient descent
+
+##### Mini-batch (stochastic) gradient descent
+
+In **==mini-batch (stochastic) gradient descent==**, the training set is randomly divided into a number of subsets—each of a specified batch size. The term **stochastic** arises due to the fact that the batches are randomly divided.
+
+The weights of the network are updated after each batch completes a forward and backward pass through the network. After one epoch is complete, we may randomly select the subsets again and perform another training epoch.
+
+---
+
+Suppose we divide $\mathcal{D}=\set{(\b{x}^{(i)},y^{(i)})}_{i=1}^N$ into $B$ batches such that $\mathcal{D}=\bigcup_{b=1}^B\mathcal{D}^{(b)}$. 
+
+> **Where**: Each batch is given as $\mathcal{D}^{(b)}=\set{(\b{x}^{(b,i)}, y^{(b,i)})}_{i=1}^{\frac{N}{B}}$. Note that the size of $\mathcal{D}^{(b)}$ may not always be exactly $\frac{N}{B}$ as the number of batches $B$ often does not perfectly divide the total number of training samples $N$. 
+>
+> So instead, the size of a training batch is simply denoted as $|\mathcal{D}^{(b)}|$.
+
+The update rules for gradient descent must be slightly modified (from the one seen before) as we now have to average the error derivative over the number of samples in the batch.
+$$
+\begin{align}
+	\theta_{j,k}^{(l)} &\leftarrow \theta_{j,k}^{(l)} - \frac{\eta}{|\mathcal{D}^{(b)}|} \sum_{i=1}^{|\mathcal{D}^{(b)}|} \pderiv{C}{\theta_{j,k}^{(l)}}\\
+	\bs{\Theta}^{(l)} &\leftarrow \bs{\Theta}^{(l)} - \frac{\eta}{|\mathcal{D}^{(b)}|} \sum_{i=1}^{|\mathcal{D}^{(b)}|} \bs{\nabla}_{\bs{\Theta}^{(l)}}C(\bs{\Theta})
+\end{align}
+$$
+
+> **Where**: $C$ is the per-example (non-averaged) error function $C_{(\b{x}^{(b,i)},\b{y}^{(b,i)})}$ evaluated on training example $(\b{x}^{(b,i)},\b{y}^{(b,i)})$. The subscripts are omitted for clarity.
+
+##### Stochastic gradient descent
+
+**==Stochastic gradient descent==** takes the idea of mini-batches to the extreme—it only uses a single example per iteration (batch size $1$). 
+
+This is simply a special case of mini-batch stochastic gradient descent where $B=N$ and $|\mathcal{D}^{(b)}|=1$. This leads to the following update rules for each example (batch):
+$$
+\begin{align}
+	\theta_{j,k}^{(l)} &\leftarrow \theta_{j,k}^{(l)} - \eta\pderiv{C}{\theta_{j,k}^{(l)}}\\
+	\bs{\Theta}^{(l)} &\leftarrow \bs{\Theta}^{(l)} - \eta\bs{\nabla}_{\bs{\Theta}^{(l)}}C(\bs{\Theta})
+\end{align}
+$$
+
+> **Where**: $C$ is the per-example (non-averaged) error function $C_{(\b{x}^{(b,i)},\b{y}^{(b,i)})}$ evaluated on training example $(\b{x}^{(b,i)},\b{y}^{(b,i)})$. The subscripts are omitted for clarity.
+
+In this form of gradient descent, the weights and biases are updated for each training example, after it has completed a forward and backward pass through the neural network. Therefore, one epoch would consist of $N$ iterations.
+
+##### Batch gradient descent
+
+In **==batch gradient descent==**, each epoch treats the entire training data as one batch, meaning the batch size is equal to the number of training examples.
+
+Once again, this is an extreme case of mini-batch stochastic gradient descent where $B=1$ and $|\mathcal{D}^{(b)}|=N$. This leads to the following update rules:
+$$
+\begin{align}
+	\theta_{j,k}^{(l)} &\leftarrow \theta_{j,k}^{(l)} - \frac{\eta}{N} \sum_{i=1}^{N} \pderiv{C}{\theta_{j,k}^{(l)}}\\
+	\bs{\Theta}^{(l)} &\leftarrow \bs{\Theta}^{(l)} - \frac{\eta}{N} \sum_{i=1}^{N} \bs{\nabla}_{\bs{\Theta}^{(l)}}C(\bs{\Theta})
+\end{align}
+$$
+
+> **Where**: $C$ is the per-example (non-averaged) error function $C_{(\b{x}^{(b,i)},\b{y}^{(b,i)})}$ evaluated on training example $(\b{x}^{(b,i)},\b{y}^{(b,i)})$. The subscripts are omitted for clarity.
+
+In this form of gradient descent, the weights are not updated until the epoch is complete (all training examples have done a forward and backward pass through the network).
+
+This form of gradient descent is rarely used in practice since it requires the entire data set to be loaded into memory. It may be feasible for problems with few training examples, but neural networks require lots of training data and therefore may not be appropriate in some of these cases anyway.
 
 # Resources
 
@@ -691,19 +776,18 @@ To train over multiple epochs, you will need another outer loop.
 - _Alex S. Holehouse_<br/>[Neural Networks: Representation](http://www.holehouse.org/mlclass/08_Neural_Networks_Representation.html)
 - _DeepAI_<br/>[Neural Network](https://deepai.org/machine-learning-glossary-and-terms/neural-network)
 - _Wikipedia_<br/>[Activation function](https://en.wikipedia.org/wiki/Activation_function)<br/>[Softmax function](https://en.wikipedia.org/wiki/Softmax_function)
-- _Jason Brownlee_<br/>[Why Training a Neural Network Is Hard](https://machinelearningmastery.com/why-training-a-neural-network-is-hard/)
+- _Jason Brownlee_<br/>[Why Training a Neural Network Is Hard](https://machinelearningmastery.com/why-training-a-neural-network-is-hard/)<br/>[A Gentle Introduction to Mini-Batch Gradient Descent and How to Configure Batch Size](https://machinelearningmastery.com/gentle-introduction-mini-batch-gradient-descent-configure-batch-size/)
 - _ML4A (Machine Learning For Artists)_<br/>[How neural networks are trained](https://ml4a.github.io/ml4a/how_neural_networks_are_trained/)
 - _Isaac Changhau_<br/>[Loss Functions in Neural Networks](https://isaacchanghau.github.io/post/loss_functions/)
 - _Kevin P. Murphy_<br/>[Machine Learning: A Probabilistic Perspective](https://www.cs.ubc.ca/~murphyk/MLbook/)
 - _Morgan Giraud (MetaFlow)_<br/>[ML notes: Why the log-likelihood?](https://blog.metaflow.fr/ml-notes-why-the-log-likelihood-24f7b6c40f83)
-- _Gluon_<br/>[Binary classification with logistic regression](https://gluon.mxnet.io/chapter02_supervised-learning/logistic-regression-gluon.html)
+- _Gluon_<br/>[Binary classification with logistic regression](https://gluon.mxnet.io/chapter02_supervised-learning/logistic-regression-gluon.html)<br/>[Gradient descent and stochastic gradient descent from scratch](https://gluon.mxnet.io/chapter06_optimization/gd-sgd-scratch.html)
 - _Ankur Gupta (Perfectly Random)_<br/>[Bernoulli Distribution as a tiny Neural Network](https://www.perfectlyrandom.org/2019/04/27/bernoulli-distribution-as-a-tiny-nn/)
 - _astroman (BigQuant)_<br/>[Entropy (3.13 Information theory)](https://bigquant.com/community/t/topic/121439)
 - _jingweimo (ScienceNet)_<br/>[Nonlinearity and loss function in multi-tasking problems](http://wap.sciencenet.cn/blog-578676-1118819.html)
-- _Google Developers_<br/>[Backpropagation algorithm](https://google-developers.appspot.com/machine-learning/crash-course/backprop-scroll/)
+- _Google Developers_<br/>[Backpropagation algorithm](https://google-developers.appspot.com/machine-learning/crash-course/backprop-scroll/)<br/>[Reducing Loss: Stochastic Gradient Descent](https://developers.google.com/machine-learning/crash-course/reducing-loss/stochastic-gradient-descent)
 - _D.W. (StackExchange)_<br/>[Why does the neural network logistic regression cost function sum for all layers only for lambda?](https://cs.stackexchange.com/a/71415)
 - _user329469 (StackExchange)_<br/>[Derivative of neural network function with respect to weights](https://math.stackexchange.com/questions/1731965/derivative-of-neural-network-function-with-respect-to-weights)
 - _Michael A. Nielsen, "Neural Networks and Deep Learning", Determination Press, 2015_<br/>[Chapter 2: How the backpropagation algorithm works](http://neuralnetworksanddeeplearning.com/chap2.html)
 - _Oleg Shirokikh (StackExchange)_<br/>[Back-propagation in Neural Nets with >2 hidden layers](https://stats.stackexchange.com/questions/70168/back-propagation-in-neural-nets-with-2-hidden-layers)
 - _John McGonagle, George Shaikouski, Christopher Williams, Andrew Hsu, Jimin Khim_<br/>[Backpropagation](https://brilliant.org/wiki/backpropagation/)
-
