@@ -194,7 +194,7 @@ A neural network may consist of many **layers**. Namely, there are three distinc
   - Functions the same way as a hidden layer—each output takes a weighted sum of its inputs and passes it through an activation function.
   - The number of output neurons is often the number of classes (in the case of a classification problem). However, in the case of binary classification, one output neuron is enough since we can represent the probability of the other class as the complement of the probability that is output by the neuron.
 
-**Note**: When we say a neural network consists of $n$ layers, $n$ is the sum of hidden layers and the output layer.
+**Note**: When we say a neural network consists of $L$ layers, $L$ is the sum of hidden layers and the output layer.
 
 ## Activation functions
 
@@ -210,7 +210,12 @@ As explained previously, the purpose of an **==activation function==** is to int
 
 ### Softmax function
 
-Some special comments about softmax
+The softmax function is a special type of activation function which takes a vector of $K$ real numbers as input, and normalizes it into a discrete probability distribution consisting of $K$ probabilities.
+
+The standard softmax function $\sigma : \R^K \to \R^K$ is defined by the formula:
+$$
+\sigma_\text{Soft}(i,\b{z})=\frac{\exp{z_i}}{\sum_{j=1}^K \exp{z_j}}\qquad\text{for $i=\set{1,\ldots,K}$ and $\b{z}=\rowv{z}{1}{k}\in\R^K$}
+$$
 
 ## Multi-layer neural networks
 
@@ -250,7 +255,7 @@ As a result, we require more structures and indexing to formally represent a neu
   >
   > - $N_i$ is the number of neurons in layer $i$.
   > - $\theta_{j,k}^{(i)}$ represents the weight from neuron $j$ in layer $i$, to neuron $k$ in layer $i+1$.
-  > - $\bs{\theta}_{\cdot,k}^{(i)}=\l(\theta_{0,k}^{(i)},\ldots,\theta_{N_1,k}^{(i)}\r)^\T$ represents the weights from each neuron in layer $i$, to neuron $k$ in layer $i+1$.
+  > - $\bs{\theta}_{\cdot,k}^{(i)}=\l(\theta_{0,k}^{(i)},\ldots,\theta_{N_i,k}^{(i)}\r)^\T$ represents the weights from each neuron in layer $i$, to neuron $k$ in layer $i+1$.
   > - $\bs{\theta}_{j,\cdot}^{(i)}=\colv{\theta^{(i)}}{j,1}{j,N_{i+1}}$ represents the weights from neuron $j$ in layer $i$, to each neuron in layer $i+1$.
 
   Observe that there is no connection to the bias unit of the next layer—this bias unit is introduced independently and is not affected by the activations of the neurons from the previous layer. As a result, this weight matrix has dimensions:
@@ -270,7 +275,7 @@ As a result, we require more structures and indexing to formally represent a neu
 
   > **Where**: Each neuron $n_j^{(i)}$ comprises an activation function $\sigma_j^{(i)}$ such that the output $a_j^{(i)}$ of this neuron is given by:
   > $$
-  > a_j^{(i)}=\sigma_j^{(i)} \! \l(\bs{\theta}_{\cdot ,j}^{(i-1)}\b{a}^{(i-1)}\r)
+  > a_j^{(i)}=\sigma_j^{(i)} \! \l(\bs{\theta}_{\cdot ,j}^{(i-1)\T}\b{a}^{(i-1)}\r)
   > $$
   > That is, the dot product between the weights from each neuron in layer $i-1$ to neuron $j$ in layer $i$, and the outputs of the neurons in the previous layer, applied to the activation function $\sigma_j^{(i)}$.
   >
@@ -285,11 +290,11 @@ As a result, we require more structures and indexing to formally represent a neu
   > 	&=\bs{\sigma}^{(i)} \! \l(\bs{\Theta}^{(i-1)}\b{a}^{(i-1)}\r)^\T\\
   > 	&=\bigg(
   > 		\underbrace{
-  > 			\sigma^{(i)}\Big(\bs{\theta}_{\cdot,1}^{(i-1)}\b{a}^{i-1}\Big)
+  > 			\sigma^{(i)}\Big(\bs{\theta}_{\cdot,1}^{(i-1)\T}\b{a}^{i-1}\Big)
   > 		}_{a_1^{(i)}},
   > 		\ldots,
   > 		\underbrace{
-  > 			\sigma^{(i)}\Big(\bs{\theta}_{\cdot,N_i}^{(i-1)}\b{a}^{i-1}\Big)
+  > 			\sigma^{(i)}\Big(\bs{\theta}_{\cdot,N_i}^{(i-1)\T}\b{a}^{i-1}\Big)
   > 		}_{a_{N_i}^{(i)}}
   > 	\bigg)^\T
   > \end{align}
@@ -308,8 +313,8 @@ $$
 \\
 \b{a}^{(2)}=\begin{pmatrix}
 	a_0^{(2)} \\
-	\sigma^{(2)} \Big(\bs{\theta}_{\cdot,1}^{(1)}\b{a}^{(1)}\Big) \\
-	\sigma^{(2)} \Big(\bs{\theta}_{\cdot,2}^{(1)}\b{a}^{(1)}\Big)
+	\sigma^{(2)} \Big(\bs{\theta}_{\cdot,1}^{(1)\T}\b{a}^{(1)}\Big) \\
+	\sigma^{(2)} \Big(\bs{\theta}_{\cdot,2}^{(1)\T}\b{a}^{(1)}\Big)
 \end{pmatrix},
 \quad
 \bs{\Theta}^{(2)}=\begin{pmatrix}
@@ -318,9 +323,9 @@ $$
 	\theta_{0,3}^{(2)} & \theta_{1,3}^{(2)} & \theta_{2,3}^{(2)} \\
 \end{pmatrix}\\
 \b{a}^{(3)}=\begin{pmatrix}
-	\sigma^{(3)} \Big(\bs{\theta}_{\cdot,1}^{(2)}\b{a}^{(2)}\Big) \\
-	\sigma^{(3)} \Big(\bs{\theta}_{\cdot,2}^{(2)}\b{a}^{(2)}\Big) \\
-	\sigma^{(3)} \Big(\bs{\theta}_{\cdot,3}^{(2)}\b{a}^{(2)}\Big)
+	\sigma^{(3)} \Big(\bs{\theta}_{\cdot,1}^{(2)\T}\b{a}^{(2)}\Big) \\
+	\sigma^{(3)} \Big(\bs{\theta}_{\cdot,2}^{(2)\T}\b{a}^{(2)}\Big) \\
+	\sigma^{(3)} \Big(\bs{\theta}_{\cdot,3}^{(2)\T}\b{a}^{(2)}\Big)
 \end{pmatrix}
 $$
 
@@ -348,29 +353,26 @@ As with other machine learning algorithms such as linear and logistic regression
 
 The purpose of an **==error function==** is to evaluate the performance of the neural network when given some training examples. As neural networks are mostly commonly used in the supervised learning setting, we have access to the actual outputs of the training examples. 
 
-The error function $C(\bs{\theta})$ is a measure of the inconsistency between the predicted outputs $\hat{y}^{(i)}$ and the actual outputs $y^{(i)}$ for a set of training examples. Therefore, a machine learning model's robustness and performance increases as the error function decreases. The optimal weights are thus the ones that minimize the error function $C(\bs{\theta})$:
+The error function $C(\bs{\Theta})$ is a measure of the inconsistency between the predicted outputs $\hat{y}^{(i)}$ and the actual outputs $y^{(i)}$ for a set of training examples. Therefore, a machine learning model's robustness and performance increases as the error function decreases. The optimal weights are thus the ones that minimize the error function $C(\bs{\Theta})$:
 $$
-\hat{\bs{\theta}}=\arg\min_{\bs{\theta}} C(\bs{\theta})
+\hat{\bs{\Theta}}=\arg\min_{\bs{\Theta}} C(\bs{\Theta})
 $$
+> **Where**: $\bs{\Theta}$ represents all of the weights in the neural network, and can therefore be represented as a vector of the weight matrices for each layer:
+> $$
+> \bs{\Theta}=\l(\bs{\Theta}^{(1)},\ldots,\bs{\Theta}^{(L)}\r)
+> $$
+
 Neural networks may be used to predict the value of $y^{(i)}\in\R$ (like linear regression), $y^{(i)}\in\set{0,1}$ (binary classification), or $y^{(i)}\in\set{1,\ldots,K}$ (multi-class/multinomial classification). As a result, the error function used in a neural network must be chosen depending on the nature of the output variable.
 
 ##### Real-valued output $y^{(i)}\in\R$
 
 Similarly to linear regression, the **residual sum of squares (RSS)** error function can be used for neural networks.
 $$
-\begin{align}
-	C(\bs{\theta})
-	&=\sum_{i=1}^N\l(y^{(i)}-\hat{y}^{(i)}\r)^2\\
-	&=\sum_{i=1}^N\l(y^{(i)}-\bs{\theta}^\T\b{x}^{(i)}\r)^2
-\end{align}
+C(\bs{\Theta})=\sum_{i=1}^N\l(y^{(i)}-\hat{y}^{(i)}\r)^2
 $$
 However for the back-propagation training algorithm, it is normally preferable for the error function to be represented as a mean of the samples. For this reason, **==mean squared error (MSE)==** is used more often. Additionally, this quantity is scaled by $\frac{1}{2}$ to make derivatives cleaner:
 $$
-\begin{align}
-	C(\bs{\theta})
-	&=\frac{1}{2N}\sum_{i=1}^N\l(y^{(i)}-\hat{y}^{(i)}\r)^2\\
-	&=\frac{1}{2N}\sum_{i=1}^N\l(y^{(i)}-\bs{\theta}^\T\b{x}^{(i)}\r)^2
-\end{align}
+C(\bs{\Theta})=\frac{1}{2N}\sum_{i=1}^N\l(y^{(i)}-\hat{y}^{(i)}\r)^2
 $$
 
 ##### Binary output $y^{(i)}\in\set{0,1}$
@@ -384,13 +386,20 @@ $$
 
 > **Where**: 
 >
-> - $p_1^{(i)}=\cp{\hat{y}^{(i)}=1}{\b{x}^{(i)};\bs{\theta}}=\sigma\l(\bs{\theta}^\T\b{x}^{(i)}\r)$ represents the probability of the output variable $\hat{y}^{(i)}$ taking the value $1$.<br/>**Note**: For binary classification, $p_0^{(i)}+p_1^{(i)}=1$ and therefore $p_0^{(i)}=1-p_1^{(i)}$.
+> - $p_1^{(i)}=\cp{\hat{y}^{(i)}=1}{\b{x}^{(i)};\bs{\Theta}}=a_1^{(L+1)}=\sigma\l(\bs{\Theta}^{(L)\T}\b{a}^{(L)}\r)$ represents the probability of the output variable $\hat{y}^{(i)}$ taking the value $1$.
+>
+>   Observe that for binary classification, the final layer $L+1$ has only one neuron $n^{(L+1)}_1$ (with output $a_1^{(L+1)}$) which represents $p_1^{(i)}$. As a result, the weight matrix from layer $L$ to layer $L+1$ is a $(1\times N_L)$ vector:
+>   $$
+>   \bs{\Theta}^{(L)}=\l(\theta_{0,1}^{(L)}, \theta_{1,1}^{(L)}, \ldots,\theta_{N_L,1}^{(L)}\r)
+>   $$
+>   **Note**: For binary classification, $p_0^{(i)}+p_1^{(i)}=1$ and therefore $p_0^{(i)}=1-p_1^{(i)}$. Due to this property, we don't require a second neuron in the final layer as we can just use the complement of $p_1^{(i)}$.
+>
 > - $\hat{y}^{(i)}$ is a random variable representing the **predicted output** for the $i$^th^ training sample, $\b{x}^{(i)}$ such that $\hat{y}^{(i)}\in\set{p_0^{(i)},p_1^{(i)}}$.
 
 In binary classification problems, we use an average of the per-example **binary cross entropies (BCE)** as the cost function:
 $$
 \begin{align}
-C(\bs{\theta})
+C(\bs{\Theta})
 &=\frac{1}{N}\sum_{i=1}^N H\l(y^{(i)},\hat{y}^{(i)}\r)\\
 &=-\frac{1}{N}\sum_{i=1}^N \l[\big(1-y^{(i)}\big) \log p_0^{(i)} + y^{(i)} \log p_1^{(i)}\r]\\
 &=-\frac{1}{N}\sum_{i=1}^N \l[\big(1-y^{(i)}\big) \log \big(1-p_1^{(i)}\big) + y^{(i)} \log p_1^{(i)}\r]\\
@@ -405,8 +414,8 @@ $$
 Observe that this is equivalent to taking the mean of the negative log likelihood function for the Bernoulli distribution:
 $$
 \begin{align}
-	-\frac{1}{N}\mathcal{L}\l(\bs{\theta}; \b{y}\r)
-	&=-\frac{1}{N} \log L\l(\bs{\theta}; \b{y}\r)\\
+	-\frac{1}{N}\mathcal{L}\l(\bs{\Theta}; \b{y}\r)
+	&=-\frac{1}{N} \log L\l(\bs{\Theta}; \b{y}\r)\\
 	&=-\frac{1}{N} \log \prod_{i=1}^N \l(1-p_1^{(i)}\r)^{1-y^{(i)}} \l(p_1^{(i)}\r)^{y^{(i)}}\\
 	&=-\frac{1}{N} \sum_{i=1}^N \log \l[ \l(1-p_1^{(i)}\r)^{1-y^{(i)}} \l(p_1^{(i)}\r)^{y^{(i)}} \r]\\
 	&=-\frac{1}{N} \sum_{i=1}^N \l[ \log\l(1-p_1^{(i)}\r)^{1-y^{(i)}} + \log\l(p_1^{(i)}\r)^{y^{(i)}} \r]\\
@@ -425,25 +434,242 @@ $$
 
 > **Where**:
 >
-> - $\bs{\Theta}$ is a matrix of weights, with each column representing the weight vector $\bs{\theta}^{(c)}$ for class $c$. Recall that in multinomial classification (as seen in the *Logistic Regression* notes), for each class $k$, we classify a feature vector $\b{x}^{(i)}$ as $k$ or not-$k$ through the use of the **softmax function**, which generates a probability for that class:
->   $$
->   \sigma_c\l(\b{x}^{(i)};\bs{\Theta}\r)=\frac{\exp\l({\bs{\theta}^{(c)\T}\b{x}^{(i)}}\r)}{\sum_{k=1}^K \exp\l({\bs{\theta}^{(k)\T}\b{x}^{(i)}}\r)}
->   $$
->   We assign $\b{x}^{(i)}$ to the class which had the highest probability.
+> - There are $K$ neurons in the output layer, with each output $a_c^{(L+1)}$ : $c\in\set{1,\ldots,K}$ representing the probability $p_c^{(i)}$ for the feature vector $\b{x}^{(i)}$ being in class $c$.
 >
-> - $p_c^{(i)}=\cp{y^{(i)}=c}{\b{x}^{(i)};\bs{\Theta}}=\sigma_c\l(\b{x}^{(i)};\bs{\Theta}\r)$ represents the probability of feature vector $\b{x}^{(i)}$ being assigned to class $c$.
+>   Therefore, the weight matrix $\bs{\Theta}^{(L)}$ from layer $L$ to the final layer $L+1$, has dimensions $(K\times N_L)$.
 >
-> - $\b{y}^{(i)}=\colv{y^{(i)}}{1}{K}$ is a **==one-hot encoded==** vector representing the actual class of the $i$^th^ training sample. For example, if we have data with $K=6$ classes, and training sample $\b{x}^{(i)}$ is assigned to class $4$, then $y_4^{(i)}$ is set to $1$, and the rest of the elements of $y^{(i)}$ are set to $0$, giving: $\b{y}^{(i)}=\l(0,0,0,1,0,0\r)^\T$. One-hot encoded vectors are frequently seen in machine learning as they allow for selective or conditional calculations, similar to indicator variables.
+>   Recall that in multinomial classification (as seen in the *Logistic Regression* notes), for each class $c$, we classify a feature vector $\b{x}^{(i)}$ as $k$ or not-$c$ through the use of the **softmax function** which generates a probability of $\b{x}^{(i)}$ being in class $c$:
+>   $$
+>   \sigma_\text{Soft}\l(c,\b{x}^{(i)};\bs{\Theta}\r)=\frac{\exp\l(\bs{\theta}_{\cdot,c}^{(L)\T}\b{a}^{(L)}\r)}{\sum_{k=1}^K \exp\l(\bs{\theta}_{\cdot,k}^{(L)\T}\b{a}^{(L)}\r)}
+>   $$
+>   We assign $\b{x}^{(i)}$ to the class which yields the highest probability (as generated by the softmax function).
+>
+> - $p_c^{(i)}=\cp{y^{(i)}=c}{\b{x}^{(i)};\bs{\Theta}}=\sigma_\text{Soft}\l(c,\b{x}^{(i)};\bs{\Theta}\r)$ represents the probability of feature vector $\b{x}^{(i)}$ being assigned to class $c$.
+>
+> - $\b{y}^{(i)}=\colv{y^{(i)}}{1}{K}$ is a **==one-hot encoded==** vector representing the actual class of the $i$^th^ training sample.<br/>For example, if we have data with $K=6$ classes, and training sample $\b{x}^{(i)}$ is assigned to class $4$, then $y_4^{(i)}$ is set to $1$, and the rest of the elements of $y^{(i)}$ are set to $0$, giving: $\b{y}^{(i)}=\l(0,0,0,1,0,0\r)^\T$. One-hot encoded vectors are frequently used in machine learning as they allow for selective or conditional calculations, similar to indicator variables.
 
-#### Using the error functions in backpropagation
+## Back-propagation
 
 As shown earlier in _Figure 4_, the modification of a single weight in any layer will have an effect on the output of the final layer. As a result, updating weights through gradient descent as we did in the _Logistic Regression_ notes, will not work in a neural network since we have multiple weight matrices.
 
-Instead, the **==back-propagation==** algorithm is used to extend gradient descent to the context of hidden layers and neurons. The idea of back-propagation is to choose an appropriate cost function and then systematically and sequentially modify the weights of various neurons in order to minimize this cost function.
+Instead, the **==back-propagation==** algorithm is used to extend gradient descent to the context of hidden layers and neurons. The idea behind back-propagation is to choose an appropriate cost function and then systematically modify the weights of various neurons in order to minimize this cost function. This method is similar to gradient descent, but it uses the chain rule in order to calculate the gradient vector.
 
-## Feedforward neural networks
+The purpose of back-propagation is to calculate all of the error derivatives of the neural network.
 
+### Error derivatives
 
+The back-propagation algorithm decides how much to update each weight of the network after comparing the predicted output with the desired output for a **particular** example. For this, we need to compute how the error changes with respect to each weight—that is $\pderiv{}{\theta_{j,k}^{(i)}}C(\bs{\Theta})$.
+
+Once we have these error derivatives, the weights can be updated using a simple update rule:
+$$
+\theta_{j,k}^{(i)} \leftarrow \theta_{j,k}^{(i)} - \eta \pderiv{C}{\theta_{j,k}^{(i)}}
+$$
+
+### Additional derivatives
+
+To help compute $\pderiv{C}{\theta_{j,k}^{(i)}}$, we store two additional derivatives for each neuron:
+
+- How the error changes with the **total (weighted) input of the neuron**: $\pderiv{C}{z_{j}^{(i)}}$.
+
+  > **Where**: $z_j^{(i)}=\bs{\theta}_{\cdot,j}^{(i-1)\T}\b{a}^{(i-1)}$, the input for neuron $n_j^{(i)}$.
+
+- How the error changes with the **total output of the neuron**: $\pderiv{C}{a_{j}^{(i)}}$.
+
+  > **Where**: $a_j^{(i)}=\sigma^{(i)} \! \l(\bs{\theta}_{\cdot,j}^{(i-1)\T}\b{a}^{(i-1)}\r)=\sigma^{(i)} \! \l(z_j^{(i)}\r)$
+
+### Example
+
+Consider a single training example $\l(\b{x}^{(i)},y^{(i)}\r)$ with a predicted output $\hat{y}^{(i)}$ from the following neural network:
+
+<p style="text-align:center;">
+	<img src="./assets/multi-layer-2.png" width="90%"/>
+  <br>
+	<p style="text-align:center;">
+    <b>Figure 5</b>: Modified version of the neural network shown in <em>Figure 3</em>, with an additional layer consisting of one output neuron.
+	</p>
+</p>
+
+The neural network has the following properties:
+
+- The output $y^{(i)}$ is given by the output of the final neuron.
+
+- All of the activation functions are $\sigma_\text{Logistic}$.
+
+- $\b{x}^{(i)}\in\R^4$ and $y^{(i)}\in(0,1)$.
+
+- The cost for one training example is given by:
+  $$
+  C(\bs{\Theta})=\frac{1}{2}\l(y^{(i)}-\hat{y}^{(i)}\r)^2
+  $$
+  
+
+The neural network can be defined by the following matrices and vectors (as seen before):
+$$
+\b{a}^{(1)}=\b{x}^{(i)}=\begin{pmatrix}
+	x_0^{(i)} \\ x_1^{(i)} \\ x_2^{(i)} \\ x_3^{(i)} \\ x_4^{(i)}
+\end{pmatrix},
+\quad
+\bs{\Theta}^{(1)}=\begin{pmatrix}
+	\theta_{0,1}^{(1)} & \theta_{1,1}^{(1)} & \theta_{2,1}^{(1)} & \theta_{3,1}^{(1)} & \theta_{4,1}^{(1)} \\
+	\theta_{0,2}^{(1)} & \theta_{1,2}^{(1)} & \theta_{2,2}^{(1)} & \theta_{3,2}^{(1)} &\theta_{4,2}^{(1)} \\
+\end{pmatrix}
+\\
+\b{a}^{(2)}=\begin{pmatrix}
+	a_0^{(2)} \\
+	\sigma \Big(\bs{\theta}_{\cdot,1}^{(1)\T}\b{a}^{(1)}\Big) \\
+	\sigma \Big(\bs{\theta}_{\cdot,2}^{(1)\T}\b{a}^{(1)}\Big)
+\end{pmatrix},
+\quad
+\bs{\Theta}^{(2)}=\begin{pmatrix}
+	\theta_{0,1}^{(2)} & \theta_{1,1}^{(2)} & \theta_{2,1}^{(2)} \\
+	\theta_{0,2}^{(2)} & \theta_{1,2}^{(2)} & \theta_{2,2}^{(2)} \\
+	\theta_{0,3}^{(2)} & \theta_{1,3}^{(2)} & \theta_{2,3}^{(2)} \\
+\end{pmatrix}
+\\
+\b{a}^{(3)}=\begin{pmatrix}
+	a_0^{(3)}\\
+	\sigma \Big(\bs{\theta}_{\cdot,1}^{(2)\T}\b{a}^{(2)}\Big) \\
+	\sigma \Big(\bs{\theta}_{\cdot,2}^{(2)\T}\b{a}^{(2)}\Big) \\
+	\sigma \Big(\bs{\theta}_{\cdot,3}^{(2)\T}\b{a}^{(2)}\Big)
+\end{pmatrix},
+\quad
+\bs{\Theta}^{(3)}=\begin{pmatrix}
+	\theta_{0,1}^{(3)} & \theta_{1,1}^{(3)} & \theta_{2,1}^{(3)} & \theta_{3,1}^{(3)}
+\end{pmatrix}
+\\
+\b{a}^{(4)}=a_1^{(4)}=\sigma\Big(\bs{\theta}_{\cdot,1}^{(3)\T}\b{a}^{(3)}\Big)
+$$
+
+#### Back-propagation procedure
+
+To begin back-propagating to find the cost derivatives, we start at the end of the network, with our predicted output $\hat{y}^{(i)}$.
+
+1. Given our cost function $C(\bs{\Theta})=\frac{1}{2}\l(y^{(i)}-\hat{y}^{(i)}\r)^2$, we have:
+   $$
+   \pderiv{C}{\hat{y}^{(i)}}=y^{(i)}-\hat{y}^{(i)}
+   $$
+   **Note**: Recall that $\hat{y}^{(i)}=a_1^{(4)}$, so we can also say that $\pderiv{C}{\hat{y}^{(i)}}=\pderiv{C}{a_{1}^{(4)}}$.
+
+2. Now that we have $\pderiv{C}{a_{1}^{(4)}}$, we can find $\pderiv{C}{z_{1}^{(4)}}$ through the use of the chain rule:
+   $$
+   \pderiv{C}{z_{1}^{(4)}}=\pderiv{C}{a_1^{(4)}} \pderiv{a_1^{(4)}}{z_1^{(4)}}
+   $$
+   Observe that $\pderiv{a_1^{(4)}}{z_1^{(4)}}$ may be expressed as:
+   $$
+   \begin{align}
+   	\pderiv{a_1^{(4)}}{z_1^{(4)}}
+   	&=\pderiv{}{z_1^{(4)}}\sigma\l(\bs{\theta}_{\cdot,1}^{(3)\T}\b{a}^{(3)}\r)\\
+   	&=\pderiv{}{z_1^{(4)}}\sigma\l(z_1^{(4)}\r)
+   \end{align}
+   $$
+   The logistic function has the nice property that its derivative is defined as $\pderiv{}{z}\sigma(z)=\sigma(z)\big(1-\sigma(z)\big)$. This allows us to further simplify $\pderiv{a_1^{(4)}}{z_1^{(4)}}$:
+   $$
+   \pderiv{a_1^{(4)}}{z_1^{(4)}}=\sigma\l(z_1^{(4)}\r)\bigg(1-\sigma\l(z_1^{(4)}\r)\bigg)
+   $$
+   However, to maintain some generality over the various activation functions, we will continue to write this as $\sigma'\l(z_1^{(4)}\r)$.
+
+   In _Step 1_ we found that $\pderiv{C}{a_{1}^{(4)}}=y^{(i)}-\hat{y}^{(i)}$ and can therefore write $\pderiv{C}{z_{1}^{(4)}}$ as:
+   $$
+   \begin{align}
+   	\pderiv{C}{z_{1}^{(4)}}
+   	&=\l(y^{(i)}-\hat{y}^{(i)}\r) \pderiv{a_1^{(4)}}{z_1^{(4)}}\\
+   	&=\bigg(y^{(i)}-\sigma\l(z_1^{(4)}\r)\bigg) \pderiv{a_1^{(4)}}{z_1^{(4)}}
+   \end{align}
+   $$
+   Substituting the expression for $\pderiv{a_1^{(4)}}{z_1^{(4)}}$ that we found earlier:
+   $$
+   \pderiv{C}{z_{1}^{(4)}}=
+   \underbrace{\sigma'\l(z_1^{(4)}\r)}_{\pderiv{a_1^{(4)}}{z_1^{(4)}}}\ 
+   \underbrace{\bigg(y^{(i)}-\sigma\l(z_1^{(4)}\r)\bigg)}_{\pderiv{C}{a_{1}^{(4)}}}
+   $$
+
+3. Once we have the cost derivative with respect to the total (weighted) input of a neuron, $\pderiv{C}{z_j^{(i)}}$, we can get the cost derivative with respect to the weights coming into that neuron:
+   $$
+   \pderiv{C}{\theta_{j,k}^{(i-1)}}=
+   \pderiv{C}{z_k^{(i)}}
+   \pderiv{z_k^{(i)}}{\theta_{j,k}^{(i-1)}}
+   $$
+   Recall that $z_k^{(i)}$ is defined as:
+   $$
+   \begin{align}
+   	z_k^{(i)}
+   	&=\sigma\l(\bs{\theta}_{\cdot,k}^{(i-1)\T}\b{a}^{(i-1)}\r)\\
+   	&=\sigma\l(\sum_{l=0}^{N_{i-1}}\theta_{l,k}^{(i-1)}a_l^{(i-1)}\r)
+   \end{align}
+   $$
+   Then the derivative of the input $z_k^{(i)}$ with respect to the incoming weight $\theta_{j,k}^{(i-1)}$ is given by the following (using the chain rule):
+   $$
+   \begin{align}
+   	\pderiv{z_k^{(i)}}{\theta_{j,k}^{(i-1)}}
+   	&=\sigma'\l(\bs{\theta}_{\cdot,k}^{(i-1)\T}\b{a}^{(i-1)}\r)a_j^{(i-1)}\\
+   	&=\sigma'\l(z_k^{(i)}\r)a_j^{(i-1)}
+   \end{align}
+   $$
+
+   ---
+
+   Applying this to $z_1^{(4)}$ and its cost derivative $\pderiv{C}{z_1^{(4)}}$ that we already obtained in _Step 2_, we can find the cost derivative of the first weight $\theta_{1,1}^{(3)}$ in $\bs{\Theta}^{(3)}$:
+   $$
+   \begin{align}
+   	\pderiv{C}{\theta_{1,1}^{(3)}}
+   	&=\pderiv{C}{z_1^{(4)}}\pderiv{z_1^{(4)}}{\theta_{1,1}^{(3)}}\\
+   	&=\underbrace{\sigma'\l(z_1^{(4)}\r)\bigg(y^{(i)}-\sigma\l(z_1^{(4)}\r)\bigg)}_{\pderiv{C}{z_1^{(4)}}} \ 
+   	  \underbrace{\sigma'\l(z_1^{(4)}\r)a_1^{(3)}}_{\pderiv{z_1^{(4)}}{\theta_{1,1}^{(3)}}}\\
+   	&=\sigma'\l(z_1^{(4)}\r)^2\bigg(y^{(i)}-\sigma\l(z_1^{(4)}\r)\bigg)a_1^{(3)}
+   \end{align}
+   $$
+   The same procedure can be used to obtain an error derivative for all of the weights in $\bs{\Theta}^{(3)}$.
+
+4. Using the chain rule for multivariate functions once again, we can calculate $\pderiv{C}{a_j^{(3)}}$.
+   $$
+   \begin{align}
+   	\pderiv{C}{z_j^{(3)}}
+   	&=\pderiv{C}{a_j^{(3)}}
+   	  \pderiv{a_j^{(3)}}{z_j^{(3)}}\\
+   	&=\pderiv{C}{a_j^{(3)}}
+   	  \pderiv{}{z_j^{(3)}}\sigma\l(z_j^{(3)}\r)\\
+   	&=\pderiv{C}{a_j^{(3)}}
+   	  \sigma'\l(z_j^{(3)}\r)  
+   \end{align}
+   $$
+   Where $\pderiv{C}{a_j^{(3)}}$ may also be found using the chain rule and the weight derivatives of the previous layer:
+   $$
+   \pderiv{C}{a_j^{(3)}}
+     =\pderiv{C}{z_1^{(4)}}
+   	\sum_{k=1}^{N_4}
+   	\pderiv{z_1^{(4)}}{\theta_{j,k}^{(3)}}
+   	\pderiv{\theta_{j,k}^{(3)}}{a_j^{(3)}}\\
+   $$
+
+   ---
+
+   And then I got lost​. But basically keep back-propagating until you find all the error derivatives with respect to all weights of the network.
+
+### Back-propagating with all training examples
+
+The example above describes the process of finding all of the error derivatives for the weights in the network after a forward pass with just one training example.
+
+To train a neural network using all of the training examples:
+
+1. **Input a set of training examples**<br/>$\mathcal{D}_\text{train}=\set{(\b{x}^{(i)},y^{(i)})}_{i=1}^N$.
+2. **Randomize the weights of the networks**<br/>Biases should be set to $1$.
+3. **For each training example**:
+   1. **Feedforward**<br/>For each layer $l$ and each neuron $n_j^{(l)}$ on layer $l$, compute:
+      - $z_{j}^{(l)}=\bs{\theta}_{.,j}^{(l-1)}\b{a}^{(l-1)}$
+      - $a_j^{(l)}=\sigma^{(l)}\!\l(z_j^{(l)}\r)$
+   2. **Calculate the error and gradient of the output layer**<br/>For each neuron $n_k^{(N+1)}$ on layer $L+1$, compute the values:
+      - $\ds\pderiv{C}{z_k^{(L+1)}}$ (the error derivative w.r.t the weighted input, a.k.a _**the error**_) 
+      - $\ds\pderiv{C}{\theta_{j,k}^{(L)}}$ (the error derivative w.r.t the weight $\theta_{j,k}^{(L)}$ connecting $n_j^{(L)}$ with $n_k^{(L+1)}$)
+   3. **Backpropagate the error**<br/>For each $l\in\set{L,L-1\ldots,2}$, compute the following values for each neuron $n_k^{(l)}$:
+      - $\ds\pderiv{C}{z_k^{(l)}}$ (the error)
+      - $\ds\pderiv{C}{\theta_{j,k}^{(l-1)}}$ (the error derivative w.r.t the weight $\theta_{j,k}^{(L)}$)
+4. **Gradient descent**<br/>For each weight $\theta_{j,k}^{(i)}$, update it using the simple update rule $\theta_{j,k}^{(i)} \leftarrow \theta_{j,k}^{(i)} - \eta \pderiv{C}{\theta_{j,k}^{(i)}}$.
+
+This forms a training loop for one **epoch**, treating the entire training set as one **batch**.
+
+To implement **stochastic gradient descent** in practice, you will require an outer loop generating mini-batches of training examples.
+
+To train over multiple epochs, you will need another outer loop.
 
 # Resources
 
@@ -464,17 +690,20 @@ Instead, the **==back-propagation==** algorithm is used to extend gradient desce
 - _Andrew Ng, Kian Katanforoosh (Computer Science Department, Stanford University)_<br/>[CS230: Deep Learning Representations](https://cs230.stanford.edu/files/Notation.pdf)
 - _Alex S. Holehouse_<br/>[Neural Networks: Representation](http://www.holehouse.org/mlclass/08_Neural_Networks_Representation.html)
 - _DeepAI_<br/>[Neural Network](https://deepai.org/machine-learning-glossary-and-terms/neural-network)
-- _Wikipedia_<br/>[Activation function](https://en.wikipedia.org/wiki/Activation_function)
+- _Wikipedia_<br/>[Activation function](https://en.wikipedia.org/wiki/Activation_function)<br/>[Softmax function](https://en.wikipedia.org/wiki/Softmax_function)
 - _Jason Brownlee_<br/>[Why Training a Neural Network Is Hard](https://machinelearningmastery.com/why-training-a-neural-network-is-hard/)
 - _ML4A (Machine Learning For Artists)_<br/>[How neural networks are trained](https://ml4a.github.io/ml4a/how_neural_networks_are_trained/)
 - _Isaac Changhau_<br/>[Loss Functions in Neural Networks](https://isaacchanghau.github.io/post/loss_functions/)
 - _Kevin P. Murphy_<br/>[Machine Learning: A Probabilistic Perspective](https://www.cs.ubc.ca/~murphyk/MLbook/)
-- __<br/>[](https://blog.metaflow.fr/ml-notes-why-the-log-likelihood-24f7b6c40f83)
+- _Morgan Giraud (MetaFlow)_<br/>[ML notes: Why the log-likelihood?](https://blog.metaflow.fr/ml-notes-why-the-log-likelihood-24f7b6c40f83)
+- _Gluon_<br/>[Binary classification with logistic regression](https://gluon.mxnet.io/chapter02_supervised-learning/logistic-regression-gluon.html)
+- _Ankur Gupta (Perfectly Random)_<br/>[Bernoulli Distribution as a tiny Neural Network](https://www.perfectlyrandom.org/2019/04/27/bernoulli-distribution-as-a-tiny-nn/)
+- _astroman (BigQuant)_<br/>[Entropy (3.13 Information theory)](https://bigquant.com/community/t/topic/121439)
+- _jingweimo (ScienceNet)_<br/>[Nonlinearity and loss function in multi-tasking problems](http://wap.sciencenet.cn/blog-578676-1118819.html)
+- _Google Developers_<br/>[Backpropagation algorithm](https://google-developers.appspot.com/machine-learning/crash-course/backprop-scroll/)
+- _D.W. (StackExchange)_<br/>[Why does the neural network logistic regression cost function sum for all layers only for lambda?](https://cs.stackexchange.com/a/71415)
+- _user329469 (StackExchange)_<br/>[Derivative of neural network function with respect to weights](https://math.stackexchange.com/questions/1731965/derivative-of-neural-network-function-with-respect-to-weights)
+- _Michael A. Nielsen, "Neural Networks and Deep Learning", Determination Press, 2015_<br/>[Chapter 2: How the backpropagation algorithm works](http://neuralnetworksanddeeplearning.com/chap2.html)
+- _Oleg Shirokikh (StackExchange)_<br/>[Back-propagation in Neural Nets with >2 hidden layers](https://stats.stackexchange.com/questions/70168/back-propagation-in-neural-nets-with-2-hidden-layers)
+- _John McGonagle, George Shaikouski, Christopher Williams, Andrew Hsu, Jimin Khim_<br/>[Backpropagation](https://brilliant.org/wiki/backpropagation/)
 
-https://gluon.mxnet.io/chapter02_supervised-learning/logistic-regression-gluon.html
-
-https://www.perfectlyrandom.org/2019/04/27/bernoulli-distribution-as-a-tiny-nn/
-
-https://bigquant.com/community/t/topic/121439
-
-http://wap.sciencenet.cn/blog-578676-1118819.html

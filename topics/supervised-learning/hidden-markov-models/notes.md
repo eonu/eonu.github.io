@@ -135,4 +135,4 @@ $$
 }
 $$
 
-# Support vector machines
+# Hidden Markov Models
