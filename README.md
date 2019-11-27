@@ -1,6 +1,6 @@
 # Notes
 
-Collection of personal notes, R-notebooks and other resources for research into computer science topics.
+Collection of personal notes, notebooks and other resources for research into computer science topics.
 
 # Editing
 
