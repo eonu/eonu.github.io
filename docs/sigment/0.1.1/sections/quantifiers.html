@@ -1,0 +1,503 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Quantifiers &mdash; sigment 0.1.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Validations" href="validations.html" />
+    <link rel="prev" title="Transformations" href="transformations.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> sigment
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Sigment</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Features</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="transformations.html">Transformations</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quantifiers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#available-quantifiers">Available quantifiers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pipeline">Pipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sometimes">Sometimes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#some-of">Some Of</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#one-of">One Of</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#using-quantifiers">Using quantifiers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="validations.html">Validations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sigment</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Quantifiers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/sections/quantifiers.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="quantifiers">
+<span id="id1"></span><h1>Quantifiers<a class="headerlink" href="#quantifiers" title="Permalink to this headline">¶</a></h1>
+<p>Quantifiers are used to specify rules for how a sequence of transformations
+or quantifiers should be applied.</p>
+<p>Each quantifier class is a subclass of the more generic <code class="xref py py-class docutils literal notranslate"><span class="pre">Quantifier</span></code> base class,
+which provides a basic interface that can also be used to write custom quantifiers,
+though there is rarely a need for this.</p>
+<p>As with transformations, Sigment offers a familiar interface for quantifiers, taking inspiration from popular augmentation libraries
+such as <a class="reference external" href="https://github.com/aleju/imgaug">imgaug</a> and <a class="reference external" href="https://github.com/makcedward/nlpaug">nlpaug</a>.</p>
+<p><span class="raw-html"><hr/></span></p>
+<div class="contents local topic" id="section-contents">
+<p class="topic-title">Section contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#available-quantifiers" id="id2">Available quantifiers</a></p>
+<ul>
+<li><p><a class="reference internal" href="#pipeline" id="id3">Pipeline</a></p></li>
+<li><p><a class="reference internal" href="#sometimes" id="id4">Sometimes</a></p></li>
+<li><p><a class="reference internal" href="#some-of" id="id5">Some Of</a></p></li>
+<li><p><a class="reference internal" href="#one-of" id="id6">One Of</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#using-quantifiers" id="id7">Using quantifiers</a></p></li>
+</ul>
+</div>
+<div class="section" id="available-quantifiers">
+<h2><a class="toc-backref" href="#id2">Available quantifiers</a><a class="headerlink" href="#available-quantifiers" title="Permalink to this headline">¶</a></h2>
+<p>In the below quantifiers, the <cite>steps</cite> argument is a list of <code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code> and/or <code class="xref py py-class docutils literal notranslate"><span class="pre">Quantifier</span></code> objects,
+specifying a sequence of transformations or quantifiers to be applied.</p>
+<div class="section" id="pipeline">
+<h3><a class="toc-backref" href="#id3">Pipeline</a><a class="headerlink" href="#pipeline" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="sigment.quantifiers.Pipeline">
+<em class="property">class </em><code class="sig-prename descclassname">sigment.quantifiers.</code><code class="sig-name descname">Pipeline</code><span class="sig-paren">(</span><em class="sig-param">steps</em>, <em class="sig-param">random_order=False</em>, <em class="sig-param">random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sigment/quantifiers.html#Pipeline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sigment.quantifiers.Pipeline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequentially executes each transformation or quantifier step.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="sometimes">
+<h3><a class="toc-backref" href="#id4">Sometimes</a><a class="headerlink" href="#sometimes" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="sigment.quantifiers.Sometimes">
+<em class="property">class </em><code class="sig-prename descclassname">sigment.quantifiers.</code><code class="sig-name descname">Sometimes</code><span class="sig-paren">(</span><em class="sig-param">steps</em>, <em class="sig-param">p=0.5</em>, <em class="sig-param">random_order=False</em>, <em class="sig-param">random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sigment/quantifiers.html#Sometimes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sigment.quantifiers.Sometimes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Probabilistically applies the provided transformation or quantifier steps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>p: float [0 ≤ p ≤ 1]</strong></dt><dd><p>The probability of executing the transformations or quantifiers.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="some-of">
+<h3><a class="toc-backref" href="#id5">Some Of</a><a class="headerlink" href="#some-of" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="sigment.quantifiers.SomeOf">
+<em class="property">class </em><code class="sig-prename descclassname">sigment.quantifiers.</code><code class="sig-name descname">SomeOf</code><span class="sig-paren">(</span><em class="sig-param">steps</em>, <em class="sig-param">n</em>, <em class="sig-param">random_order=False</em>, <em class="sig-param">random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sigment/quantifiers.html#SomeOf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sigment.quantifiers.SomeOf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Randomly applies a number of the provided transformation or quantifier steps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n: int [n &gt; 0] or (int, int)</strong></dt><dd><p>The number of transformation or quantifier steps to apply.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>The chosen steps will still be applied in the same order they were defined by default.</p></li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="one-of">
+<h3><a class="toc-backref" href="#id6">One Of</a><a class="headerlink" href="#one-of" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="sigment.quantifiers.OneOf">
+<em class="property">class </em><code class="sig-prename descclassname">sigment.quantifiers.</code><code class="sig-name descname">OneOf</code><span class="sig-paren">(</span><em class="sig-param">steps</em>, <em class="sig-param">random_order=False</em>, <em class="sig-param">random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sigment/quantifiers.html#OneOf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sigment.quantifiers.OneOf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Randomly applies a single step from the provided transformation or quantifier steps.</p>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>This is a special case of the <a class="reference internal" href="#sigment.quantifiers.SomeOf" title="sigment.quantifiers.SomeOf"><code class="xref py py-class docutils literal notranslate"><span class="pre">SomeOf</span></code></a> quantifier, with <cite>n=1</cite>.</p></li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="using-quantifiers">
+<h2><a class="toc-backref" href="#id7">Using quantifiers</a><a class="headerlink" href="#using-quantifiers" title="Permalink to this headline">¶</a></h2>
+<p>Each quantifier class comes with a number of methods that can be used to apply the transformations to either a <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> or WAV file.</p>
+<p>All quantifiers accept the <cite>random_order</cite> and <cite>random_state</cite> parameters, inherited from the <code class="xref py py-class docutils literal notranslate"><span class="pre">Quantifier</span></code> base class described below.</p>
+<dl class="class">
+<dt id="sigment.quantifiers.Quantifier">
+<em class="property">class </em><code class="sig-prename descclassname">sigment.quantifiers.</code><code class="sig-name descname">Quantifier</code><span class="sig-paren">(</span><em class="sig-param">steps</em>, <em class="sig-param">random_order=False</em>, <em class="sig-param">random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sigment/quantifiers.html#Quantifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sigment.quantifiers.Quantifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies how to execute transformation or quantifier steps.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As this is a base class, it should <strong>not</strong> be directly instantiated.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>steps: List[Transform, Quantifier]</strong></dt><dd><p>A collection of transformation or quantifier steps to apply.</p>
+</dd>
+<dt><strong>random_order: bool</strong></dt><dd><p>Whether or not to randomize the order of execution of <cite>steps</cite>.</p>
+</dd>
+<dt><strong>random_state: numpy.RandomState, int, optional</strong></dt><dd><p>A random state object or seed for reproducible randomness.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="sigment.quantifiers.Quantifier.__call__">
+<code class="sig-name descname">__call__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">X</em>, <em class="sig-param">sr=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sigment/quantifiers.html#Quantifier.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sigment.quantifiers.Quantifier.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the transformations or quantifiers on a provided input signal.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>X: numpy.ndarray [shape (T,) or (1xT) for mono, (2xT) for stereo]</strong></dt><dd><p>The input signal to transform.</p>
+</dd>
+<dt><strong>sr: int [sr &gt; 0], optional</strong></dt><dd><p>The sample rate for the input signal.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not required if using transformations that <strong>do not</strong> require a sample rate.</p>
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>transformed: numpy.ndarray [shape (T,) for mono, (2xT) for stereo]</dt><dd><p>The transformed signal, clipped so that it fits into the <span class="math notranslate nohighlight">\([-1,1]\)</span> range required for 32-bit floating point WAVs.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If a mono signal <cite>X</cite> of shape <cite>(1xT)</cite> was used, the output is reshaped to <cite>(T,)</cite>.</p>
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sigment.quantifiers</span> <span class="kn">import</span> <span class="n">SomeOf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sigment.transforms</span> <span class="kn">import</span> <span class="n">GaussianWhiteNoise</span><span class="p">,</span> <span class="n">PitchShift</span><span class="p">,</span> <span class="n">EdgeCrop</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create an example stereo signal.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">[</span><span class="mf">0.325</span><span class="p">,</span> <span class="mf">0.53</span> <span class="p">,</span> <span class="mf">0.393</span><span class="p">,</span> <span class="mf">0.211</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">[</span><span class="mf">0.21</span> <span class="p">,</span> <span class="mf">0.834</span><span class="p">,</span> <span class="mf">0.022</span><span class="p">,</span> <span class="mf">0.38</span> <span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Use the SomeOf quantifier to run only 1 to 2 of the transformations.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transform</span> <span class="o">=</span> <span class="n">SomeOf</span><span class="p">([</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">GaussianWhiteNoise</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">)),</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">PitchShift</span><span class="p">(</span><span class="n">n_steps</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)),</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">EdgeCrop</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="n">crop_size</span><span class="o">=</span><span class="p">(</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">],</span> <span class="n">n</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Run the __call__ method on the quantifier object to transform X.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># NOTE: Pitch shifting requires a sample rate when called, therefore</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#   we must call the quantifier with a specified sample rate parameter.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X_transform</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">sr</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="sigment.quantifiers.Quantifier.generate">
+<code class="sig-name descname">generate</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">X</em>, <em class="sig-param">n</em>, <em class="sig-param">sr=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sigment/quantifiers.html#Quantifier.generate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sigment.quantifiers.Quantifier.generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the transformations or quantifiers on a provided input signal,
+producing multiple augmented copies of the input signal.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>X: numpy.ndarray [shape (T,) or (1xT) for mono, (2xT) for stereo]</strong></dt><dd><p>The input signal to transform.</p>
+</dd>
+<dt><strong>n: int [n &gt; 0]</strong></dt><dd><p>Number of augmented copies of <cite>X</cite> to generate.</p>
+</dd>
+<dt><strong>sr: int [sr &gt; 0], optional</strong></dt><dd><p>The sample rate for the input signal.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not required if not using transformations that require a sample rate.</p>
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>augmented: List[numpy.ndarray] or numpy.ndarray</dt><dd><p>The augmented copies (or copy if <cite>n=1</cite>) of the signal <cite>X</cite>, clipped so that they fit into the <span class="math notranslate nohighlight">\([-1,1]\)</span> range required for 32-bit floating point WAVs.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If a mono signal <cite>X</cite> of shape <cite>(1xT)</cite> was used, the output is reshaped to <cite>(T,)</cite>.</p>
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sigment.quantifiers</span> <span class="kn">import</span> <span class="n">Sometimes</span><span class="p">,</span> <span class="n">OneOf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sigment.transforms</span> <span class="kn">import</span> <span class="n">LinearFade</span><span class="p">,</span> <span class="n">GaussianWhiteNoise</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create an example stereo signal.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">[</span><span class="mf">0.325</span><span class="p">,</span> <span class="mf">0.53</span> <span class="p">,</span> <span class="mf">0.393</span><span class="p">,</span> <span class="mf">0.211</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">[</span><span class="mf">0.21</span> <span class="p">,</span> <span class="mf">0.834</span><span class="p">,</span> <span class="mf">0.022</span><span class="p">,</span> <span class="mf">0.38</span> <span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Use the Sometimes and OneOf quantifiers to sometimes (with probability 0.65)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># apply a Gaussian white noise transformation and either a fade-in or fade-out.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transform</span> <span class="o">=</span> <span class="n">Sometimes</span><span class="p">([</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">GaussianWhiteNoise</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">)),</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">OneOf</span><span class="p">([</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">LinearFade</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s1">&#39;in&#39;</span><span class="p">,</span> <span class="n">fade_size</span><span class="o">=</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)),</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">LinearFade</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s1">&#39;out&#39;</span><span class="p">,</span> <span class="n">fade_size</span><span class="o">=</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">],</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.65</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate 5 augmented versions of X, using the quantifier object.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Xs_transform</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="sigment.quantifiers.Quantifier.apply_to_wav">
+<code class="sig-name descname">apply_to_wav</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">source</em>, <em class="sig-param">out=None</em><span class="sig-paren">)</span><a class="headerlink" href="#sigment.quantifiers.Quantifier.apply_to_wav" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies the augmentation to the provided input WAV file and writes the resulting signal back to a WAV file.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The resulting signal is always clipped so that it fits into the <span class="math notranslate nohighlight">\([-1,1]\)</span> range required for 32-bit floating point WAVs.</p>
+</div>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>source: str, Path or path-like</strong></dt><dd><p>Path to the input WAV file.</p>
+</dd>
+<dt><strong>out: str, Path or path-like</strong></dt><dd><p>Output WAV path for the augmented signal.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If <cite>out</cite> is set to <code class="docutils literal notranslate"><span class="pre">None</span></code> (which is the default) or the same as <cite>source</cite>, the input WAV file <strong>will</strong> be overwritten!</p>
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sigment</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create a transformation or quantifier object.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transform</span> <span class="o">=</span> <span class="o">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Apply the transformation to the input WAV file and write it to the output file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transform</span><span class="o">.</span><span class="n">apply_to_wav</span><span class="p">(</span><span class="s1">&#39;in.wav&#39;</span><span class="p">,</span> <span class="s1">&#39;out.wav&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="sigment.quantifiers.Quantifier.generate_from_wav">
+<code class="sig-name descname">generate_from_wav</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">source</em>, <em class="sig-param">n=1</em><span class="sig-paren">)</span><a class="headerlink" href="#sigment.quantifiers.Quantifier.generate_from_wav" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies the augmentation to the provided input WAV file and returns a <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>source: str, Path or path-like</strong></dt><dd><p>Path to the input WAV file.</p>
+</dd>
+<dt><strong>n: int [n &gt; 0]</strong></dt><dd><p>Number of augmented versions of the <cite>source</cite> signal to generate.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>augmented: List[numpy.ndarray] or numpy.ndarray</dt><dd><p>The augmented versions (or version if <cite>n=1</cite>) of the <cite>source</cite> signal, clipped so that they fit into the <span class="math notranslate nohighlight">\([-1,1]\)</span> range required for 32-bit floating point WAVs.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sigment</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create a transformation or quantifier object.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transform</span> <span class="o">=</span> <span class="o">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate 5 augmented versions of the signal data from &#39;signal.wav&#39; as numpy.ndarrays.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformed</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">generate_from_wav</span><span class="p">(</span><span class="s1">&#39;signal.wav&#39;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="validations.html" class="btn btn-neutral float-right" title="Validations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="transformations.html" class="btn btn-neutral float-left" title="Transformations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019-2021, Edwin Onuonga
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

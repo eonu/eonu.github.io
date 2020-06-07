@@ -1,0 +1,755 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Transformations &mdash; sigment 0.1.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Quantifiers" href="quantifiers.html" />
+    <link rel="prev" title="Changelog" href="../changelog.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> sigment
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Sigment</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Features</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Transformations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#available-transformations">Available transformations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#identity">Identity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#additive-gaussian-white-noise">Additive Gaussian White Noise</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#time-stretch">Time Stretch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pitch-shift">Pitch Shift</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#edge-crop">Edge Crop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#random-crop">Random Crop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#linear-fade-in-out">Linear Fade In/Out</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#normalize">Normalize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pre-emphasize">Pre-Emphasize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#extract-loudest-section">Extract Loudest Section</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#median-filter">Median Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reverberate">Reverberate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#clipping-distortion">Clipping Distortion</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#using-transformations">Using transformations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quantifiers.html">Quantifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="validations.html">Validations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sigment</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Transformations</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/sections/transformations.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="transformations">
+<span id="id1"></span><h1>Transformations<a class="headerlink" href="#transformations" title="Permalink to this headline">¶</a></h1>
+<p>Audio signal transformations in Sigment are represented by classes that can be used to apply
+a specific type of transformation to the audio data.</p>
+<p>Some example transformation classes include <code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianWhiteNoise</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">TimeStretch</span></code>. A full
+list of available transformations and their details and parameters can be found below.</p>
+<p>Each of these transformation classes are a subclass of the more generic <code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code> base class,
+which provides a basic interface that can also be used to <a class="reference external" href="https://nbviewer.jupyter.org/github/eonu/sigment/blob/master/notebooks/Custom%20Transformations.ipynb">write custom transformations</a>.</p>
+<p>Sigment offers a familiar interface for transformations, taking inspiration from popular augmentation libraries
+such as <a class="reference external" href="https://github.com/aleju/imgaug">imgaug</a>, <a class="reference external" href="https://github.com/makcedward/nlpaug">nlpaug</a>,
+<a class="reference external" href="https://github.com/albumentations-team/albumentations">albumentations</a> and <a class="reference external" href="https://github.com/iver56/audiomentations">audiomentations</a>.</p>
+<p><span class="raw-html"><hr/></span></p>
+<div class="contents local topic" id="section-contents">
+<p class="topic-title">Section contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#available-transformations" id="id8">Available transformations</a></p>
+<ul>
+<li><p><a class="reference internal" href="#identity" id="id9">Identity</a></p></li>
+<li><p><a class="reference internal" href="#additive-gaussian-white-noise" id="id10">Additive Gaussian White Noise</a></p></li>
+<li><p><a class="reference internal" href="#time-stretch" id="id11">Time Stretch</a></p></li>
+<li><p><a class="reference internal" href="#pitch-shift" id="id12">Pitch Shift</a></p></li>
+<li><p><a class="reference internal" href="#edge-crop" id="id13">Edge Crop</a></p></li>
+<li><p><a class="reference internal" href="#random-crop" id="id14">Random Crop</a></p></li>
+<li><p><a class="reference internal" href="#linear-fade-in-out" id="id15">Linear Fade In/Out</a></p></li>
+<li><p><a class="reference internal" href="#normalize" id="id16">Normalize</a></p></li>
+<li><p><a class="reference internal" href="#pre-emphasize" id="id17">Pre-Emphasize</a></p></li>
+<li><p><a class="reference internal" href="#extract-loudest-section" id="id18">Extract Loudest Section</a></p></li>
+<li><p><a class="reference internal" href="#median-filter" id="id19">Median Filter</a></p></li>
+<li><p><a class="reference internal" href="#reverberate" id="id20">Reverberate</a></p></li>
+<li><p><a class="reference internal" href="#clipping-distortion" id="id21">Clipping Distortion</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#using-transformations" id="id22">Using transformations</a></p></li>
+</ul>
+</div>
+<div class="section" id="available-transformations">
+<h2><a class="toc-backref" href="#id8">Available transformations</a><a class="headerlink" href="#available-transformations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="identity">
+<h3><a class="toc-backref" href="#id9">Identity</a><a class="headerlink" href="#identity" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="sigment.transforms.Identity">
+<em class="property">class </em><code class="sig-prename descclassname">sigment.transforms.</code><code class="sig-name descname">Identity</code><a class="reference internal" href="../_modules/sigment/transforms.html#Identity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sigment.transforms.Identity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies an identity transformation to a signal.</p>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>A sampling rate <strong>is not</strong> required when applying this transformation.</p></li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="additive-gaussian-white-noise">
+<h3><a class="toc-backref" href="#id10">Additive Gaussian White Noise</a><a class="headerlink" href="#additive-gaussian-white-noise" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="sigment.transforms.GaussianWhiteNoise">
+<em class="property">class </em><code class="sig-prename descclassname">sigment.transforms.</code><code class="sig-name descname">GaussianWhiteNoise</code><span class="sig-paren">(</span><em class="sig-param">scale</em>, <em class="sig-param">p=1.0</em>, <em class="sig-param">random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sigment/transforms.html#GaussianWhiteNoise"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sigment.transforms.GaussianWhiteNoise" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies additive Gaussian white noise to the signal.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>scale: float [scale &gt; 0] or (float, float)</strong></dt><dd><div class="line-block">
+<div class="line">Amount to scale the value sampled from the standard normal distribution.</div>
+<div class="line">Essentially the variance <span class="math notranslate nohighlight">\(\sigma^2\)</span>.</div>
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>A sampling rate <strong>is not</strong> required when applying this transformation.</p></li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="time-stretch">
+<h3><a class="toc-backref" href="#id11">Time Stretch</a><a class="headerlink" href="#time-stretch" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="sigment.transforms.TimeStretch">
+<em class="property">class </em><code class="sig-prename descclassname">sigment.transforms.</code><code class="sig-name descname">TimeStretch</code><span class="sig-paren">(</span><em class="sig-param">rate</em>, <em class="sig-param">p=1.0</em>, <em class="sig-param">random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sigment/transforms.html#TimeStretch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sigment.transforms.TimeStretch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stretches the duration or speed of the signal without affecting its pitch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>rate: float [rate &gt; 0] or (float, float)</strong></dt><dd><p>Stretch rate.</p>
+<ul class="simple">
+<li><p>If <cite>rate &lt; 1</cite>, the signal is slowed down.</p></li>
+<li><p>If <cite>rate &gt; 1</cite>, the signal is sped up.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>A sampling rate <strong>is not</strong> required when applying this transformation.</p></li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="pitch-shift">
+<h3><a class="toc-backref" href="#id12">Pitch Shift</a><a class="headerlink" href="#pitch-shift" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="sigment.transforms.PitchShift">
+<em class="property">class </em><code class="sig-prename descclassname">sigment.transforms.</code><code class="sig-name descname">PitchShift</code><span class="sig-paren">(</span><em class="sig-param">n_steps</em>, <em class="sig-param">p=1.0</em>, <em class="sig-param">random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sigment/transforms.html#PitchShift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sigment.transforms.PitchShift" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shifts the pitch of the signal without changing its duration or speed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_steps: float [-12 ≤ n_steps ≤ 12] or (float, float)</strong></dt><dd><p>Number of semitones to shift.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>A sampling rate <strong>is</strong> required when applying this transformation.</p></li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="edge-crop">
+<h3><a class="toc-backref" href="#id13">Edge Crop</a><a class="headerlink" href="#edge-crop" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="sigment.transforms.EdgeCrop">
+<em class="property">class </em><code class="sig-prename descclassname">sigment.transforms.</code><code class="sig-name descname">EdgeCrop</code><span class="sig-paren">(</span><em class="sig-param">side</em>, <em class="sig-param">crop_size</em>, <em class="sig-param">p=1.0</em>, <em class="sig-param">random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sigment/transforms.html#EdgeCrop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sigment.transforms.EdgeCrop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crops a section from the start or end of the signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>side: {‘start’, ‘end’}</strong></dt><dd><p>The side of the signal to crop.</p>
+</dd>
+<dt><strong>crop_size: float [0 &lt; crop_size ≤ 0.5] or (float, float)</strong></dt><dd><p>The fraction of the signal duration to crop from the chosen <cite>side</cite>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>A sampling rate <strong>is not</strong> required when applying this transformation.</p></li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="random-crop">
+<h3><a class="toc-backref" href="#id14">Random Crop</a><a class="headerlink" href="#random-crop" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="sigment.transforms.RandomCrop">
+<em class="property">class </em><code class="sig-prename descclassname">sigment.transforms.</code><code class="sig-name descname">RandomCrop</code><span class="sig-paren">(</span><em class="sig-param">crop_size</em>, <em class="sig-param">n_crops</em>, <em class="sig-param">p=1.0</em>, <em class="sig-param">random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sigment/transforms.html#RandomCrop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sigment.transforms.RandomCrop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Randomly crops multiple sections from the signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>crop_size: float [0 &lt; crop_size &lt; 1] or (float, float)</strong></dt><dd><p>The fraction of the signal duration to crop.</p>
+</dd>
+<dt><strong>n_crops: int [n_crops &gt; 0] or (int, int)</strong></dt><dd><p>The number of random crops of size <cite>crop_size</cite> to make.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Chunking is done according to the algorithm defined at <a class="reference internal" href="#rc6c413aa6161-1" id="id2">[1]</a>.</p></li>
+<li><p><cite>crop_size</cite> <span class="math notranslate nohighlight">\(\times\)</span> <cite>n_crops</cite> must not exceed 1.</p></li>
+<li><p>A sampling rate <strong>is not</strong> required when applying this transformation.</p></li>
+</ul>
+<p class="rubric">References</p>
+<dl class="citation">
+<dt class="label" id="rc6c413aa6161-1"><span class="brackets"><a class="fn-backref" href="#id2">1</a></span></dt>
+<dd><p><a class="reference external" href="https://stackoverflow.com/a/49944026">https://stackoverflow.com/a/49944026</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="linear-fade-in-out">
+<h3><a class="toc-backref" href="#id15">Linear Fade In/Out</a><a class="headerlink" href="#linear-fade-in-out" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="sigment.transforms.LinearFade">
+<em class="property">class </em><code class="sig-prename descclassname">sigment.transforms.</code><code class="sig-name descname">LinearFade</code><span class="sig-paren">(</span><em class="sig-param">direction</em>, <em class="sig-param">fade_size</em>, <em class="sig-param">p=1.0</em>, <em class="sig-param">random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sigment/transforms.html#LinearFade"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sigment.transforms.LinearFade" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linearly fades the signal in or out.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>direction: {‘in’, ‘out’}</strong></dt><dd><p>The direction to fade the signal.</p>
+</dd>
+<dt><strong>fade_size: float [0 &lt; fade_size ≤ 0.5] or (float, float)</strong></dt><dd><p>The fraction of the signal to fade in the chosen <cite>direction</cite>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>A sampling rate <strong>is not</strong> required when applying this transformation.</p></li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="normalize">
+<h3><a class="toc-backref" href="#id16">Normalize</a><a class="headerlink" href="#normalize" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="sigment.transforms.Normalize">
+<em class="property">class </em><code class="sig-prename descclassname">sigment.transforms.</code><code class="sig-name descname">Normalize</code><span class="sig-paren">(</span><em class="sig-param">independent=True</em>, <em class="sig-param">p=1.0</em>, <em class="sig-param">random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sigment/transforms.html#Normalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sigment.transforms.Normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalizes the signal by dividing each sample by the maximum absolute sample amplitude.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>independent: bool</strong></dt><dd><p>Whether or not to normalize each channel independently.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>A sampling rate <strong>is not</strong> required when applying this transformation.</p></li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="pre-emphasize">
+<h3><a class="toc-backref" href="#id17">Pre-Emphasize</a><a class="headerlink" href="#pre-emphasize" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="sigment.transforms.PreEmphasize">
+<em class="property">class </em><code class="sig-prename descclassname">sigment.transforms.</code><code class="sig-name descname">PreEmphasize</code><span class="sig-paren">(</span><em class="sig-param">alpha=0.95</em>, <em class="sig-param">p=1.0</em>, <em class="sig-param">random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sigment/transforms.html#PreEmphasize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sigment.transforms.PreEmphasize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pre-emphasizes the signal by applying a first-order high-pass filter.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}x'[t] = \begin{cases}
+  x[t] &amp; \text{if $t=0$} \\
+  x[t] - \alpha x[t-1] &amp; \text{otherwise}
+\end{cases}\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>alpha: float [0 &lt; alpha ≤ 1] or (float, float)</strong></dt><dd><p>Pre-emphasis coefficient.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>A sampling rate <strong>is not</strong> required when applying this transformation.</p></li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="extract-loudest-section">
+<h3><a class="toc-backref" href="#id18">Extract Loudest Section</a><a class="headerlink" href="#extract-loudest-section" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="sigment.transforms.ExtractLoudestSection">
+<em class="property">class </em><code class="sig-prename descclassname">sigment.transforms.</code><code class="sig-name descname">ExtractLoudestSection</code><span class="sig-paren">(</span><em class="sig-param">duration</em>, <em class="sig-param">p=1.0</em>, <em class="sig-param">random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sigment/transforms.html#ExtractLoudestSection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sigment.transforms.ExtractLoudestSection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts the loudest section from the signal using sliding window aggregation over amplitudes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>duration: float [0 &lt; duration ≤ 1] or (float, float)</strong></dt><dd><p>The duration of the section to extract, as a fraction of the original signal duration.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>See <a class="reference internal" href="#r53fd6e153d3d-2" id="id4">[2]</a> for more details on the implementation.</p></li>
+<li><p>A sampling rate <strong>is not</strong> required when applying this transformation.</p></li>
+</ul>
+<p class="rubric">References</p>
+<dl class="citation">
+<dt class="label" id="r53fd6e153d3d-2"><span class="brackets"><a class="fn-backref" href="#id4">2</a></span></dt>
+<dd><p><a class="reference external" href="https://github.com/petewarden/extract_loudest_section">https://github.com/petewarden/extract_loudest_section</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="median-filter">
+<h3><a class="toc-backref" href="#id19">Median Filter</a><a class="headerlink" href="#median-filter" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="sigment.transforms.MedianFilter">
+<em class="property">class </em><code class="sig-prename descclassname">sigment.transforms.</code><code class="sig-name descname">MedianFilter</code><span class="sig-paren">(</span><em class="sig-param">window_size</em>, <em class="sig-param">p=1.0</em>, <em class="sig-param">random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sigment/transforms.html#MedianFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sigment.transforms.MedianFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies a median filter to the signal.</p>
+<div class="math notranslate nohighlight">
+\[x'[t] = \mathrm{median}
+\underbrace{\Big[
+  \ldots, x[t-1], x[t], x[t+1], \ldots
+\Big]}_\text{window size}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>window_size: int [window_size &gt; 1] or (int, int)</strong></dt><dd><p>The size of the window of neighbouring samples.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>A sampling rate <strong>is not</strong> required when applying this transformation.</p></li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="reverberate">
+<h3><a class="toc-backref" href="#id20">Reverberate</a><a class="headerlink" href="#reverberate" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="sigment.transforms.Reverb">
+<em class="property">class </em><code class="sig-prename descclassname">sigment.transforms.</code><code class="sig-name descname">Reverb</code><span class="sig-paren">(</span><em class="sig-param">delay</em>, <em class="sig-param">decay</em>, <em class="sig-param">p=1.0</em>, <em class="sig-param">random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sigment/transforms.html#Reverb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sigment.transforms.Reverb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies reverb to the signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>delay: float [0 &lt; delay ≤ 1] or (float, float)</strong></dt><dd><p>Fraction of signal diration to delay reverberated samples by.</p>
+</dd>
+<dt><strong>decay: float [0 &lt; decay ≤ 1] or (float, float)</strong></dt><dd><p>Scalar to decay reverberated samples by.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>See <a class="reference internal" href="#r10e2e588b359-3" id="id6">[3]</a> for more details on the implementation.</p></li>
+</ul>
+<p class="rubric">References</p>
+<dl class="citation">
+<dt class="label" id="r10e2e588b359-3"><span class="brackets"><a class="fn-backref" href="#id6">3</a></span></dt>
+<dd><p><a class="reference external" href="https://stackoverflow.com/a/1117249">https://stackoverflow.com/a/1117249</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="clipping-distortion">
+<h3><a class="toc-backref" href="#id21">Clipping Distortion</a><a class="headerlink" href="#clipping-distortion" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="sigment.transforms.ClipDistort">
+<em class="property">class </em><code class="sig-prename descclassname">sigment.transforms.</code><code class="sig-name descname">ClipDistort</code><span class="sig-paren">(</span><em class="sig-param">percentile</em>, <em class="sig-param">independent=False</em>, <em class="sig-param">p=1.0</em>, <em class="sig-param">random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sigment/transforms.html#ClipDistort"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sigment.transforms.ClipDistort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies clipping distortion to the signal according to a percentile clipping threshold.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>percentile: int [0 &lt; percentile ≤ 100]</strong></dt><dd><p>Percentile of sample amplitudes to use as a clipping threshold.</p>
+</dd>
+<dt><strong>independent: boolean</strong></dt><dd><p>Whether or not to independently distort channels by calculating individual percentiles.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="using-transformations">
+<h2><a class="toc-backref" href="#id22">Using transformations</a><a class="headerlink" href="#using-transformations" title="Permalink to this headline">¶</a></h2>
+<p>Each transformation class comes with a number of methods that can be used to apply the transformation to either a <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> or WAV file.</p>
+<p>All transformations accept the <cite>p</cite> and <cite>random_state</cite> parameters, inherited from the <code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code> base class described below.</p>
+<dl class="class">
+<dt id="sigment.transforms.Transform">
+<em class="property">class </em><code class="sig-prename descclassname">sigment.transforms.</code><code class="sig-name descname">Transform</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">random_state</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sigment/transforms.html#Transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sigment.transforms.Transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class representing a single transformation or augmentation.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As this is a base class, it should <strong>not</strong> be directly instantiated.</p>
+<p>You can however, use it to <a class="reference external" href="https://nbviewer.jupyter.org/github/eonu/sigment/blob/master/notebooks/Custom%20Transformations.ipynb">create your own transformations</a>, following the
+implementation of the pre-defined transformations in Sigment.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>p: float [0 ≤ p ≤ 1]</strong></dt><dd><p>The probability of executing the transformation.</p>
+</dd>
+<dt><strong>random_state: numpy.RandomState, int, optional</strong></dt><dd><p>A random state object or seed for reproducible randomness.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="sigment.transforms.Transform.__call__">
+<code class="sig-name descname">__call__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">X</em>, <em class="sig-param">sr=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sigment/transforms.html#Transform.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sigment.transforms.Transform.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the transformation on a provided input signal.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>X: numpy.ndarray [shape (T,) or (1xT) for mono, (2xT) for stereo]</strong></dt><dd><p>The input signal to transform.</p>
+</dd>
+<dt><strong>sr: int [sr &gt; 0], optional</strong></dt><dd><p>The sample rate for the input signal.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not required if using transformations that <strong>do not</strong> require a sample rate.</p>
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>transformed: numpy.ndarray [shape (T,) for mono, (2xT) for stereo]</dt><dd><p>The transformed signal, clipped so that it fits into the <span class="math notranslate nohighlight">\([-1,1]\)</span> range required for 32-bit floating point WAVs.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If a mono signal <cite>X</cite> of shape <cite>(1xT)</cite> was used, the output is reshaped to <cite>(T,)</cite>.</p>
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sigment.transforms</span> <span class="kn">import</span> <span class="n">PitchShift</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create an example stereo signal.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">[</span><span class="mf">0.325</span><span class="p">,</span> <span class="mf">0.53</span> <span class="p">,</span> <span class="mf">0.393</span><span class="p">,</span> <span class="mf">0.211</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">[</span><span class="mf">0.21</span> <span class="p">,</span> <span class="mf">0.834</span><span class="p">,</span> <span class="mf">0.022</span><span class="p">,</span> <span class="mf">0.38</span> <span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create the pitch-shifting transformation object.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">shift</span> <span class="o">=</span> <span class="n">PitchShift</span><span class="p">(</span><span class="n">n_steps</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Run the __call__ method on the transformation object to transform X.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># NOTE: Pitch shifting requires a sample rate when called.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X_shift</span> <span class="o">=</span> <span class="n">shift</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">sr</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="sigment.transforms.Transform.generate">
+<code class="sig-name descname">generate</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">X</em>, <em class="sig-param">n</em>, <em class="sig-param">sr=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sigment/transforms.html#Transform.generate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sigment.transforms.Transform.generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the transformation on a provided input signal, producing multiple augmented copies of the input signal.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>X: numpy.ndarray [shape (T,) or (1xT) for mono, (2xT) for stereo]</strong></dt><dd><p>The input signal to transform.</p>
+</dd>
+<dt><strong>n: int [n &gt; 0]</strong></dt><dd><p>Number of augmented copies of <cite>X</cite> to generate.</p>
+</dd>
+<dt><strong>sr: int [sr &gt; 0], optional</strong></dt><dd><p>The sample rate for the input signal.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not required if using transformations that <strong>do not</strong> require a sample rate.</p>
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>augmented: List[numpy.ndarray] or numpy.ndarray</dt><dd><p>The augmented copies (or copy if <cite>n=1</cite>) of the signal <cite>X</cite>, clipped so that they fit into the <span class="math notranslate nohighlight">\([-1,1]\)</span> range required for 32-bit floating point WAVs.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If a mono signal <cite>X</cite> of shape <cite>(1xT)</cite> was used, the output is reshaped to <cite>(T,)</cite>.</p>
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sigment.transforms</span> <span class="kn">import</span> <span class="n">GaussianWhiteNoise</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create an example stereo signal.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">[</span><span class="mf">0.325</span><span class="p">,</span> <span class="mf">0.53</span> <span class="p">,</span> <span class="mf">0.393</span><span class="p">,</span> <span class="mf">0.211</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">[</span><span class="mf">0.21</span> <span class="p">,</span> <span class="mf">0.834</span><span class="p">,</span> <span class="mf">0.022</span><span class="p">,</span> <span class="mf">0.38</span> <span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create the Gaussian white noise transformation object.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add_noise</span> <span class="o">=</span> <span class="n">GaussianWhiteNoise</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate 5 augmented versions of X, using the noise transformation.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Xs_noisy</span> <span class="o">=</span> <span class="n">add_noise</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="sigment.transforms.Transform.apply_to_wav">
+<code class="sig-name descname">apply_to_wav</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">source</em>, <em class="sig-param">out=None</em><span class="sig-paren">)</span><a class="headerlink" href="#sigment.transforms.Transform.apply_to_wav" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies the augmentation to the provided input WAV file and writes the resulting signal back to a WAV file.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The resulting signal is always clipped so that it fits into the <span class="math notranslate nohighlight">\([-1,1]\)</span> range required for 32-bit floating point WAVs.</p>
+</div>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>source: str, Path or path-like</strong></dt><dd><p>Path to the input WAV file.</p>
+</dd>
+<dt><strong>out: str, Path or path-like</strong></dt><dd><p>Output WAV path for the augmented signal.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If <cite>out</cite> is set to <code class="docutils literal notranslate"><span class="pre">None</span></code> (which is the default) or the same as <cite>source</cite>, the input WAV file <strong>will</strong> be overwritten!</p>
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sigment</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create a transformation or quantifier object.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transform</span> <span class="o">=</span> <span class="o">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Apply the transformation to the input WAV file and write it to the output file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transform</span><span class="o">.</span><span class="n">apply_to_wav</span><span class="p">(</span><span class="s1">&#39;in.wav&#39;</span><span class="p">,</span> <span class="s1">&#39;out.wav&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="sigment.transforms.Transform.generate_from_wav">
+<code class="sig-name descname">generate_from_wav</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">source</em>, <em class="sig-param">n=1</em><span class="sig-paren">)</span><a class="headerlink" href="#sigment.transforms.Transform.generate_from_wav" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies the augmentation to the provided input WAV file and returns a <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>source: str, Path or path-like</strong></dt><dd><p>Path to the input WAV file.</p>
+</dd>
+<dt><strong>n: int [n &gt; 0]</strong></dt><dd><p>Number of augmented versions of the <cite>source</cite> signal to generate.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>augmented: List[numpy.ndarray] or numpy.ndarray</dt><dd><p>The augmented versions (or version if <cite>n=1</cite>) of the <cite>source</cite> signal, clipped so that they fit into the <span class="math notranslate nohighlight">\([-1,1]\)</span> range required for 32-bit floating point WAVs.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sigment</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create a transformation or quantifier object.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transform</span> <span class="o">=</span> <span class="o">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate 5 augmented versions of the signal data from &#39;signal.wav&#39; as numpy.ndarrays.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformed</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">generate_from_wav</span><span class="p">(</span><span class="s1">&#39;signal.wav&#39;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="quantifiers.html" class="btn btn-neutral float-right" title="Quantifiers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../changelog.html" class="btn btn-neutral float-left" title="Changelog" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019-2021, Edwin Onuonga
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

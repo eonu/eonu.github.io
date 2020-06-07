@@ -1,0 +1,621 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>sigment.internals.validator &mdash; sigment 0.1.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> sigment
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Sigment</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../sections/transformations.html">Transformations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sections/quantifiers.html">Quantifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sections/validations.html">Validations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">sigment</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>sigment.internals.validator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for sigment.internals.validator</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="_Validator"><a class="viewcode-back" href="../../../sections/validations.html#sigment.internals.validator._Validator">[docs]</a><span class="k">class</span> <span class="nc">_Validator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Performs internal validations on various input types.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="_Validator.integer"><a class="viewcode-back" href="../../../sections/validations.html#sigment.internals.validator._Validator.integer">[docs]</a>    <span class="k">def</span> <span class="nf">integer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">desc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Validates an integer.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        item: int</span>
+<span class="sd">            The item to validate.</span>
+
+<span class="sd">        desc: str</span>
+<span class="sd">            A description of the item being validated.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        item: int</span>
+<span class="sd">            The original input item if valid.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the value is not an ``int``.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; validator = _Validator()</span>
+<span class="sd">        &gt;&gt;&gt; n_crops = 3</span>
+<span class="sd">        &gt;&gt;&gt; validator.integer(n_crops, &#39;n_crops (number of sections to crop)&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Expected </span><span class="si">{}</span><span class="s2"> to be an integer&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">desc</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">item</span></div>
+
+<div class="viewcode-block" id="_Validator.real"><a class="viewcode-back" href="../../../sections/validations.html#sigment.internals.validator._Validator.real">[docs]</a>    <span class="k">def</span> <span class="nf">real</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">desc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Validates a real number.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        item: float</span>
+<span class="sd">            The item to validate.</span>
+
+<span class="sd">        desc: str</span>
+<span class="sd">            A description of the item being validated.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        item: float</span>
+<span class="sd">            The original input item if valid.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the value cannot be converted into a ``float``.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; validator = _Validator()</span>
+<span class="sd">        &gt;&gt;&gt; var = 5.0</span>
+<span class="sd">        &gt;&gt;&gt; validator.real(var, &#39;var (variance)&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Expected </span><span class="si">{}</span><span class="s2"> to be a real number&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">desc</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="_Validator.string"><a class="viewcode-back" href="../../../sections/validations.html#sigment.internals.validator._Validator.string">[docs]</a>    <span class="k">def</span> <span class="nf">string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">desc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Validates a string.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        item: str</span>
+<span class="sd">            The item to validate.</span>
+
+<span class="sd">        desc: str</span>
+<span class="sd">            A description of the item being validated.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        item: str</span>
+<span class="sd">            The original input item if valid.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the value is not a ``str``.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; validator = _Validator()</span>
+<span class="sd">        &gt;&gt;&gt; method = &#39;median&#39;</span>
+<span class="sd">        &gt;&gt;&gt; method = validator.string(method, &#39;method (filter type)&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Expected </span><span class="si">{}</span><span class="s2"> to be a string&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">desc</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">item</span></div>
+
+<div class="viewcode-block" id="_Validator.boolean"><a class="viewcode-back" href="../../../sections/validations.html#sigment.internals.validator._Validator.boolean">[docs]</a>    <span class="k">def</span> <span class="nf">boolean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">desc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Validates a boolean.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        item: bool</span>
+<span class="sd">            The item to validate.</span>
+
+<span class="sd">        desc: str</span>
+<span class="sd">            A description of the item being validated.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        item: bool</span>
+<span class="sd">            The original input item if valid.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the value is not ``True`` or ``False``.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; validator = _Validator()</span>
+<span class="sd">        &gt;&gt;&gt; indep = True</span>
+<span class="sd">        &gt;&gt;&gt; indep = validator.boolean(indep, &#39;indep (whether to independently normalize channels)&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Expected </span><span class="si">{}</span><span class="s2"> to be a boolean&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">desc</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">item</span></div>
+
+<div class="viewcode-block" id="_Validator.one_of"><a class="viewcode-back" href="../../../sections/validations.html#sigment.internals.validator._Validator.one_of">[docs]</a>    <span class="k">def</span> <span class="nf">one_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">desc</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Validates that an item is one of some permitted values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        item: Any</span>
+<span class="sd">            The item to validate.</span>
+
+<span class="sd">        desc: str</span>
+<span class="sd">            A description of the item being validated.</span>
+
+<span class="sd">        items: Iterable[Any]</span>
+<span class="sd">            The collection of permitted values to check against.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        item: Any</span>
+<span class="sd">            The original input item if valid.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the value is not one of the specified permitted values.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; validator = _Validator()</span>
+<span class="sd">        &gt;&gt;&gt; method = &#39;median&#39;</span>
+<span class="sd">        &gt;&gt;&gt; method = validator.one_of(method, &#39;method (filter type)&#39;, [&#39;median&#39;, &#39;mean&#39;])</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Expected </span><span class="si">{}</span><span class="s1"> to be one of </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="n">items</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">item</span></div>
+
+<div class="viewcode-block" id="_Validator.restricted_integer"><a class="viewcode-back" href="../../../sections/validations.html#sigment.internals.validator._Validator.restricted_integer">[docs]</a>    <span class="k">def</span> <span class="nf">restricted_integer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">desc</span><span class="p">,</span> <span class="n">condition</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Validates an integer and checks that it satisfies some condition.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        item: int</span>
+<span class="sd">            The item to validate.</span>
+
+<span class="sd">        desc: str</span>
+<span class="sd">            A description of the item being validated.</span>
+
+<span class="sd">        condition: lambda</span>
+<span class="sd">            A condition to check the item against.</span>
+
+<span class="sd">        expected: str</span>
+<span class="sd">            A description of the condition, or expected value.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        item: int</span>
+<span class="sd">            The original input item if valid.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the ``int`` value does not satisfy the provided condition.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; validator = _Validator()</span>
+<span class="sd">        &gt;&gt;&gt; n_crops = 3</span>
+<span class="sd">        &gt;&gt;&gt; n_crops = validator.restricted_integer(</span>
+<span class="sd">        &gt;&gt;&gt;     n_crops, &#39;n_crops (number of sections to crop)&#39;,</span>
+<span class="sd">        &gt;&gt;&gt;     lambda x: 0 &lt;= x &lt;= 5, &#39;between zero and five&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">condition</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Expected </span><span class="si">{}</span><span class="s1"> to be </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="n">expected</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Expected </span><span class="si">{}</span><span class="s2"> to be an integer&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">desc</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">item</span></div>
+
+<div class="viewcode-block" id="_Validator.restricted_float"><a class="viewcode-back" href="../../../sections/validations.html#sigment.internals.validator._Validator.restricted_float">[docs]</a>    <span class="k">def</span> <span class="nf">restricted_float</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">desc</span><span class="p">,</span> <span class="n">condition</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Validates a float and checks that it satisfies some condition.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        item: float</span>
+<span class="sd">            The item to validate.</span>
+
+<span class="sd">        desc: str</span>
+<span class="sd">            A description of the item being validated.</span>
+
+<span class="sd">        condition: lambda</span>
+<span class="sd">            A condition to check the item against.</span>
+
+<span class="sd">        expected: str</span>
+<span class="sd">            A description of the condition, or expected value.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        item: float</span>
+<span class="sd">            The original input item if valid.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the ``float`` value does not satisfy the provided condition.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; validator = _Validator()</span>
+<span class="sd">        &gt;&gt;&gt; var = 5.0</span>
+<span class="sd">        &gt;&gt;&gt; validator.restricted_float(var, &#39;var (variance)&#39;, lambda x: x &gt; 0, &#39;positive&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">desc</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">condition</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Expected </span><span class="si">{}</span><span class="s1"> to be </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="n">expected</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">item</span></div>
+
+<div class="viewcode-block" id="_Validator.integer_value"><a class="viewcode-back" href="../../../sections/validations.html#sigment.internals.validator._Validator.integer_value">[docs]</a>    <span class="k">def</span> <span class="nf">integer_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">desc</span><span class="p">,</span> <span class="n">condition</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Validates an integer value or value range and checks that it satisfies some condition.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        item: int</span>
+<span class="sd">            The item to validate.</span>
+
+<span class="sd">        desc: str</span>
+<span class="sd">            A description of the item being validated.</span>
+
+<span class="sd">        condition: lambda</span>
+<span class="sd">            A condition to check the item against.</span>
+
+<span class="sd">        expected: str</span>
+<span class="sd">            A description of the condition, or expected value.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        item: tuple(int, int)</span>
+<span class="sd">            The value range if the input item is valid.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the value is not a ``int`` or ``(int, int)``.</span>
+
+<span class="sd">        ValueError</span>
+<span class="sd">            If the value is a tuple with more than two elements (sanity check).</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; validator = _Validator()</span>
+<span class="sd">        &gt;&gt;&gt; validator.integer_value(5, &#39;window_size (window size)&#39;, lambda a, b: 0 &lt; a &lt;= b, &#39;positive&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; #=&gt; (5, 5)</span>
+<span class="sd">        &gt;&gt;&gt; validator.integer_value((5, 10), &#39;window_size (window size)&#39;, lambda a, b: 0 &lt; a &lt;= b, &#39;positive&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; #=&gt; (5, 10)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">restricted_integer</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;lower limit for </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">desc</span><span class="p">),</span>
+                    <span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">condition</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="p">),</span> <span class="n">expected</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">restricted_integer</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;upper limit for </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">desc</span><span class="p">),</span>
+                    <span class="k">lambda</span> <span class="n">b</span><span class="p">:</span> <span class="n">condition</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="p">),</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> and greater than or equal to the lower limit&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">expected</span><span class="p">))</span>
+                <span class="k">return</span> <span class="n">item</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Expected range for </span><span class="si">{}</span><span class="s1"> to be a tuple (lower, upper) representing the limits &#39;</span> \
+                    <span class="s1">&#39;of the range of values from which the value is drawn&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="n">desc</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">restricted_integer</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">desc</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">condition</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">expected</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Expected range for </span><span class="si">{}</span><span class="s1"> to be a tuple (lower, upper) representing the limits &#39;</span> \
+                    <span class="s1">&#39;of the range of values from which the value is drawn&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="n">desc</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="_Validator.float_value"><a class="viewcode-back" href="../../../sections/validations.html#sigment.internals.validator._Validator.float_value">[docs]</a>    <span class="k">def</span> <span class="nf">float_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">desc</span><span class="p">,</span> <span class="n">condition</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Validates a float value or value range and checks that it satisfies some condition.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        item: float</span>
+<span class="sd">            The item to validate.</span>
+
+<span class="sd">        desc: str</span>
+<span class="sd">            A description of the item being validated.</span>
+
+<span class="sd">        condition: lambda</span>
+<span class="sd">            A condition to check the item against.</span>
+
+<span class="sd">        expected: str</span>
+<span class="sd">            A description of the condition, or expected value.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        item: tuple(float, float)</span>
+<span class="sd">            The value range if the input item is valid.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the value is not a ``float`` or ``(float, float)``.</span>
+
+<span class="sd">        ValueError</span>
+<span class="sd">            If the value is a tuple with more than two elements (sanity check).</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; validator = _Validator()</span>
+<span class="sd">        &gt;&gt;&gt; validator.float_value(5.0, &#39;var (variance)&#39;, lambda a, b: 0 &lt; a &lt;= b, &#39;positive&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; #=&gt; (5.0, 5.0)</span>
+<span class="sd">        &gt;&gt;&gt; validator.float_value((5, 10), &#39;var (variance)&#39;, lambda a, b: 0 &lt; a &lt;= b, &#39;positive&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; #=&gt; (5.0, 10.0)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">restricted_float</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;lower limit for </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">desc</span><span class="p">),</span>
+                    <span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">condition</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="p">),</span> <span class="n">expected</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">restricted_float</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;upper limit for </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">desc</span><span class="p">),</span>
+                    <span class="k">lambda</span> <span class="n">b</span><span class="p">:</span> <span class="n">condition</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="p">),</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> and greater than or equal to the lower limit&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">expected</span><span class="p">))</span>
+                <span class="k">return</span> <span class="n">item</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Expected range for </span><span class="si">{}</span><span class="s1"> to be a tuple (lower, upper) representing the limits &#39;</span> \
+                    <span class="s1">&#39;for a uniform distribution from which the value is sampled&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="n">desc</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">restricted_float</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">desc</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">condition</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">expected</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Expected range for </span><span class="si">{}</span><span class="s1"> to be a tuple (lower, upper) representing the limits &#39;</span> \
+                <span class="s1">&#39;for a uniform distribution from which the value is sampled&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="n">desc</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="_Validator.signal"><a class="viewcode-back" href="../../../sections/validations.html#sigment.internals.validator._Validator.signal">[docs]</a>    <span class="k">def</span> <span class="nf">signal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Validates a WAV audio signal.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        signal: numpy.ndarray [shape (T,) or (1xT) for mono, (2xT) for stereo]</span>
+<span class="sd">            The input signal to validate.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        signal: numpy.ndarray [shape (T,) for mono, (2xT) for stereo]</span>
+<span class="sd">            The original signal if it is valid.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            - If the signal is of the wrong type.</span>
+<span class="sd">            - If the signal is not a floating point ``numpy.ndarray``.</span>
+<span class="sd">            - If the signal is a floating point ``numpy.ndarray`` with samples outside :math:`[-1, 1]`.</span>
+
+<span class="sd">        ValueError</span>
+<span class="sd">            - If the signal is a ``numpy.ndarray`` with more than two dimensions.</span>
+<span class="sd">            - If the signal has more than two channels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">type_</span><span class="p">)</span> <span class="k">for</span> <span class="n">type_</span> <span class="ow">in</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">signal</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">signal</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">signal</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">n_channels</span> <span class="ow">in</span> <span class="n">signal</span><span class="o">.</span><span class="n">shape</span> <span class="k">for</span> <span class="n">n_channels</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)):</span>
+                            <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">shape</span>
+                            <span class="k">return</span> <span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">T</span> <span class="k">if</span> <span class="n">b</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="k">else</span> <span class="n">signal</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Expected signal to be mono (T,) or stereo (2xT)&#39;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Expected signal to be a 1D or 2D numpy.ndarray&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Expected signal to have samples in range [-1, 1]&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Expected a floating point signal&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Expected signal to be a numpy.ndarray&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="_Validator.random_state"><a class="viewcode-back" href="../../../sections/validations.html#sigment.internals.validator._Validator.random_state">[docs]</a>    <span class="k">def</span> <span class="nf">random_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Validates a random state object or seed.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        state: None, int, numpy.random.RandomState</span>
+<span class="sd">            A random state object or seed.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        state: numpy.random.RandomState</span>
+<span class="sd">            A random state object.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the random state object is of the incorrect type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">state</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">state</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Expected random state to be of type: None, int, or numpy.random.RandomState&#39;</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019-2021, Edwin Onuonga
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

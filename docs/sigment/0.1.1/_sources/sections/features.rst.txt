@@ -1,0 +1,367 @@
+.. _features:
+
+.. role:: raw-html(raw)
+    :format: html
+
+Transformations
+===============
+
+Audio signal transformations in Sigment are represented by classes that can be used to apply
+a specific type of transformation to the audio data.
+
+Some example transformation classes include ``GaussianWhiteNoise`` and ``TimeStretch``. A full
+list of available transformations and their details and parameters can be found :ref:`below<transformations>`.
+
+Each of these transformation classes are a subclass of the more generic ``Transform`` base class,
+which provides a basic interface that can also be used to `write custom transformations <https://nbviewer.jupyter.org/github/eonu/sigment/blob/master/notebooks/Custom%20Transformations.ipynb>`_.
+
+Sigment offers a familiar interface for transformations, taking inspiration from popular augmentation libraries
+such as `imgaug <https://github.com/aleju/imgaug>`_, `nlpaug <https://github.com/makcedward/nlpaug>`_,
+`albumentations <https://github.com/albumentations-team/albumentations>`_ and `audiomentations <https://github.com/iver56/audiomentations>`_.
+
+:raw-html:`<hr/>`
+
+.. contents:: Section contents
+    :local:
+
+.. _transformations:
+
+Available transformations
+-------------------------
+
+Identity
+^^^^^^^^
+.. autoclass:: sigment.transforms.Identity
+    :members:
+
+Additive Gaussian White Noise
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. autoclass:: sigment.transforms.GaussianWhiteNoise
+    :members:
+
+Time Stretch
+^^^^^^^^^^^^
+.. autoclass:: sigment.transforms.TimeStretch
+    :members:
+
+Pitch Shift
+^^^^^^^^^^^
+.. autoclass:: sigment.transforms.PitchShift
+    :members:
+
+Edge Crop
+^^^^^^^^^
+.. autoclass:: sigment.transforms.EdgeCrop
+    :members:
+
+Random Crop
+^^^^^^^^^^^
+.. autoclass:: sigment.transforms.RandomCrop
+    :members:
+
+Linear Fade In/Out
+^^^^^^^^^^^^^^^^^^
+.. autoclass:: sigment.transforms.LinearFade
+    :members:
+
+Normalize
+^^^^^^^^^
+.. autoclass:: sigment.transforms.Normalize
+    :members:
+
+Pre-Emphasize
+^^^^^^^^^^^^^
+.. autoclass:: sigment.transforms.PreEmphasize
+    :members:
+
+Extract Loudest Section
+^^^^^^^^^^^^^^^^^^^^^^^
+.. autoclass:: sigment.transforms.ExtractLoudestSection
+    :members:
+
+Median Filter
+^^^^^^^^^^^^^
+.. autoclass:: sigment.transforms.MedianFilter
+    :members:
+
+Using transformations
+---------------------
+
+Each transformation class comes with a number of methods that can be used to apply the transformation to either a ``numpy.ndarray`` or WAV file.
+
+All transformations accept the `p` and `random_state` parameters, inherited from the ``Transform`` base class described below.
+
+.. autoclass:: sigment.transforms.Transform
+    :members:
+    :special-members: __call__
+    :inherited-members:
+
+Quantifiers
+===========
+
+Quantifiers are used to specify rules for how a sequence of transformations
+or quantifiers should be applied.
+
+Each quantifier class is a subclass of the more generic ``Quantifier`` base class,
+which provides a basic interface that can also be used to write custom quantifiers,
+though there is rarely a need for this.
+
+As with transformations, Sigment offers a familiar interface for quantifiers, taking inspiration from popular augmentation libraries
+such as `imgaug <https://github.com/aleju/imgaug>`_ and `nlpaug <https://github.com/makcedward/nlpaug>`_.
+
+:raw-html:`<hr/>`
+
+.. contents:: Section contents
+    :local:
+
+.. _Quantifiers:
+
+Available quantifiers
+---------------------
+
+In the below table, the `steps` argument is of type ``List[Transform, Quantifier]``, specifying a sequence of transformations or quantifiers to be applied.
+
++-------------------------------------------------+----------------------------------------------------+
+| Quantifier                                      | Summary                                            |
++=================================================+====================================================+
+| | :raw-html:`<h3>Quantifier (Base)</h3>`        | A base class representing a single quantifier.     |
+| | ``Quantifier(steps, **kwargs)``               |                                                    |
+|                                                 +----------------------------------------------------+
+|                                                 | | **Main parameters**                              |
+|                                                 | | • None                                           |
+|                                                 +----------------------------------------------------+
+|                                                 | **Notes**: As this is a base class,                |
+|                                                 | it should **not** be initialized.                  |
++-------------------------------------------------+----------------------------------------------------+
+|                                                                                                      |
++-------------------------------------------------+----------------------------------------------------+
+| | :raw-html:`<h3>Pipeline</h3>`                 | Sequentially executes each transformation or       |
+| | ``Pipeline(steps, **kwargs)``                 | quantifier step.                                   |
+|                                                 +----------------------------------------------------+
+|                                                 | | **Main parameters**                              |
+|                                                 | | • None                                           |
+|                                                 +----------------------------------------------------+
+|                                                 | **Notes**: None                                    |
++-------------------------------------------------+----------------------------------------------------+
+|                                                                                                      |
++-------------------------------------------------+----------------------------------------------------+
+| | :raw-html:`<h3>Sometimes</h3>`                | Probabilistically applies the provided             |
+| | ``Sometimes(steps, p, **kwargs)``             | transformation or quantifier steps.                |
+|                                                 +----------------------------------------------------+
+|                                                 | | **Main parameters**                              |
+|                                                 | | • `p`: ``0 <= float <= 1``                       |
+|                                                 | |   The probability of executing the               |
+|                                                 |   transformation or quantifier steps.              |
+|                                                 +----------------------------------------------------+
+|                                                 | **Notes**: None                                    |
++-------------------------------------------------+----------------------------------------------------+
+|                                                                                                      |
++-------------------------------------------------+----------------------------------------------------+
+| | :raw-html:`<h3>Some</h3>`                     | Randomly applies a number of the provided          |
+| | ``SomeOf(steps, n, **kwargs)``                | transformation or quantifier steps.                |
+|                                                 +----------------------------------------------------+
+|                                                 | | **Main parameters**                              |
+|                                                 | | • `n`: ``tuple`` or ``int > 0``                  |
+|                                                 | |   The number of transformation or quantifier     |
+|                                                 |   steps to apply.                                  |
+|                                                 +----------------------------------------------------+
+|                                                 | **Notes**: The chosen steps will still be applied  |
+|                                                 | in the same order they were defined by default.    |
++-------------------------------------------------+----------------------------------------------------+
+|                                                                                                      |
++-------------------------------------------------+----------------------------------------------------+
+| | :raw-html:`<h3>One</h3>`                      | Randomly applies a single step from the provided   |
+| | ``OneOf(steps, **kwargs)``                    | transformation or quantifier steps.                |
+|                                                 +----------------------------------------------------+
+|                                                 | | **Main parameters**                              |
+|                                                 | | • None                                           |
+|                                                 +----------------------------------------------------+
+|                                                 | **Notes**: This is a special case of the           |
+|                                                 | ``SomeOf`` quantifier, with :math:`n=1`.           |
++-------------------------------------------------+----------------------------------------------------+
+
+Using quantifiers
+-----------------
+
+.. py:class:: sigment.quantifiers.Quantifier(steps, [main params], random_order=False, random_state=None)
+
+    Base class representing a single quantifier.
+
+    .. note::
+        As ``Quantifier`` is a base class, it should **not** be directly instantiated – use one of the quantifier classes listed :ref:`above<Quantifiers>`.
+
+    :param steps: A collection of transformation or quantifier steps to apply.
+    :type steps: ``List[Transform, Quantifier]``
+
+    :param random_order: Whether or not to randomize the order of execution of `steps`.
+    :type random_order: ``bool``
+
+    :param random_state: A random state object or seed for reproducible randomness.
+    :type random_state: ``numpy.RandomState``, ``int`` or ``None``
+
+    .. py:function:: __call__(self, X, sr=None)
+
+        Runs the quantifier steps on a provided input signal.
+
+        :param X: The input signal to transform.
+        :type X: ``numpy.ndarray`` :math:`(T,)` or :math:`(1\times T)` for mono, :math:`(2\times T)` for stereo
+
+        :param sr: Sample rate. :raw-html:`<br/>` If the steps of the quantifier do not depend on a sample rate, this should be ``None`` (which is the default). See the :ref:`transformations table<Transformations>` to determine whether you need a sample rate or not.
+        :type sr: ``int`` :math:`> 0` or ``None``
+
+        :return: The transformed signal.
+        :rtype: ``numpy.ndarray`` :math:`(T,)` for mono, :math:`(2\times T)` for stereo
+
+        **Example**:
+
+        .. code-block:: python
+            :linenos:
+
+            import numpy as np
+            from sigment.quantifiers import SomeOf
+            from sigment.transforms import GaussianWhiteNoise, PitchShift, EdgeCrop
+
+            # Create an example stereo signal.
+            X = np.array([
+                [0.325, 0.53 , 1.393, 1.211],
+                [1.21 , 0.834, 1.022, 0.38 ]
+            ])
+
+            # Use the SomeOf quantifier to run only 1 to 2 of the transformations.
+            transform = SomeOf([
+                GaussianWhiteNoise(scale=(0.05, 0.15)),
+                PitchShift(n_steps=(-1., 1.)),
+                EdgeCrop(side='start', crop_size=(0.02, 0.05))
+            ], n=(1, 2))
+
+            # Run the __call__ method on the quantifier object to transform X.
+            # NOTE: Pitch shifting requires a sample rate when called, therefore
+            #   we must call the quantifier with a specified sample rate parameter.
+            X_transform = transform(X, sr=10)
+
+    .. py:function:: generate(self, X, n, sr=None)
+
+        Runs the quantifier steps on a provided input signal, producing multiple augmented copies of the input signal.
+
+        :param X: The input signal to transform.
+        :type X: ``numpy.ndarray`` :math:`(T,)` or :math:`(1\times T)` for mono, :math:`(2\times T)` for stereo
+
+        :param n: Number of augmented versions of `X` to generate.
+        :type n: ``int`` :math:`> 0`
+
+        :param sr: Sample rate. :raw-html:`<br/>` If the steps of the quantifier do not depend on a sample rate, this should be ``None`` (which is the default). See the :ref:`transformations table<Transformations>` to determine whether you need a sample rate or not.
+        :type sr: ``int`` :math:`> 0` or ``None``
+
+        :return: The augmented versions (or version if `n=1`) of the signal `X`.
+        :rtype: ``List[numpy.ndarray]`` or ``numpy.ndarray``
+
+        **Example**:
+
+        .. code-block:: python
+            :linenos:
+
+            import numpy as np
+            from sigment.quantifiers import Sometimes, OneOf
+            from sigment.transforms import LinearFade, GaussianWhiteNoise
+
+            # Create an example stereo signal.
+            X = np.array([
+                [0.325, 0.53 , 1.393, 1.211],
+                [1.21 , 0.834, 1.022, 0.38 ]
+            ])
+
+            # Use the Sometimes and OneOf quantifiers to sometimes (with probability 0.65)
+            # apply a Gaussian white noise transformation and either a fade-in or fade-out.
+            transform = Sometimes([
+                GaussianWhiteNoise(scale=(0.05, 0.15)),
+                OneOf([
+                    LinearFade(direction='in', fade_size=(0.05, 0.1)),
+                    LinearFade(direction='out', fade_size=(0.05, 0.1))
+                ])
+            ], p=0.65)
+
+            # Generate 5 augmented versions of X, using the quantifier object.
+            Xs_transform = transform.generate(X, n=5)
+
+    .. py:function:: apply_to_wav(self, source, out=None)
+
+        Runs the quantifier steps on a provided input WAV file and writes the resulting signal back to a WAV file.
+
+        .. warning:: If `out` is set to ``None`` (which is the default) or the same as `source`, the input WAV file **will** be overwritten!
+
+        :param source: Path to the input WAV file.
+        :type source: ``str``, ``Path`` or *path-like*
+
+        :param out: Output WAV path for the augmented signal.
+        :type out: ``str``, ``Path`` or *path-like*
+
+        **Example**:
+
+        .. code-block:: python
+            :linenos:
+
+            from librosa import load
+            from sigment import *
+
+            # Load the stereo WAV audio file
+            X, sr = load('audio.wav', mono=False)
+
+            # Create a complex augmentation pipeline
+            transform = Pipeline([
+                GaussianWhiteNoise(scale=(0.001, 0.0075), p=0.65),
+                ExtractLoudestSection(duration=(0.85, 0.95)),
+                OneOf([
+                    RandomCrop(crop_size=(0.01, 0.04), n_crops=(2, 5)),
+                    SomeOf([
+                        EdgeCrop('start', crop_size=(0.05, 0.1)),
+                        EdgeCrop('end', crop_size=(0.05, 0.1))
+                    ], n=(1, 2))
+                ]),
+                Sometimes([
+                    SomeOf([
+                        LinearFade('in', fade_size=(0.1, 0.2)),
+                        LinearFade('out', fade_size=(0.1, 0.2))
+                    ], n=(1, 2))
+                ], p=0.5),
+                TimeStretch(rate=(0.8, 1.2)),
+                PitchShift(n_steps=(-0.25, 0.25)),
+                MedianFilter(window_size=(5, 10), p=0.5)
+            ], random_state=seed)
+
+            # Apply the pipeline steps to the input WAV file and write it to the output file.
+            transform.apply_to_wav('in.wav', 'out.wav')
+
+    .. py:function:: generate_from_wav(self, source, n=1)
+
+        Runs the quantifier steps on a provided input WAV file and returns a ``numpy.ndarray``.
+
+        :param source: Path to the input WAV file.
+        :type source: ``str``, ``Path`` or *path-like*
+
+        :param n: Number of augmented versions of the `source` signal to generate.
+        :type n: ``int`` :math:`> 0`
+
+        :return: The augmented versions (or version if `n=1`) of the `source` signal.
+        :rtype: ``List[numpy.ndarray]`` or ``numpy.ndarray``
+
+        **Example**:
+
+        .. code-block:: python
+            :linenos:
+
+            from sigment import *
+
+            # Create a pipeline of multiple OneOf quantifiers.
+            transform = Pipeline([
+                OneOf([
+                   EdgeCrop(side='start', crop_size=(0.04, 0.08)),
+                   EdgeCrop(side='end', crop_size=(0.04, 0.08))
+                ]),
+                OneOf([
+                    LinearFade(direction='in', fade_size=(0.02, 0.05)),
+                    LinearFade(direction='out', fade_size=(0.02, 0.05))
+                ])
+            ])
+
+            # Generate 5 augmented versions of the signal data from 'signal.wav' as numpy.ndarrays.
+            Xs_transform = transform.generate_from_wav('signal.wav', n=5)
