@@ -153,7 +153,7 @@ $$
 
 Plaintext written in columns of size $k$. The cipher text is the concatenation of the resulting rows.
 
-> **Example**: 
+> **Example**:
 >
 > - $k=4$
 >
@@ -425,7 +425,7 @@ In a **==stream cipher==**, each plaintext digit is encrypted one at a time with
 
 ```ruby
 for i = 0 to 255 do
-	S[i] = i 
+	S[i] = i
 end
 
 j = 0
@@ -487,7 +487,7 @@ The **==Data Encryption Standard (DES)==** is a symmetric-key block cipher
 
 3. Permute the plaintext.
 
-4. Divide the plaintext into two 32-bit halves, $L_i$ and $R_i$. 
+4. Divide the plaintext into two 32-bit halves, $L_i$ and $R_i$.
 
 5. For each of the 16 rounds, starting from $i=1$:
 
@@ -812,7 +812,7 @@ Where $g$ is a **==generator==** of $\Z_p^*$. See [here](https://crypto.stanford
 
 ##### RSAP
 
-- **Input**: 
+- **Input**:
   - $n$ such that $n=pq$ with $p,q$ prime
   - $e$ such that $\gcd(e,\phi(n))=1$
   - $m^e\pmod n$
@@ -828,11 +828,11 @@ Where $g$ is a **==generator==** of $\Z_p^*$. See [here](https://crypto.stanford
 
 ##### Diffie-Hellman problem (DHP)
 
-- **Input**: 
+- **Input**:
   - $p$ prime
-  
+
   - generator $g$ of $\Z_p^*$, $g^a\pmod p, g^b\pmod p$
-  
+
     **Note**: $a$ and $b$ are not known—they are randomly chosen.
 - **Output**: $g^{ab}\pmod p$
 
@@ -844,7 +844,7 @@ The protocol uses (and assumes) the fact that the Diffie-Hellman protocol is har
 
 #### Functionality
 
-1. Fix: 
+1. Fix:
 
    - A very large prime $p$
    - A generator $g$ of $\Z_p^*$
@@ -1053,7 +1053,7 @@ Suppose $U_i$ wishes to send a message $m$ to $U_j$, but $U_j$ to be sure that t
 
 #### Security
 
-A good digital signature scheme should satisfy ==**existential unforgeability**==: 
+A good digital signature scheme should satisfy ==**existential unforgeability**==:
 
 Given $\set{\big(m_i,S(K_\hat{s}, m_i)\big)}_{i=1}^n$ where $\seq[,]{m}{1}{n}$ is chosen by the adversary, it should be hard to compute a valid pair $\big(m,S(K_\hat{s},m)\big)$ without knowing $K_\hat{s}$ for any $m\notin\set{\seq[,]{m}{1}{n}}$.
 
@@ -1069,7 +1069,7 @@ Given $\set{\big(m_i,S(K_\hat{s}, m_i)\big)}_{i=1}^n$ where $\seq[,]{m}{1}{n}$ i
 
 ### RSA signatures
 
-RSA can be used for signing and verification, as detailed below in what is known as the **==textbook RSA signature==**. 
+RSA can be used for signing and verification, as detailed below in what is known as the **==textbook RSA signature==**.
 
 #### Functionality
 
@@ -1153,7 +1153,7 @@ Public-key encryption schemes are secure only if the authenticity of the public 
 
 #### Public key certificates
 
-**==Public key certificates==** are used to ensure the authenticity (or ownership) of public keys. 
+**==Public key certificates==** are used to ensure the authenticity (or ownership) of public keys.
 
 A public key certificate (issued by CAs) consists mainly of:
 
@@ -1187,7 +1187,7 @@ Note over Alice: Decrypts\nwith K_1
 Alice->Bob: (pin:3443)_K2
 ```
 
-In this example, an attacker sitting on the network can derive `K_2`. An attacker can also perform a man-in-the-middle attack. 
+In this example, an attacker sitting on the network can derive `K_2`. An attacker can also perform a man-in-the-middle attack.
 
 ### Authentication and key agreement protocols
 
@@ -1217,7 +1217,7 @@ Unlike the standard Diffie-Hellman key exchange, this protocol assumes that the 
 
 #### Functionality
 
-1. Fix: 
+1. Fix:
 
    - A very large prime $p$
    - A generator $g$ of $\Z_p^*$
