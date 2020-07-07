@@ -1,16 +1,20 @@
 % Display
+\newcommand{\t}{\text}
 \newcommand{\ds}{\displaystyle}
 \newcommand{\ob}{\overbrace}
 \newcommand{\ub}{\underbrace}
 \newcommand{\code}{\texttt}
+\newcommand{\stack}[2]{\substack{#1 \\ #2}}
+\newcommand{\smallstack}{\stackrel}
+\newcommand{\stackt}[2]{\stack{\t{#1}}{\t{#2}}}
 
 % Colours
 \newcommand{\red}[1]{\textcolor{red}{#1}}
-\newcommand{\redt}[1]{\textcolor{red}{\text{#1}}}
+\newcommand{\redt}[1]{\textcolor{red}{\t{#1}}}
 \newcommand{\blue}[1]{\textcolor{blue}{#1}}
-\newcommand{\bluet}[1]{\textcolor{blue}{\text{#1}}}
+\newcommand{\bluet}[1]{\textcolor{blue}{\t{#1}}}
 \newcommand{\green}[1]{\textcolor{green}{#1}}
-\newcommand{\greent}[1]{\textcolor{green}{\text{#1}}}
+\newcommand{\greent}[1]{\textcolor{green}{\t{#1}}}
 
 % Typefaces/Text-styles
 \newcommand{\mc}{\mathcal}
@@ -54,13 +58,25 @@
 \newcommand{\i}[4]{\int_{#1}^{#2}#3\ \d{#4}}
 
 % Probability
-\newcommand{\p}[1]{\bb{P}\l(#1\r)}
-\newcommand{\cp}[2]{\p{#1\m|#2}}
-\newcommand{\jp}[2]{\p{#1,#2}}
-\newcommand{\e}[1]{\bb{E}\l[#1\r]}
-\newcommand{\var}[1]{\text{Var}\l[#1\r]}
-\newcommand{\sd}[1]{\text{SD}\l[#1\r]}
-\newcommand{\cov}[2]{\text{Cov}\l[#1,#2\r]}
+\newcommand{\p}[2][{}]{\bb{P}_{#1}\!\l(#2\r)}
+\newcommand{\cp}[3][{}]{\p[#1]{#2\ \m|\ #3}}
+\newcommand{\jp}[3][{}]{\p[#1]{#2, #3}}
+\newcommand{\pe}[2][{}]{\hat{\bb{P}}_{#1}\!\l(#2\r)}
+\newcommand{\cpe}[3][{}]{\pe[#1]{#2\ \m|\ #3}}
+\newcommand{\jpe}[3][{}]{\pe[#1]{#2, #3}}
+\newcommand{\e}[2][{}]{\bb{E}_{#1}\!\l[#2\r]}
+\newcommand{\var}[1]{\t{Var}\!\l[#1\r]}
+\newcommand{\sd}[1]{\t{SD}\!\l[#1\r]}
+\newcommand{\cov}[2]{\t{Cov}\!\l[#1,#2\r]}
+% Probability distributions
+\newcommand{\pd}[2][{}]{p_{#1}\!\l(#2\r)}
+\newcommand{\cpd}[3][{}]{\pd[#1]{#2\ \m|\ #3}}
+\newcommand{\jpd}[3][{}]{\pd[#1]{#2, #3}}
+\newcommand{\pde}[2][{}]{\hat{p}_{#1}\!\l(#2\r)}
+\newcommand{\cpde}[3][{}]{\pde[#1]{#2\ \m|\ #3}}
+\newcommand{\jpde}[3][{}]{\pde[#1]{#2, #3}}
+\newcommand{\nvar}[2]{\mc{N}\!\l(#1, #2\r)}
+\newcommand{\ndist}[3]{\nvar{#1;#2}{#3}}
 
 % Binomials
 \newcommand{\ch}{\binom}
@@ -69,29 +85,9 @@
 
 % Linear Algebra
 \newcommand{\T}{\mathsf{T}}
-\newcommand{\seq}[4][{}]{#2_{#3}#1 \ldots #1 #2_{#4}}
-\newcommand{\rowv}[3]{\l(\seq[,]{#1}{#2}{#3}\r)}
+\newcommand{\seq}[4][,]{#2_{#3}#1 \ldots #1 #2_{#4}}
+\newcommand{\rowv}[3]{\l(\seq{#1}{#2}{#3}\r)}
 \newcommand{\colv}[3]{\rowv{#1}{#2}{#3}^\T}
-\newcommand{\sqpmat}[3][{}]{
-    \begin{pmatrix}
-		#2_{1{#1}1} & #2_{1{#1}2} & \cdots & #2_{1{#1}j} & \cdots & #2_{1{#1}#3} \\
-		#2_{2{#1}1} & #2_{2{#1}2} & \cdots & #2_{2{#1}j} & \cdots & #2_{2{#1}#3} \\
-		\vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
-		#2_{i{#1}1} & #2_{i{#1}2} & \cdots & #2_{i{#1}j} & \cdots & #2_{i{#1}#3} \\
-		\vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
-		#2_{#3{#1}1} & #2_{#3{#1}2} & \cdots & #2_{#3{#1}j} & \cdots & #2_{#3{#1}#3} \\
-	\end{pmatrix}
-}
-\newcommand{\sqmat}[3][{}]{
-    \begin{matrix}
-		#2_{1{#1}1} & #2_{1{#1}2} & \cdots & #2_{1{#1}j} & \cdots & #2_{1{#1}#3} \\
-		#2_{2{#1}1} & #2_{2{#1}2} & \cdots & #2_{2{#1}j} & \cdots & #2_{2{#1}#3} \\
-		\vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
-		#2_{i{#1}1} & #2_{i{#1}2} & \cdots & #2_{i{#1}j} & \cdots & #2_{i{#1}#3} \\
-		\vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
-		#2_{#3{#1}1} & #2_{#3{#1}2} & \cdots & #2_{#3{#1}j} & \cdots & #2_{#3{#1}#3} \\
-	\end{matrix}
-}
 \newcommand{\sqbmat}[3][{}]{
     \begin{bmatrix}
 		#2_{1{#1}1} & #2_{1{#1}2} & \cdots & #2_{1{#1}j} & \cdots & #2_{1{#1}#3} \\
@@ -111,24 +107,4 @@
 		\vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
 		#2_{#3{#1}1} & #2_{#3{#1}2} & \cdots & #2_{#3{#1}j} & \cdots & #2_{#3{#1}#3} \\
 	\end{pmatrix}
-}
-\newcommand{\sqvmat}[3][{}]{
-    \begin{vmatrix}
-		#2_{1{#1}1} & #2_{1{#1}2} & \cdots & #2_{1{#1}j} & \cdots & #2_{1{#1}#3} \\
-		#2_{2{#1}1} & #2_{2{#1}2} & \cdots & #2_{2{#1}j} & \cdots & #2_{2{#1}#3} \\
-		\vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
-		#2_{i{#1}1} & #2_{i{#1}2} & \cdots & #2_{i{#1}j} & \cdots & #2_{i{#1}#3} \\
-		\vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
-		#2_{#3{#1}1} & #2_{#3{#1}2} & \cdots & #2_{#3{#1}j} & \cdots & #2_{#3{#1}#3} \\
-	\end{vmatrix}
-}
-\newcommand{\sqVmat}[3][{}]{
-    \begin{Vmatrix}
-		#2_{1{#1}1} & #2_{1{#1}2} & \cdots & #2_{1{#1}j} & \cdots & #2_{1{#1}#3} \\
-		#2_{2{#1}1} & #2_{2{#1}2} & \cdots & #2_{2{#1}j} & \cdots & #2_{2{#1}#3} \\
-		\vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
-		#2_{i{#1}1} & #2_{i{#1}2} & \cdots & #2_{i{#1}j} & \cdots & #2_{i{#1}#3} \\
-		\vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
-		#2_{#3{#1}1} & #2_{#3{#1}2} & \cdots & #2_{#3{#1}j} & \cdots & #2_{#3{#1}#3} \\
-	\end{Vmatrix}
 }

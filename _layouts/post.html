@@ -1,0 +1,126 @@
+---
+layout: default
+---
+<div class="post">
+  <div class="container main">
+    <div class="row">
+      <header>
+        <center><span itemprop="name"><h1>{{ page.title }}</h1></span></center>
+        <center><p>{{ page.date | date: "%-d %b %Y" }}</p></center>
+        <center><span class="small-ornament"><svg viewBox="0 0 290 320">
+          <path d="M280.2656 245.3906 Q280.2656 263.25 261.8438 271.9688 Q247.9219 278.7188 227.8125 278.7188 Q235.2656 269.8594 235.2656 256.5 Q235.2656 231.8906 214.4531 217.125 Q196.0312 204.0469 170.2969 204.0469 Q143.5781 204.0469 108.8438 221.0625 L118.9688 231.4688 Q154.4062 267.8906 168.3281 267.8906 Q181.125 267.8906 181.125 255.9375 Q181.125 248.3438 173.5312 243.5625 Q167.0625 239.3438 159.0469 239.3438 Q154.6875 239.3438 148.6406 241.4531 Q158.625 220.0781 173.9531 220.0781 Q184.5 220.0781 191.8828 228.0938 Q199.2656 236.1094 199.2656 246.6562 Q199.2656 265.5 184.3594 277.875 Q170.2969 289.4062 151.0312 289.4062 Q118.6875 289.4062 81.4219 251.0156 L72.1406 241.4531 Q53.5781 249.4688 39.375 249.4688 Q26.4375 249.4688 17.1562 240.9609 Q7.875 232.4531 7.875 219.5156 Q7.875 203.9062 19.125 193.9219 Q29.9531 184.5 45.8438 184.5 Q70.0312 184.5 98.2969 211.6406 Q111.5156 202.2188 127.5469 185.4844 L134.5781 178.1719 Q174.5156 136.6875 204.8906 136.6875 Q231.4688 136.6875 231.4688 155.25 Q231.4688 173.5312 204.3281 177.3281 Q206.4375 172.8281 206.4375 170.1562 Q206.4375 159.3281 193.3594 159.3281 Q175.2188 159.3281 144.2812 189 L137.1094 195.8906 Q165.2344 185.7656 191.25 185.7656 Q221.7656 185.7656 248.3438 200.1094 Q280.2656 217.2656 280.2656 245.3906 ZM61.1719 230.4844 Q44.5781 215.2969 37.2656 215.2969 Q27.9844 215.2969 27.9844 223.4531 Q27.9844 234.4219 42.75 234.4219 Q51.1875 234.4219 61.1719 230.4844z"/>
+        </svg></span></center>
+      </header>
+    </div>
+    <div class="row">
+      <div class="col-md-1"></div>
+      <div class="col-md-8 offset-md-1">
+        <article lang="en">
+          <div style="display:none;">
+            $
+              \newcommand{\t}{\text}
+              \newcommand{\ds}{\displaystyle}
+              \newcommand{\ob}{\overbrace}
+              \newcommand{\ub}{\underbrace}
+              \newcommand{\code}{\texttt}
+              \newcommand{\stack}[2]{\substack{#1 \\ #2}}
+              \newcommand{\smallstack}{\stackrel}
+              \newcommand{\stackt}[2]{\stack{\t{#1}}{\t{#2}}}
+
+              \newcommand{\red}[1]{\textcolor{red}{#1}}
+              \newcommand{\redt}[1]{\textcolor{red}{\t{#1}}}
+              \newcommand{\blue}[1]{\textcolor{blue}{#1}}
+              \newcommand{\bluet}[1]{\textcolor{blue}{\t{#1}}}
+              \newcommand{\green}[1]{\textcolor{green}{#1}}
+              \newcommand{\greent}[1]{\textcolor{green}{\t{#1}}}
+
+              \newcommand{\mc}{\mathcal}
+              \newcommand{\mf}{\mathfrak}
+              \newcommand{\b}{\mathbf}
+              \newcommand{\bs}{\boldsymbol}
+
+              \newcommand{\f}{\frac}
+
+              \newcommand{\l}{\left}
+              \newcommand{\m}{\middle}
+              \newcommand{\r}{\right}
+
+              \newcommand{\n}{\not}
+              \newcommand{\eq}{\equiv}
+              \newcommand{\xor}{\oplus}
+
+              \newcommand{\fa}{\forall}
+              \newcommand{\te}{\exists}
+              \newcommand{\empty}{\varnothing}
+              \newcommand{\set}[1]{\l\lbrace#1\r\rbrace}
+              \newcommand{\setb}[2]{\l\lbrace#1\ \m| \ #2\r\rbrace}
+              \newcommand{\bb}{\mathbb}
+              \newcommand{\R}{\bb{R}}
+              \newcommand{\N}{\bb{N}}
+              \newcommand{\Z}{\bb{Z}}
+              \newcommand{\Q}{\bb{Q}}
+              \newcommand{\C}{\bb{C}}
+
+              \newcommand{\d}[1]{\mathrm{d}#1}
+              \newcommand{\deriv}[2]{\f{\d{#1}}{\d{#2}}}
+              \newcommand{\pderiv}[2]{\f{\partial #1}{\partial #2}}
+
+              \newcommand{\s}[3]{\sum_{#1}^{#2}#3}
+              \newcommand{\i}[4]{\int_{#1}^{#2}#3\ \d{#4}}
+
+              \newcommand{\p}[2][{}]{\bb{P}_{#1}\!\l(#2\r)}
+              \newcommand{\cp}[3][{}]{\p[#1]{#2\ \m|\ #3}}
+              \newcommand{\jp}[3][{}]{\p[#1]{#2, #3}}
+              \newcommand{\pe}[2][{}]{\hat{\bb{P}}_{#1}\!\l(#2\r)}
+              \newcommand{\cpe}[3][{}]{\pe[#1]{#2\ \m|\ #3}}
+              \newcommand{\jpe}[3][{}]{\pe[#1]{#2, #3}}
+              \newcommand{\e}[2][{}]{\bb{E}_{#1}\!\l[#2\r]}
+              \newcommand{\var}[1]{\t{Var}\!\l[#1\r]}
+              \newcommand{\sd}[1]{\t{SD}\!\l[#1\r]}
+              \newcommand{\cov}[2]{\t{Cov}\!\l[#1,#2\r]}
+              \newcommand{\pd}[2][{}]{p_{#1}\!\l(#2\r)}
+              \newcommand{\cpd}[3][{}]{\pd[#1]{#2\ \m|\ #3}}
+              \newcommand{\jpd}[3][{}]{\pd[#1]{#2, #3}}
+              \newcommand{\pde}[2][{}]{\hat{p}_{#1}\!\l(#2\r)}
+              \newcommand{\cpde}[3][{}]{\pde[#1]{#2\ \m|\ #3}}
+              \newcommand{\jpde}[3][{}]{\pde[#1]{#2, #3}}
+              \newcommand{\nvar}[2]{\mc{N}\!\l(#1, #2\r)}
+              \newcommand{\ndist}[3]{\nvar{#1;#2}{#3}}
+
+              \newcommand{\ch}{\binom}
+              \newcommand{\pbin}[3][{}]{\l(#2 + #3\r)^#1}
+              \newcommand{\mbin}[3][{}]{\l(#2 - #3\r)^#1}
+
+              \newcommand{\T}{\mathsf{T}}
+              \newcommand{\seq}[4][,]{#2_{#3}#1 \ldots #1 #2_{#4}}
+              \newcommand{\rowv}[3]{\l(\seq{#1}{#2}{#3}\r)}
+              \newcommand{\colv}[3]{\rowv{#1}{#2}{#3}^\T}
+              \newcommand{\sqbmat}[3][{}]{
+                  \begin{bmatrix}
+                  #2_{1{#1}1} & #2_{1{#1}2} & \cdots & #2_{1{#1}j} & \cdots & #2_{1{#1}#3} \\
+                  #2_{2{#1}1} & #2_{2{#1}2} & \cdots & #2_{2{#1}j} & \cdots & #2_{2{#1}#3} \\
+                  \vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
+                  #2_{i{#1}1} & #2_{i{#1}2} & \cdots & #2_{i{#1}j} & \cdots & #2_{i{#1}#3} \\
+                  \vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
+                  #2_{#3{#1}1} & #2_{#3{#1}2} & \cdots & #2_{#3{#1}j} & \cdots & #2_{#3{#1}#3} \\
+                \end{bmatrix}
+              }
+              \newcommand{\sqpmat}[3][{}]{
+                  \begin{pmatrix}
+                  #2_{1{#1}1} & #2_{1{#1}2} & \cdots & #2_{1{#1}j} & \cdots & #2_{1{#1}#3} \\
+                  #2_{2{#1}1} & #2_{2{#1}2} & \cdots & #2_{2{#1}j} & \cdots & #2_{2{#1}#3} \\
+                  \vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
+                  #2_{i{#1}1} & #2_{i{#1}2} & \cdots & #2_{i{#1}j} & \cdots & #2_{i{#1}#3} \\
+                  \vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
+                  #2_{#3{#1}1} & #2_{#3{#1}2} & \cdots & #2_{#3{#1}j} & \cdots & #2_{#3{#1}#3} \\
+                \end{pmatrix}
+              }
+            $
+          </div>
+          {% if page.abstract %} <b>Abstract:</b> {{ page.abstract }}<br><br>{% endif %}
+          {{ content }}
+        </article>
+	     </div>
+     </div>
+  </div>
+</div>
