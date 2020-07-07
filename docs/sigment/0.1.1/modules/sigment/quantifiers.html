@@ -1,0 +1,461 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>sigment.quantifiers &mdash; sigment 0.1.1 documentation</title>
+
+
+
+
+
+
+
+
+  <script type="text/javascript" src="../../static/js/modernizr.min.js"></script>
+
+
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+        <script src="../../static/jquery.js"></script>
+        <script src="../../static/underscore.js"></script>
+        <script src="../../static/doctools.js"></script>
+        <script src="../../static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript" src="../../static/js/theme.js"></script>
+
+
+
+
+  <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+</head>
+
+<body class="wy-body-for-nav">
+
+
+  <div class="wy-grid-for-nav">
+
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+            <a href="../../index.html" class="icon icon-home"> sigment
+
+
+
+          </a>
+
+
+
+
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+
+
+
+
+
+
+              <p class="caption"><span class="caption-text">Sigment</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../sections/transformations.html">Transformations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sections/quantifiers.html">Quantifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sections/validations.html">Validations</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+
+      <nav class="wy-nav-top" aria-label="top navigation">
+
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">sigment</a>
+
+      </nav>
+
+
+      <div class="wy-nav-content">
+
+        <div class="rst-content">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+
+      <li>sigment.quantifiers</li>
+
+
+      <li class="wy-breadcrumbs-aside">
+
+      </li>
+
+  </ul>
+
+
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <h1>Source code for sigment.quantifiers</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
+<span class="kn">from</span> <span class="nn">.internals</span> <span class="kn">import</span> <span class="n">_Validator</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">_Base</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Quantifier&#39;</span><span class="p">,</span> <span class="s1">&#39;Pipeline&#39;</span><span class="p">,</span> <span class="s1">&#39;Sometimes&#39;</span><span class="p">,</span> <span class="s1">&#39;SomeOf&#39;</span><span class="p">,</span> <span class="s1">&#39;OneOf&#39;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Quantifier"><a class="viewcode-back" href="../../sections/quantifiers.html#sigment.quantifiers.Quantifier">[docs]</a><span class="k">class</span> <span class="nc">Quantifier</span><span class="p">(</span><span class="n">_Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Specifies how to execute transformation or quantifier steps.</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">        As this is a base class, it should **not** be directly instantiated.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    steps: List[Transform, Quantifier]</span>
+<span class="sd">        A collection of transformation or quantifier steps to apply.</span>
+
+<span class="sd">    random_order: bool</span>
+<span class="sd">        Whether or not to randomize the order of execution of `steps`.</span>
+
+<span class="sd">    random_state: numpy.RandomState, int, optional</span>
+<span class="sd">        A random state object or seed for reproducible randomness.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">random_order</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span> <span class="o">==</span> <span class="n">Quantifier</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;Quantifier is a base class and cannot be instantiated&#39;</span><span class="p">)</span>
+
+        <span class="kn">from</span> <span class="nn">.transforms</span> <span class="kn">import</span> <span class="n">Transform</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">steps</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">steps</span> <span class="o">=</span> <span class="n">steps</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="p">(</span><span class="n">step</span> <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Expected steps to be an iterable&#39;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="p">(</span><span class="n">Quantifier</span><span class="p">,</span> <span class="n">Transform</span><span class="p">))</span> <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Expected each step to be a subclass of Quantifier (Pipeline, Sometimes, SomeOf or OneOf) or Transform&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">steps</span> <span class="o">=</span> <span class="n">steps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_val</span> <span class="o">=</span> <span class="n">_Validator</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">boolean</span><span class="p">(</span><span class="n">random_order</span><span class="p">,</span> <span class="s1">&#39;random_order (whether to randomize the order of steps)&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Quantifier.__call__"><a class="viewcode-back" href="../../sections/quantifiers.html#sigment.quantifiers.Quantifier.__call__">[docs]</a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">sr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Runs the transformations or quantifiers on a provided input signal.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X: numpy.ndarray [shape (T,) or (1xT) for mono, (2xT) for stereo]</span>
+<span class="sd">            The input signal to transform.</span>
+
+<span class="sd">        sr: int [sr &gt; 0], optional</span>
+<span class="sd">            The sample rate for the input signal.</span>
+
+<span class="sd">            .. note::</span>
+<span class="sd">                Not required if using transformations that **do not** require a sample rate.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        transformed: numpy.ndarray [shape (T,) for mono, (2xT) for stereo]</span>
+<span class="sd">            The transformed signal, clipped so that it fits into the :math:`[-1,1]` range required for 32-bit floating point WAVs.</span>
+
+<span class="sd">            .. note::</span>
+<span class="sd">                If a mono signal `X` of shape `(1xT)` was used, the output is reshaped to `(T,)`.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; from sigment.quantifiers import SomeOf</span>
+<span class="sd">        &gt;&gt;&gt; from sigment.transforms import GaussianWhiteNoise, PitchShift, EdgeCrop</span>
+<span class="sd">        &gt;&gt;&gt; # Create an example stereo signal.</span>
+<span class="sd">        &gt;&gt;&gt; X = np.array([</span>
+<span class="sd">        &gt;&gt;&gt;     [0.325, 0.53 , 0.393, 0.211],</span>
+<span class="sd">        &gt;&gt;&gt;     [0.21 , 0.834, 0.022, 0.38 ]</span>
+<span class="sd">        &gt;&gt;&gt; ])</span>
+<span class="sd">        &gt;&gt;&gt; # Use the SomeOf quantifier to run only 1 to 2 of the transformations.</span>
+<span class="sd">        &gt;&gt;&gt; transform = SomeOf([</span>
+<span class="sd">        &gt;&gt;&gt;     GaussianWhiteNoise(scale=(0.05, 0.15)),</span>
+<span class="sd">        &gt;&gt;&gt;     PitchShift(n_steps=(-1., 1.)),</span>
+<span class="sd">        &gt;&gt;&gt;     EdgeCrop(side=&#39;start&#39;, crop_size=(0.02, 0.05))</span>
+<span class="sd">        &gt;&gt;&gt; ], n=(1, 2))</span>
+<span class="sd">        &gt;&gt;&gt; # Run the __call__ method on the quantifier object to transform X.</span>
+<span class="sd">        &gt;&gt;&gt; # NOTE: Pitch shifting requires a sample rate when called, therefore</span>
+<span class="sd">        &gt;&gt;&gt; #   we must call the quantifier with a specified sample rate parameter.</span>
+<span class="sd">        &gt;&gt;&gt; X_transform = transform(X, sr=10)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">sr</span> <span class="o">=</span> <span class="n">sr</span> <span class="k">if</span> <span class="n">sr</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">restricted_integer</span><span class="p">(</span>
+            <span class="n">sr</span><span class="p">,</span> <span class="s1">&#39;sr (sample rate)&#39;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;positive&#39;</span><span class="p">)</span>
+
+        <span class="n">steps</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_generate_steps</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_order</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">steps</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">:</span>
+            <span class="n">step</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">step</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">sr</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">X</span></div>
+
+<div class="viewcode-block" id="Quantifier.generate"><a class="viewcode-back" href="../../sections/quantifiers.html#sigment.quantifiers.Quantifier.generate">[docs]</a>    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">sr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Runs the transformations or quantifiers on a provided input signal,</span>
+<span class="sd">        producing multiple augmented copies of the input signal.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X: numpy.ndarray [shape (T,) or (1xT) for mono, (2xT) for stereo]</span>
+<span class="sd">            The input signal to transform.</span>
+
+<span class="sd">        n: int [n &gt; 0]</span>
+<span class="sd">            Number of augmented copies of `X` to generate.</span>
+
+<span class="sd">        sr: int [sr &gt; 0], optional</span>
+<span class="sd">            The sample rate for the input signal.</span>
+
+<span class="sd">            .. note::</span>
+<span class="sd">                Not required if not using transformations that require a sample rate.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        augmented: List[numpy.ndarray] or numpy.ndarray</span>
+<span class="sd">            The augmented copies (or copy if `n=1`) of the signal `X`, clipped so that they fit into the :math:`[-1,1]` range required for 32-bit floating point WAVs.</span>
+
+<span class="sd">            .. note::</span>
+<span class="sd">                If a mono signal `X` of shape `(1xT)` was used, the output is reshaped to `(T,)`.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; from sigment.quantifiers import Sometimes, OneOf</span>
+<span class="sd">        &gt;&gt;&gt; from sigment.transforms import LinearFade, GaussianWhiteNoise</span>
+<span class="sd">        &gt;&gt;&gt; # Create an example stereo signal.</span>
+<span class="sd">        &gt;&gt;&gt; X = np.array([</span>
+<span class="sd">        &gt;&gt;&gt;     [0.325, 0.53 , 0.393, 0.211],</span>
+<span class="sd">        &gt;&gt;&gt;     [0.21 , 0.834, 0.022, 0.38 ]</span>
+<span class="sd">        &gt;&gt;&gt; ])</span>
+<span class="sd">        &gt;&gt;&gt; # Use the Sometimes and OneOf quantifiers to sometimes (with probability 0.65)</span>
+<span class="sd">        &gt;&gt;&gt; # apply a Gaussian white noise transformation and either a fade-in or fade-out.</span>
+<span class="sd">        &gt;&gt;&gt; transform = Sometimes([</span>
+<span class="sd">        &gt;&gt;&gt;     GaussianWhiteNoise(scale=(0.05, 0.15)),</span>
+<span class="sd">        &gt;&gt;&gt;     OneOf([</span>
+<span class="sd">        &gt;&gt;&gt;         LinearFade(direction=&#39;in&#39;, fade_size=(0.05, 0.1)),</span>
+<span class="sd">        &gt;&gt;&gt;         LinearFade(direction=&#39;out&#39;, fade_size=(0.05, 0.1))</span>
+<span class="sd">        &gt;&gt;&gt;     ])</span>
+<span class="sd">        &gt;&gt;&gt; ], p=0.65)</span>
+<span class="sd">        &gt;&gt;&gt; # Generate 5 augmented versions of X, using the quantifier object.</span>
+<span class="sd">        &gt;&gt;&gt; Xs_transform = transform.generate(X, n=5)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">restricted_integer</span><span class="p">(</span>
+            <span class="n">n</span><span class="p">,</span> <span class="s1">&#39;n (number of augmented copies)&#39;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;positive&#39;</span><span class="p">)</span>
+        <span class="n">sr</span> <span class="o">=</span> <span class="n">sr</span> <span class="k">if</span> <span class="n">sr</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">restricted_integer</span><span class="p">(</span>
+            <span class="n">sr</span><span class="p">,</span> <span class="s1">&#39;sr (sample rate)&#39;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;positive&#39;</span><span class="p">)</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">sr</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">X</span></div>
+
+    <span class="k">def</span> <span class="nf">_generate_steps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="p">[(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span>
+            <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;steps&#39;</span><span class="p">,</span> <span class="s1">&#39;random_order&#39;</span><span class="p">,</span> <span class="s1">&#39;random_state&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)]</span>
+        <span class="n">padding</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span> <span class="o">*</span> <span class="p">(</span><span class="n">indent</span> <span class="o">*</span> <span class="n">level</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">padding</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.</span><span class="si">{}</span><span class="s1">([</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__module__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+            <span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="p">(</span><span class="s1">&#39;, </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">step</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span>
+            <span class="p">)</span> <span class="o">+</span> <span class="n">padding</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;], </span><span class="si">{}</span><span class="s1">, random_order=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">random_order</span>
+            <span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;], random_order=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">random_order</span><span class="p">)</span>
+        <span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.</span><span class="si">{}</span><span class="s1">([]</span><span class="si">{}</span><span class="s1">, random_order=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__module__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="p">(</span><span class="s1">&#39;, &#39;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">+</span>
+            <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">random_order</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="p">[(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span>
+            <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;steps&#39;</span><span class="p">,</span> <span class="s1">&#39;random_order&#39;</span><span class="p">,</span> <span class="s1">&#39;random_state&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.</span><span class="si">{}</span><span class="s1">([...], </span><span class="si">{}</span><span class="s1">random_order=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__module__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="p">(</span><span class="s1">&#39;, &#39;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">+</span>
+            <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">random_order</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Pipeline"><a class="viewcode-back" href="../../sections/quantifiers.html#sigment.quantifiers.Pipeline">[docs]</a><span class="k">class</span> <span class="nc">Pipeline</span><span class="p">(</span><span class="n">Quantifier</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sequentially executes each transformation or quantifier step.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_generate_steps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span></div>
+
+<div class="viewcode-block" id="Sometimes"><a class="viewcode-back" href="../../sections/quantifiers.html#sigment.quantifiers.Sometimes">[docs]</a><span class="k">class</span> <span class="nc">Sometimes</span><span class="p">(</span><span class="n">Quantifier</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Probabilistically applies the provided transformation or quantifier steps.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    p: float [0 ≤ p ≤ 1]</span>
+<span class="sd">        The probability of executing the transformations or quantifiers.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">random_order</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">steps</span><span class="p">,</span> <span class="n">random_order</span><span class="p">,</span> <span class="n">random_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">restricted_float</span><span class="p">(</span>
+            <span class="n">p</span><span class="p">,</span> <span class="s1">&#39;p (probability)&#39;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mf">0.</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mf">1.</span><span class="p">,</span> <span class="s1">&#39;between zero and one&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_generate_steps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply</span><span class="p">()</span> <span class="k">else</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="SomeOf"><a class="viewcode-back" href="../../sections/quantifiers.html#sigment.quantifiers.SomeOf">[docs]</a><span class="k">class</span> <span class="nc">SomeOf</span><span class="p">(</span><span class="n">Quantifier</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Randomly applies a number of the provided transformation or quantifier steps.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n: int [n &gt; 0] or (int, int)</span>
+<span class="sd">        The number of transformation or quantifier steps to apply.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - The chosen steps will still be applied in the same order they were defined by default.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">random_order</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">steps</span><span class="p">,</span> <span class="n">random_order</span><span class="p">,</span> <span class="n">random_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">integer_value</span><span class="p">(</span>
+            <span class="n">n</span><span class="p">,</span> <span class="s1">&#39;n (number of steps to run)&#39;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">a</span> <span class="o">&lt;=</span> <span class="n">b</span><span class="p">,</span> <span class="s1">&#39;positive&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Quantifier upper limit for n (number of steps) cannot exceed the number of available augmentations&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">n</span>
+
+    <span class="k">def</span> <span class="nf">_generate_steps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">idxs</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">idxs</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="OneOf"><a class="viewcode-back" href="../../sections/quantifiers.html#sigment.quantifiers.OneOf">[docs]</a><span class="k">class</span> <span class="nc">OneOf</span><span class="p">(</span><span class="n">SomeOf</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Randomly applies a single step from the provided transformation or quantifier steps.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - This is a special case of the :class:`SomeOf` quantifier, with `n=1`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">random_order</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">steps</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">random_order</span><span class="p">,</span> <span class="n">random_state</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+
+          </div>
+          <footer>
+
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019-2021, Edwin Onuonga
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+
+
+
+
+
+</body>
+</html>

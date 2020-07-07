@@ -1,0 +1,805 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>sigment.transforms &mdash; sigment 0.1.1 documentation</title>
+
+
+
+
+
+
+
+
+  <script type="text/javascript" src="../../static/js/modernizr.min.js"></script>
+
+
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+        <script src="../../static/jquery.js"></script>
+        <script src="../../static/underscore.js"></script>
+        <script src="../../static/doctools.js"></script>
+        <script src="../../static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript" src="../../static/js/theme.js"></script>
+
+
+
+
+  <link rel="stylesheet" href="../../static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+</head>
+
+<body class="wy-body-for-nav">
+
+
+  <div class="wy-grid-for-nav">
+
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+            <a href="../../index.html" class="icon icon-home"> sigment
+
+
+
+          </a>
+
+
+
+
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+
+
+
+
+
+
+              <p class="caption"><span class="caption-text">Sigment</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../sections/transformations.html">Transformations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sections/quantifiers.html">Quantifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sections/validations.html">Validations</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+
+      <nav class="wy-nav-top" aria-label="top navigation">
+
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">sigment</a>
+
+      </nav>
+
+
+      <div class="wy-nav-content">
+
+        <div class="rst-content">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+
+      <li>sigment.transforms</li>
+
+
+      <li class="wy-breadcrumbs-aside">
+
+      </li>
+
+  </ul>
+
+
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <h1>Source code for sigment.transforms</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span><span class="o">,</span> <span class="nn">librosa</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">ceil</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">_Base</span>
+<span class="kn">from</span> <span class="nn">.internals</span> <span class="kn">import</span> <span class="n">_Validator</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;Transform&#39;</span><span class="p">,</span> <span class="s1">&#39;Identity&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;GaussianWhiteNoise&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;TimeStretch&#39;</span><span class="p">,</span> <span class="s1">&#39;PitchShift&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;EdgeCrop&#39;</span><span class="p">,</span> <span class="s1">&#39;RandomCrop&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;LinearFade&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Normalize&#39;</span><span class="p">,</span> <span class="s1">&#39;PreEmphasize&#39;</span><span class="p">,</span> <span class="s1">&#39;ExtractLoudestSection&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;MedianFilter&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Reverb&#39;</span><span class="p">,</span> <span class="s1">&#39;ClipDistort&#39;</span>
+<span class="p">]</span>
+
+<div class="viewcode-block" id="Transform"><a class="viewcode-back" href="../../sections/transformations.html#sigment.transforms.Transform">[docs]</a><span class="k">class</span> <span class="nc">Transform</span><span class="p">(</span><span class="n">_Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class representing a single transformation or augmentation.</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">        As this is a base class, it should **not** be directly instantiated.</span>
+
+<span class="sd">        You can however, use it to `create your own transformations &lt;https://nbviewer.jupyter.org/github/eonu/sigment/blob/master/notebooks/Custom%20Transformations.ipynb&gt;`_, following the</span>
+<span class="sd">        implementation of the pre-defined transformations in Sigment.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    p: float [0 ≤ p ≤ 1]</span>
+<span class="sd">        The probability of executing the transformation.</span>
+
+<span class="sd">    random_state: numpy.RandomState, int, optional</span>
+<span class="sd">        A random state object or seed for reproducible randomness.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">random_state</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span> <span class="o">==</span> <span class="n">Transform</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;Transform is a base class for creating augmentations as a subclass - &#39;</span> \
+                <span class="s1">&#39;you cannot directly instantiate it&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_val</span> <span class="o">=</span> <span class="n">_Validator</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">restricted_float</span><span class="p">(</span>
+            <span class="n">p</span><span class="p">,</span> <span class="s1">&#39;p (probability)&#39;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mf">0.</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mf">1.</span><span class="p">,</span> <span class="s1">&#39;between zero and one&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Transform.__call__"><a class="viewcode-back" href="../../sections/transformations.html#sigment.transforms.Transform.__call__">[docs]</a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">sr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Runs the transformation on a provided input signal.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X: numpy.ndarray [shape (T,) or (1xT) for mono, (2xT) for stereo]</span>
+<span class="sd">            The input signal to transform.</span>
+
+<span class="sd">        sr: int [sr &gt; 0], optional</span>
+<span class="sd">            The sample rate for the input signal.</span>
+
+<span class="sd">            .. note::</span>
+<span class="sd">                Not required if using transformations that **do not** require a sample rate.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        transformed: numpy.ndarray [shape (T,) for mono, (2xT) for stereo]</span>
+<span class="sd">            The transformed signal, clipped so that it fits into the :math:`[-1,1]` range required for 32-bit floating point WAVs.</span>
+
+<span class="sd">            .. note::</span>
+<span class="sd">                If a mono signal `X` of shape `(1xT)` was used, the output is reshaped to `(T,)`.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; from sigment.transforms import PitchShift</span>
+<span class="sd">        &gt;&gt;&gt; # Create an example stereo signal.</span>
+<span class="sd">        &gt;&gt;&gt; X = np.array([</span>
+<span class="sd">        &gt;&gt;&gt;     [0.325, 0.53 , 0.393, 0.211],</span>
+<span class="sd">        &gt;&gt;&gt;     [0.21 , 0.834, 0.022, 0.38 ]</span>
+<span class="sd">        &gt;&gt;&gt; ])</span>
+<span class="sd">        &gt;&gt;&gt; # Create the pitch-shifting transformation object.</span>
+<span class="sd">        &gt;&gt;&gt; shift = PitchShift(n_steps=(-1., 1.))</span>
+<span class="sd">        &gt;&gt;&gt; # Run the __call__ method on the transformation object to transform X.</span>
+<span class="sd">        &gt;&gt;&gt; # NOTE: Pitch shifting requires a sample rate when called.</span>
+<span class="sd">        &gt;&gt;&gt; X_shift = shift(X, sr=10)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_transform</span><span class="p">(</span><span class="n">copy</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">sr</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply</span><span class="p">()</span> <span class="k">else</span> <span class="n">copy</span><span class="p">(</span><span class="n">X</span><span class="p">))</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="nb">min</span><span class="o">=-</span><span class="mf">1.</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Transform.generate"><a class="viewcode-back" href="../../sections/transformations.html#sigment.transforms.Transform.generate">[docs]</a>    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">sr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Runs the transformation on a provided input signal, producing multiple augmented copies of the input signal.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X: numpy.ndarray [shape (T,) or (1xT) for mono, (2xT) for stereo]</span>
+<span class="sd">            The input signal to transform.</span>
+
+<span class="sd">        n: int [n &gt; 0]</span>
+<span class="sd">            Number of augmented copies of `X` to generate.</span>
+
+<span class="sd">        sr: int [sr &gt; 0], optional</span>
+<span class="sd">            The sample rate for the input signal.</span>
+
+<span class="sd">            .. note::</span>
+<span class="sd">                Not required if using transformations that **do not** require a sample rate.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        augmented: List[numpy.ndarray] or numpy.ndarray</span>
+<span class="sd">            The augmented copies (or copy if `n=1`) of the signal `X`, clipped so that they fit into the :math:`[-1,1]` range required for 32-bit floating point WAVs.</span>
+
+<span class="sd">            .. note::</span>
+<span class="sd">                If a mono signal `X` of shape `(1xT)` was used, the output is reshaped to `(T,)`.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; from sigment.transforms import GaussianWhiteNoise</span>
+<span class="sd">        &gt;&gt;&gt; # Create an example stereo signal.</span>
+<span class="sd">        &gt;&gt;&gt; X = np.array([</span>
+<span class="sd">        &gt;&gt;&gt;     [0.325, 0.53 , 0.393, 0.211],</span>
+<span class="sd">        &gt;&gt;&gt;     [0.21 , 0.834, 0.022, 0.38 ]</span>
+<span class="sd">        &gt;&gt;&gt; ])</span>
+<span class="sd">        &gt;&gt;&gt; # Create the Gaussian white noise transformation object.</span>
+<span class="sd">        &gt;&gt;&gt; add_noise = GaussianWhiteNoise(scale=(0.05, 0.15))</span>
+<span class="sd">        &gt;&gt;&gt; # Generate 5 augmented versions of X, using the noise transformation.</span>
+<span class="sd">        &gt;&gt;&gt; Xs_noisy = add_noise.generate(X, n=5)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">restricted_integer</span><span class="p">(</span>
+            <span class="n">n</span><span class="p">,</span> <span class="s1">&#39;n (number of augmented copies)&#39;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;positive&#39;</span><span class="p">)</span>
+        <span class="n">sr</span> <span class="o">=</span> <span class="n">sr</span> <span class="k">if</span> <span class="n">sr</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">restricted_integer</span><span class="p">(</span>
+            <span class="n">sr</span><span class="p">,</span> <span class="s1">&#39;sr (sample rate)&#39;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;positive&#39;</span><span class="p">)</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">sr</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">X</span></div>
+
+    <span class="k">def</span> <span class="nf">_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">sr</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__module__</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="p">[(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span>
+            <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;random_state&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="p">(</span><span class="s1">&#39; &#39;</span> <span class="o">*</span> <span class="n">indent</span> <span class="o">*</span> <span class="n">level</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">{}{}</span><span class="s1">(</span><span class="si">{}{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="n">module</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span> <span class="k">else</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">module</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="p">),</span>
+            <span class="s1">&#39;p=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Identity"><a class="viewcode-back" href="../../sections/transformations.html#sigment.transforms.Identity">[docs]</a><span class="k">class</span> <span class="nc">Identity</span><span class="p">(</span><span class="n">Transform</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Applies an identity transformation to a signal.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - A sampling rate **is not** required when applying this transformation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">sr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">copy</span><span class="p">(</span><span class="n">X</span><span class="p">)))</span></div>
+
+<div class="viewcode-block" id="GaussianWhiteNoise"><a class="viewcode-back" href="../../sections/transformations.html#sigment.transforms.GaussianWhiteNoise">[docs]</a><span class="k">class</span> <span class="nc">GaussianWhiteNoise</span><span class="p">(</span><span class="n">Transform</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Applies additive Gaussian white noise to the signal.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    scale: float [scale &gt; 0] or (float, float)</span>
+<span class="sd">        | Amount to scale the value sampled from the standard normal distribution.</span>
+<span class="sd">        | Essentially the variance :math:`\sigma^2`.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - A sampling rate **is not** required when applying this transformation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">random_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">float_value</span><span class="p">(</span>
+            <span class="n">scale</span><span class="p">,</span> <span class="s1">&#39;scale (scale parameter)&#39;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="mf">0.</span> <span class="o">&lt;</span> <span class="n">a</span> <span class="o">&lt;=</span> <span class="n">b</span><span class="p">,</span> <span class="s1">&#39;positive&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">sr</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">)</span>
+
+        <span class="c1"># Generate the additive Gaussian white signal noise</span>
+        <span class="n">noise</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="c1"># Return the signal with added noise</span>
+        <span class="k">return</span> <span class="n">X</span> <span class="o">+</span> <span class="n">noise</span></div>
+
+<div class="viewcode-block" id="TimeStretch"><a class="viewcode-back" href="../../sections/transformations.html#sigment.transforms.TimeStretch">[docs]</a><span class="k">class</span> <span class="nc">TimeStretch</span><span class="p">(</span><span class="n">Transform</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Stretches the duration or speed of the signal without affecting its pitch.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rate: float [rate &gt; 0] or (float, float)</span>
+<span class="sd">        Stretch rate.</span>
+
+<span class="sd">        - If `rate &lt; 1`, the signal is slowed down.</span>
+<span class="sd">        - If `rate &gt; 1`, the signal is sped up.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - A sampling rate **is not** required when applying this transformation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rate</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">random_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">float_value</span><span class="p">(</span>
+            <span class="n">rate</span><span class="p">,</span> <span class="s1">&#39;rate (stretch rate)&#39;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="mf">0.</span> <span class="o">&lt;</span> <span class="n">a</span> <span class="o">&lt;=</span> <span class="n">b</span><span class="p">,</span> <span class="s1">&#39;positive&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">sr</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">rate</span><span class="p">)</span>
+
+        <span class="c1"># Return the signal with time stretching applied to each channel independently</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">apply_along_axis</span><span class="p">(</span><span class="n">librosa</span><span class="o">.</span><span class="n">effects</span><span class="o">.</span><span class="n">time_stretch</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">asfortranarray</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="n">rate</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PitchShift"><a class="viewcode-back" href="../../sections/transformations.html#sigment.transforms.PitchShift">[docs]</a><span class="k">class</span> <span class="nc">PitchShift</span><span class="p">(</span><span class="n">Transform</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Shifts the pitch of the signal without changing its duration or speed.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n_steps: float [-12 ≤ n_steps ≤ 12] or (float, float)</span>
+<span class="sd">        Number of semitones to shift.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - A sampling rate **is** required when applying this transformation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">random_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_steps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">float_value</span><span class="p">(</span>
+            <span class="n">n_steps</span><span class="p">,</span> <span class="s1">&#39;n_steps (number of semitones to shift)&#39;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="o">-</span><span class="mf">12.</span> <span class="o">&lt;=</span> <span class="n">a</span> <span class="o">&lt;=</span> <span class="n">b</span> <span class="o">&lt;=</span> <span class="mf">12.</span><span class="p">,</span> <span class="s1">&#39;between -12 and 12&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">sr</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">sr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">restricted_integer</span><span class="p">(</span>
+            <span class="n">sr</span><span class="p">,</span> <span class="s1">&#39;sr (sample rate)&#39;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;positive&#39;</span><span class="p">)</span>
+        <span class="n">n_steps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">n_steps</span><span class="p">)</span>
+
+        <span class="c1"># Return the signal with pitch shifting applied to each channel independently</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">apply_along_axis</span><span class="p">(</span><span class="n">librosa</span><span class="o">.</span><span class="n">effects</span><span class="o">.</span><span class="n">pitch_shift</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">asfortranarray</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">sr</span><span class="o">=</span><span class="n">sr</span><span class="p">,</span> <span class="n">n_steps</span><span class="o">=</span><span class="n">n_steps</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EdgeCrop"><a class="viewcode-back" href="../../sections/transformations.html#sigment.transforms.EdgeCrop">[docs]</a><span class="k">class</span> <span class="nc">EdgeCrop</span><span class="p">(</span><span class="n">Transform</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Crops a section from the start or end of the signal.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    side: {&#39;start&#39;, &#39;end&#39;}</span>
+<span class="sd">        The side of the signal to crop.</span>
+
+<span class="sd">    crop_size: float [0 &lt; crop_size ≤ 0.5] or (float, float)</span>
+<span class="sd">        The fraction of the signal duration to crop from the chosen `side`.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - A sampling rate **is not** required when applying this transformation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">side</span><span class="p">,</span> <span class="n">crop_size</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">random_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">side</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">one_of</span><span class="p">(</span>
+            <span class="n">side</span><span class="p">,</span> <span class="s1">&#39;side (side to crop)&#39;</span><span class="p">,</span>
+            <span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="s1">&#39;end&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">crop_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">float_value</span><span class="p">(</span>
+            <span class="n">crop_size</span><span class="p">,</span> <span class="s1">&#39;crop_size (fraction of signal duration)&#39;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="mf">0.</span> <span class="o">&lt;</span> <span class="n">a</span> <span class="o">&lt;=</span> <span class="n">b</span> <span class="o">&lt;=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;between zero and a half&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">sr</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">crop_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">crop_size</span><span class="p">)</span>
+
+        <span class="c1"># Calculate the number of frames to crop</span>
+        <span class="n">crop_frames</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">crop_size</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="c1"># Remove the frames from the start or end of the signal</span>
+        <span class="k">return</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">crop_frames</span><span class="p">:]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">side</span> <span class="o">==</span> <span class="s1">&#39;start&#39;</span> <span class="k">else</span> <span class="n">X</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="n">crop_frames</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="RandomCrop"><a class="viewcode-back" href="../../sections/transformations.html#sigment.transforms.RandomCrop">[docs]</a><span class="k">class</span> <span class="nc">RandomCrop</span><span class="p">(</span><span class="n">Transform</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Randomly crops multiple sections from the signal.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    crop_size: float [0 &lt; crop_size &lt; 1] or (float, float)</span>
+<span class="sd">        The fraction of the signal duration to crop.</span>
+
+<span class="sd">    n_crops: int [n_crops &gt; 0] or (int, int)</span>
+<span class="sd">        The number of random crops of size `crop_size` to make.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - Chunking is done according to the algorithm defined at [1]_.</span>
+<span class="sd">    - `crop_size` :math:`\\times` `n_crops` must not exceed 1.</span>
+<span class="sd">    - A sampling rate **is not** required when applying this transformation.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1]  https://stackoverflow.com/a/49944026</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crop_size</span><span class="p">,</span> <span class="n">n_crops</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">random_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">crop_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">float_value</span><span class="p">(</span>
+            <span class="n">crop_size</span><span class="p">,</span> <span class="s1">&#39;crop_size (fraction of signal duration)&#39;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="mf">0.</span> <span class="o">&lt;</span> <span class="n">a</span> <span class="o">&lt;=</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="mf">1.</span><span class="p">,</span> <span class="s1">&#39;between zero and one&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_crops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">integer_value</span><span class="p">(</span>
+            <span class="n">n_crops</span><span class="p">,</span> <span class="s1">&#39;n_crops (number of crops)&#39;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">b</span> <span class="o">&gt;=</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;positive&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">crop_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_crops</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">1.</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Expected maximum possible crop_size * n_crops to be less than one&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">sr</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">n_crops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_crops</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_crops</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Convert crop_size fraction to number of frames</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">lower_crop_size</span><span class="p">,</span> <span class="n">upper_crop_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crop_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">length</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crop_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">length</span><span class="p">)</span>
+
+        <span class="c1"># Get at least enough random chunk sizes in the specified range (i.e. lower &lt;= n &lt;= upper)</span>
+        <span class="n">ns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">lower_crop_size</span><span class="p">,</span> <span class="n">upper_crop_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">length</span><span class="o">//</span><span class="n">lower_crop_size</span><span class="p">)</span>
+        <span class="c1"># Add up the chunk sizes to get the indices at which we&#39;ll slice up the input array</span>
+        <span class="n">idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="o">.</span><span class="n">accumulate</span><span class="p">(</span><span class="n">ns</span><span class="p">)</span>
+        <span class="c1"># Truncate idxs so that its contents are all valid indices with respect to signal</span>
+        <span class="n">idxs</span> <span class="o">=</span> <span class="n">idxs</span><span class="p">[:</span><span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">idxs</span><span class="p">,</span> <span class="n">length</span><span class="p">)]</span>
+        <span class="c1"># Retrieve chunks from the signal using idxs</span>
+        <span class="n">chunks</span> <span class="o">=</span> <span class="p">[</span><span class="n">X</span><span class="p">[:,</span> <span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span> <span class="k">for</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">chain</span><span class="p">([</span><span class="kc">None</span><span class="p">],</span> <span class="n">idxs</span><span class="p">),</span> <span class="n">chain</span><span class="p">(</span><span class="n">idxs</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">]))]</span>
+
+        <span class="c1"># Return signal with chunks removed</span>
+        <span class="n">remove_idxs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">chunks</span><span class="p">)),</span> <span class="n">n_crops</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">c</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">remove_idxs</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="LinearFade"><a class="viewcode-back" href="../../sections/transformations.html#sigment.transforms.LinearFade">[docs]</a><span class="k">class</span> <span class="nc">LinearFade</span><span class="p">(</span><span class="n">Transform</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Linearly fades the signal in or out.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    direction: {&#39;in&#39;, &#39;out&#39;}</span>
+<span class="sd">        The direction to fade the signal.</span>
+
+<span class="sd">    fade_size: float [0 &lt; fade_size ≤ 0.5] or (float, float)</span>
+<span class="sd">        The fraction of the signal to fade in the chosen `direction`.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - A sampling rate **is not** required when applying this transformation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">fade_size</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">random_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">one_of</span><span class="p">(</span>
+            <span class="n">direction</span><span class="p">,</span> <span class="s1">&#39;direction (direction to fade)&#39;</span><span class="p">,</span>
+            <span class="p">[</span><span class="s1">&#39;in&#39;</span><span class="p">,</span> <span class="s1">&#39;out&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fade_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">float_value</span><span class="p">(</span>
+            <span class="n">fade_size</span><span class="p">,</span> <span class="s1">&#39;fade_size (fraction of signal duration)&#39;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="mf">0.</span> <span class="o">&lt;</span> <span class="n">a</span> <span class="o">&lt;=</span> <span class="n">b</span> <span class="o">&lt;=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;between zero and a half&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">sr</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">fade_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">fade_size</span><span class="p">)</span>
+
+        <span class="c1"># Calculate the number of frames to fade</span>
+        <span class="n">fade_frames</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">fade_size</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="c1"># Generate scalars for fading</span>
+        <span class="n">scalars</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">fade_frames</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">fade_frames</span><span class="p">)</span>
+        <span class="c1"># Fade the signal from the start or end with the scalars</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">==</span> <span class="s1">&#39;in&#39;</span><span class="p">:</span>
+            <span class="n">X</span><span class="p">[:,</span> <span class="p">:</span><span class="n">fade_frames</span><span class="p">]</span> <span class="o">*=</span> <span class="n">scalars</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">X</span><span class="p">[:,</span> <span class="o">-</span><span class="n">fade_frames</span><span class="p">:]</span> <span class="o">*=</span> <span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">scalars</span><span class="p">)</span>
+
+        <span class="c1"># Return the faded signal</span>
+        <span class="k">return</span> <span class="n">X</span></div>
+
+<div class="viewcode-block" id="Normalize"><a class="viewcode-back" href="../../sections/transformations.html#sigment.transforms.Normalize">[docs]</a><span class="k">class</span> <span class="nc">Normalize</span><span class="p">(</span><span class="n">Transform</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Normalizes the signal by dividing each sample by the maximum absolute sample amplitude.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    independent: bool</span>
+<span class="sd">        Whether or not to normalize each channel independently.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - A sampling rate **is not** required when applying this transformation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">independent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">random_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">independent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">boolean</span><span class="p">(</span>
+            <span class="n">independent</span><span class="p">,</span> <span class="s1">&#39;independent (whether to independently normalize channels)&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">sr</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+        <span class="c1"># Return the normalized signal (treat each channel separately if independent=True)</span>
+        <span class="k">return</span> <span class="n">X</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">independent</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">X</span><span class="p">)))</span></div>
+
+<div class="viewcode-block" id="PreEmphasize"><a class="viewcode-back" href="../../sections/transformations.html#sigment.transforms.PreEmphasize">[docs]</a><span class="k">class</span> <span class="nc">PreEmphasize</span><span class="p">(</span><span class="n">Transform</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Pre-emphasizes the signal by applying a first-order high-pass filter.</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">      x&#39;[t] = \\begin{cases}</span>
+<span class="sd">        x[t] &amp; \\text{if $t=0$} \\\\</span>
+<span class="sd">        x[t] - \\alpha x[t-1] &amp; \\text{otherwise}</span>
+<span class="sd">      \\end{cases}</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    alpha: float [0 &lt; alpha ≤ 1] or (float, float)</span>
+<span class="sd">        Pre-emphasis coefficient.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - A sampling rate **is not** required when applying this transformation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">random_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">float_value</span><span class="p">(</span>
+            <span class="n">alpha</span><span class="p">,</span> <span class="s1">&#39;alpha (pre-emphasis coefficient)&#39;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="mf">0.</span> <span class="o">&lt;</span> <span class="n">a</span> <span class="o">&lt;=</span> <span class="n">b</span> <span class="o">&lt;=</span> <span class="mf">1.</span><span class="p">,</span> <span class="s1">&#39;between zero and one&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">sr</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
+
+        <span class="c1"># Return the pre-emphasized signal</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">][:,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">X</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ExtractLoudestSection"><a class="viewcode-back" href="../../sections/transformations.html#sigment.transforms.ExtractLoudestSection">[docs]</a><span class="k">class</span> <span class="nc">ExtractLoudestSection</span><span class="p">(</span><span class="n">Transform</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extracts the loudest section from the signal using sliding window aggregation over amplitudes.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    duration: float [0 &lt; duration ≤ 1] or (float, float)</span>
+<span class="sd">        The duration of the section to extract, as a fraction of the original signal duration.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - See [2]_ for more details on the implementation.</span>
+<span class="sd">    - A sampling rate **is not** required when applying this transformation.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [2] https://github.com/petewarden/extract_loudest_section</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">random_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">float_value</span><span class="p">(</span>
+            <span class="n">duration</span><span class="p">,</span> <span class="s1">&#39;duration (fraction of signal duration)&#39;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="mf">0.</span> <span class="o">&lt;</span> <span class="n">a</span> <span class="o">&lt;=</span> <span class="n">b</span> <span class="o">&lt;=</span> <span class="mf">1.</span><span class="p">,</span> <span class="s1">&#39;between zero and one&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">sr</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">duration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">)</span>
+
+        <span class="c1"># Convert stereo signals to mono and take the absolute value</span>
+        <span class="n">mono_amp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">librosa</span><span class="o">.</span><span class="n">to_mono</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+        <span class="c1"># Calculate the length of the section in terms of frames</span>
+        <span class="n">total_frames</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">mono_amp</span><span class="p">)</span>
+        <span class="n">frames</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">(</span><span class="n">total_frames</span> <span class="o">*</span> <span class="n">duration</span><span class="p">)</span>
+        <span class="c1"># Initialize variables for keeping track of loudest section</span>
+        <span class="n">previous_amp</span><span class="p">,</span> <span class="n">section_amp</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">frames</span>
+        <span class="n">loudest_amp</span><span class="p">,</span> <span class="n">loudest_idx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+
+        <span class="c1"># Slide the moving section window</span>
+        <span class="k">while</span> <span class="n">end</span> <span class="o">&lt;</span> <span class="n">total_frames</span><span class="p">:</span>
+            <span class="c1"># Calculate volume for current section</span>
+            <span class="n">section_amp</span> <span class="o">+=</span> <span class="n">mono_amp</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="k">if</span> <span class="n">previous_amp</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">mono_amp</span><span class="p">[</span><span class="n">end</span><span class="p">]</span> <span class="o">-</span> <span class="n">previous_amp</span>
+            <span class="c1"># Update loudest section indices if current section is loudest</span>
+            <span class="k">if</span> <span class="n">section_amp</span> <span class="o">&gt;</span> <span class="n">loudest_amp</span><span class="p">:</span>
+                <span class="n">loudest_amp</span><span class="p">,</span> <span class="n">loudest_idx</span> <span class="o">=</span> <span class="n">section_amp</span><span class="p">,</span> <span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+            <span class="c1"># Store volume of the frame leaving the moving window</span>
+            <span class="n">previous_amp</span> <span class="o">=</span> <span class="n">mono_amp</span><span class="p">[</span><span class="n">start</span><span class="p">]</span>
+            <span class="c1"># Update section indices</span>
+            <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">end</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="c1"># Return section of the original signal which was the loudest</span>
+        <span class="k">return</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">loudest_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">loudest_idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span></div>
+
+<div class="viewcode-block" id="MedianFilter"><a class="viewcode-back" href="../../sections/transformations.html#sigment.transforms.MedianFilter">[docs]</a><span class="k">class</span> <span class="nc">MedianFilter</span><span class="p">(</span><span class="n">Transform</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Applies a median filter to the signal.</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">      x&#39;[t] = \\mathrm{median}</span>
+<span class="sd">      \\underbrace{\\Big[</span>
+<span class="sd">        \\ldots, x[t-1], x[t], x[t+1], \\ldots</span>
+<span class="sd">      \\Big]}_\\text{window size}</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    window_size: int [window_size &gt; 1] or (int, int)</span>
+<span class="sd">        The size of the window of neighbouring samples.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - A sampling rate **is not** required when applying this transformation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window_size</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">random_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">integer_value</span><span class="p">(</span>
+            <span class="n">window_size</span><span class="p">,</span> <span class="s1">&#39;window_size (filter window size)&#39;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">a</span> <span class="o">&lt;=</span> <span class="n">b</span><span class="p">,</span> <span class="s1">&#39;positive&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">sr</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">window_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Create array to store filtered samples</span>
+        <span class="n">filtered</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="c1"># Calculate number of elements to the right and left</span>
+        <span class="n">right</span> <span class="o">=</span> <span class="n">window_size</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="p">(</span><span class="n">window_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">right</span>
+        <span class="c1"># Slide the moving window and store filtered samples</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">l</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="p">((</span><span class="n">i</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">)):</span><span class="n">i</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">i</span><span class="p">][:,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">right</span><span class="p">)]</span>
+            <span class="n">filtered</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">l</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">r</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Return the filtered signal</span>
+        <span class="k">return</span> <span class="n">filtered</span></div>
+
+<div class="viewcode-block" id="Reverb"><a class="viewcode-back" href="../../sections/transformations.html#sigment.transforms.Reverb">[docs]</a><span class="k">class</span> <span class="nc">Reverb</span><span class="p">(</span><span class="n">Transform</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Applies reverb to the signal.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    delay: float [0 &lt; delay ≤ 1] or (float, float)</span>
+<span class="sd">        Fraction of signal diration to delay reverberated samples by.</span>
+
+<span class="sd">    decay: float [0 &lt; decay ≤ 1] or (float, float)</span>
+<span class="sd">        Scalar to decay reverberated samples by.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - See [3]_ for more details on the implementation.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [3] https://stackoverflow.com/a/1117249</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">decay</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">random_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">float_value</span><span class="p">(</span>
+            <span class="n">delay</span><span class="p">,</span> <span class="s1">&#39;delay (fraction of signal duration)&#39;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="mf">0.</span> <span class="o">&lt;</span> <span class="n">a</span> <span class="o">&lt;=</span> <span class="n">b</span> <span class="o">&lt;=</span> <span class="mf">1.</span><span class="p">,</span> <span class="s1">&#39;between zero and one&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">float_value</span><span class="p">(</span>
+            <span class="n">decay</span><span class="p">,</span> <span class="s1">&#39;decay (scalar to decay samples by)&#39;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="mf">0.</span> <span class="o">&lt;</span> <span class="n">a</span> <span class="o">&lt;=</span> <span class="n">b</span> <span class="o">&lt;=</span> <span class="mf">1.</span><span class="p">,</span> <span class="s1">&#39;between zero and one&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">sr</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">delay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">delay</span><span class="p">)</span>
+        <span class="n">decay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">decay</span><span class="p">)</span>
+
+        <span class="c1"># Calculate the number of frames to delay</span>
+        <span class="n">C</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">delay_frames</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">delay</span> <span class="o">*</span> <span class="n">T</span><span class="p">)</span>
+
+        <span class="c1"># Decay and delay the signal</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">C</span><span class="p">,</span> <span class="n">T</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+            <span class="n">out</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">+=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">T</span> <span class="o">-</span> <span class="n">delay_frames</span><span class="p">:</span>
+                <span class="n">out</span><span class="p">[:,</span> <span class="n">t</span> <span class="o">+</span> <span class="n">delay_frames</span><span class="p">]</span> <span class="o">+=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">*</span> <span class="n">decay</span>
+
+        <span class="c1"># Return the reverberated signal</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="ClipDistort"><a class="viewcode-back" href="../../sections/transformations.html#sigment.transforms.ClipDistort">[docs]</a><span class="k">class</span> <span class="nc">ClipDistort</span><span class="p">(</span><span class="n">Transform</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Applies clipping distortion to the signal according to a percentile clipping threshold.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    percentile: int [0 &lt; percentile ≤ 100]</span>
+<span class="sd">        Percentile of sample amplitudes to use as a clipping threshold.</span>
+
+<span class="sd">    independent: boolean</span>
+<span class="sd">        Whether or not to independently distort channels by calculating individual percentiles.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">percentile</span><span class="p">,</span> <span class="n">independent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">random_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">percentile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">integer_value</span><span class="p">(</span>
+            <span class="n">percentile</span><span class="p">,</span> <span class="s1">&#39;percentile (clipping threshold)&#39;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">a</span> <span class="o">&lt;=</span> <span class="n">b</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;between zero and 100&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">independent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">boolean</span><span class="p">(</span>
+            <span class="n">independent</span><span class="p">,</span> <span class="s1">&#39;independent (whether to independently distort channels)&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">sr</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">percentile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">percentile</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">percentile</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Return the distorted signal by clipping at the percentile threshold</span>
+        <span class="n">clip</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">signal</span><span class="p">,</span> <span class="n">percentile</span><span class="p">:</span> <span class="n">signal</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="nb">max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">percentile</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">apply_along_axis</span><span class="p">(</span><span class="n">clip</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">percentile</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">independent</span> <span class="k">else</span> <span class="n">clip</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">percentile</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+
+          </div>
+          <footer>
+
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019-2021, Edwin Onuonga
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+
+
+
+
+
+</body>
+</html>

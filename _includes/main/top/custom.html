@@ -1,3 +1,103 @@
 <!-- start custom main top snippet -->
+<div style="display:none;">
+	$
+	  \newcommand{\t}{\text}
+	  \newcommand{\ds}{\displaystyle}
+	  \newcommand{\ob}{\overbrace}
+	  \newcommand{\ub}{\underbrace}
+	  \newcommand{\code}{\texttt}
+	  \newcommand{\stack}[2]{\substack{#1 \\ #2}}
+	  \newcommand{\smallstack}{\stackrel}
+	  \newcommand{\stackt}[2]{\stack{\t{#1}}{\t{#2}}}
 
+	  \newcommand{\red}[1]{\textcolor{red}{#1}}
+	  \newcommand{\redt}[1]{\textcolor{red}{\t{#1}}}
+	  \newcommand{\blue}[1]{\textcolor{blue}{#1}}
+	  \newcommand{\bluet}[1]{\textcolor{blue}{\t{#1}}}
+	  \newcommand{\green}[1]{\textcolor{green}{#1}}
+	  \newcommand{\greent}[1]{\textcolor{green}{\t{#1}}}
+
+	  \newcommand{\mc}{\mathcal}
+	  \newcommand{\mf}{\mathfrak}
+	  \newcommand{\b}{\mathbf}
+	  \newcommand{\bs}{\boldsymbol}
+
+	  \newcommand{\f}{\frac}
+
+	  \newcommand{\l}{\left}
+	  \newcommand{\m}{\middle}
+	  \newcommand{\r}{\right}
+
+	  \newcommand{\n}{\not}
+	  \newcommand{\eq}{\equiv}
+	  \newcommand{\xor}{\oplus}
+
+	  \newcommand{\fa}{\forall}
+	  \newcommand{\te}{\exists}
+	  \newcommand{\empty}{\varnothing}
+	  \newcommand{\set}[1]{\l\lbrace#1\r\rbrace}
+	  \newcommand{\setb}[2]{\l\lbrace#1\ \m| \ #2\r\rbrace}
+	  \newcommand{\bb}{\mathbb}
+	  \newcommand{\R}{\bb{R}}
+	  \newcommand{\N}{\bb{N}}
+	  \newcommand{\Z}{\bb{Z}}
+	  \newcommand{\Q}{\bb{Q}}
+	  \newcommand{\C}{\bb{C}}
+
+	  \newcommand{\d}[1]{\mathrm{d}#1}
+	  \newcommand{\deriv}[2]{\f{\d{#1}}{\d{#2}}}
+	  \newcommand{\pderiv}[2]{\f{\partial #1}{\partial #2}}
+
+	  \newcommand{\s}[3]{\sum_{#1}^{#2}#3}
+	  \newcommand{\i}[4]{\int_{#1}^{#2}#3\ \d{#4}}
+
+	  \newcommand{\p}[2][{}]{\bb{P}_{#1}\!\l(#2\r)}
+	  \newcommand{\cp}[3][{}]{\p[#1]{#2\ \m|\ #3}}
+	  \newcommand{\jp}[3][{}]{\p[#1]{#2, #3}}
+	  \newcommand{\pe}[2][{}]{\hat{\bb{P}}_{#1}\!\l(#2\r)}
+	  \newcommand{\cpe}[3][{}]{\pe[#1]{#2\ \m|\ #3}}
+	  \newcommand{\jpe}[3][{}]{\pe[#1]{#2, #3}}
+	  \newcommand{\e}[2][{}]{\bb{E}_{#1}\!\l[#2\r]}
+	  \newcommand{\var}[1]{\t{Var}\!\l[#1\r]}
+	  \newcommand{\sd}[1]{\t{SD}\!\l[#1\r]}
+	  \newcommand{\cov}[2]{\t{Cov}\!\l[#1,#2\r]}
+	  \newcommand{\pd}[2][{}]{p_{#1}\!\l(#2\r)}
+	  \newcommand{\cpd}[3][{}]{\pd[#1]{#2\ \m|\ #3}}
+	  \newcommand{\jpd}[3][{}]{\pd[#1]{#2, #3}}
+	  \newcommand{\pde}[2][{}]{\hat{p}_{#1}\!\l(#2\r)}
+	  \newcommand{\cpde}[3][{}]{\pde[#1]{#2\ \m|\ #3}}
+	  \newcommand{\jpde}[3][{}]{\pde[#1]{#2, #3}}
+	  \newcommand{\nvar}[2]{\mc{N}\!\l(#1, #2\r)}
+	  \newcommand{\ndist}[3]{\nvar{#1;#2}{#3}}
+
+	  \newcommand{\ch}{\binom}
+	  \newcommand{\pbin}[3][{}]{\l(#2 + #3\r)^#1}
+	  \newcommand{\mbin}[3][{}]{\l(#2 - #3\r)^#1}
+
+	  \newcommand{\T}{\mathsf{T}}
+	  \newcommand{\seq}[4][,]{#2_{#3}#1 \ldots #1 #2_{#4}}
+	  \newcommand{\rowv}[3]{\l(\seq{#1}{#2}{#3}\r)}
+	  \newcommand{\colv}[3]{\rowv{#1}{#2}{#3}^\T}
+	  \newcommand{\sqbmat}[3][{}]{
+		  \begin{bmatrix}
+		  #2_{1{#1}1} & #2_{1{#1}2} & \cdots & #2_{1{#1}j} & \cdots & #2_{1{#1}#3} \\
+		  #2_{2{#1}1} & #2_{2{#1}2} & \cdots & #2_{2{#1}j} & \cdots & #2_{2{#1}#3} \\
+		  \vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
+		  #2_{i{#1}1} & #2_{i{#1}2} & \cdots & #2_{i{#1}j} & \cdots & #2_{i{#1}#3} \\
+		  \vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
+		  #2_{#3{#1}1} & #2_{#3{#1}2} & \cdots & #2_{#3{#1}j} & \cdots & #2_{#3{#1}#3} \\
+		\end{bmatrix}
+	  }
+	  \newcommand{\sqpmat}[3][{}]{
+		  \begin{pmatrix}
+		  #2_{1{#1}1} & #2_{1{#1}2} & \cdots & #2_{1{#1}j} & \cdots & #2_{1{#1}#3} \\
+		  #2_{2{#1}1} & #2_{2{#1}2} & \cdots & #2_{2{#1}j} & \cdots & #2_{2{#1}#3} \\
+		  \vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
+		  #2_{i{#1}1} & #2_{i{#1}2} & \cdots & #2_{i{#1}j} & \cdots & #2_{i{#1}#3} \\
+		  \vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
+		  #2_{#3{#1}1} & #2_{#3{#1}2} & \cdots & #2_{#3{#1}j} & \cdots & #2_{#3{#1}#3} \\
+		\end{pmatrix}
+	  }
+	$
+</div>
 <!-- end custom main top snippet -->

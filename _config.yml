@@ -184,8 +184,6 @@ highlighter : rouge
 permalink   : date
 
 exclude:
-  - CHANGELOG.md
-  - HOW_TO_RELEASE.md
   - Gemfile
   - Gemfile.lock
   - LICENSE
@@ -195,10 +193,7 @@ exclude:
   - jekyll-text-theme.gemspec
   - package-lock.json
   - package.json
-  - /docs
   - /node_modules
-  - /screenshots
-  - /test
   - /vendor
 
 defaults:
