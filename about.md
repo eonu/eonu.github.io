@@ -32,7 +32,7 @@ This is a blog that mainly aims to cover various topics in machine learning, dat
 
 These resources are a mixture of:
 
-- revisits or reflections on particular subjects that I came across during my undergraduate studies,
+- revisits or reflections on particular subjects that I came across during my studies,
 - new concepts or ideas that I find interesting,
 - projects that I am currently working on!
 
