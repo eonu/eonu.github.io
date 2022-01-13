@@ -22,8 +22,7 @@ url     : https://notes.eonu.net # the base hostname & protocol for your site e.
 baseurl : # does not include hostname
 title   : The Regression Profession
 description: > # this means to ignore newlines until "Language & timezone"
-  Your Site Description
-
+  The one-stop shop for all things data. Where else?
 
 ## => Language and Timezone
 ##############################
@@ -38,7 +37,7 @@ author:
   name      : Edwin Onuonga
   url       : https://eonu.net
   avatar    : /assets/images/me.jpg # path or url of avatar image (square)
-  bio       : I am an amazing person.
+  bio       : I'm a data scientist looking to use statistics and machine learning along with the plentiful data we have, to gain insight into various application areas, understand the intricacies of people, and improve our knowledge of the world.
   email     : ed@eonu.net
   facebook  : # "user_name" the last part of your profile url, e.g. https://www.facebook.com/user_name
   twitter   : # "user_name" the last part of your profile url, e.g. https://twitter.com/user_name
@@ -67,7 +66,7 @@ paths:
 excerpt_separator: <!--more-->
 
 ## license
-license: CC-BY-4.0 # "CC-BY-4.0", "CC-BY-SA-4.0", "CC-BY-NC-4.0", "CC-BY-ND-4.0"
+license: CC-BY-SA-4.0 # "CC-BY-4.0", "CC-BY-SA-4.0", "CC-BY-NC-4.0", "CC-BY-ND-4.0"
 
 ## TOC
 toc:
