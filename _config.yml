@@ -22,7 +22,7 @@ url     : https://notes.eonu.net # the base hostname & protocol for your site e.
 baseurl : # does not include hostname
 title   : The Regression Profession
 description: > # this means to ignore newlines until "Language & timezone"
-  The one-stop shop for all things data. Where else?
+  The one-stop blog for all things data.
 
 ## => Language and Timezone
 ##############################
@@ -151,11 +151,11 @@ pageview:
 ## => Search
 ##############################
 search:
-  provider: default # "default" (default), false, "google", "custom"
+  provider: google # "default" (default), false, "google", "custom"
 
   ## Google Custom Search Engine
   google:
-    custom_search_engine_id: # Google Custom Search Engine ID
+    custom_search_engine_id: 6846fdfed7c51d6ce
 
 
 ## => Analytics
