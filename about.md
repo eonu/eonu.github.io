@@ -26,9 +26,7 @@ titles:
 key: page-about
 ---
 
-My name is Edwin Onuonga. I am a recent graduate student in statistics and data science at the [School of Mathematics, University of Edinburgh](https://www.maths.ed.ac.uk/school-of-mathematics), previously studing computer science at the [School of Informatics](https://www.ed.ac.uk/informatics).
-
-This is a blog that aims to cover various topics that I find interesting in machine learning, statistics and programming.
+My name is Edwin. I am a machine learning engineer looking to share all things related to data, machine learning, statistics and programming that I find fascinating through this blog.
 
 <p align="center">
   <a href="https://eonu.net">Click here to view my main website!</a>
